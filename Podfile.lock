@@ -1,0 +1,16 @@
+PODS:
+  - Bolts (1.1.0)
+  - Facebook-iOS-SDK (3.14.1):
+    - Bolts
+  - libPhoneNumber-iOS (0.7.2)
+
+DEPENDENCIES:
+  - Facebook-iOS-SDK (~> 3.14)
+  - libPhoneNumber-iOS (~> 0.7)
+
+SPEC CHECKSUMS:
+  Bolts: 91c2af8eae1d44e1dd75946a5b0ae04a43ea43e4
+  Facebook-iOS-SDK: e9b3d5ac54ee3e5e693f4eef470b97911b3d076d
+  libPhoneNumber-iOS: 207db9b19395d5ba8898398626620568282fa2bc
+
+COCOAPODS: 0.33.1

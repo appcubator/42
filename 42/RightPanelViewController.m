@@ -10,6 +10,7 @@
 #import "RightPanelView.h"
 #import <AddressBook/AddressBook.h>
 #import <Parse/Parse.h>
+#import <AddressBookUI/AddressBookUI.h>
 
 
 @implementation RightPanelViewController
@@ -20,7 +21,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    }
+}
 
 - (void)viewDidUnload
 {
@@ -80,7 +81,7 @@
         
         NSMutableArray *contacts = [self getContacts];
         _arrayOfContacts = contacts;
-        [_contactsTableView reloadData];
+//        [_contactsTableView reloadData];
     }
     else {
         // The user has previously denied access
@@ -175,32 +176,6 @@
     return 54;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *cellMainNibID = @"cellMain";
-    
-    _cellMain = [tableView dequeueReusableCellWithIdentifier:cellMainNibID];
-    if (_cellMain == nil) {
-        [[NSBundle mainBundle] loadNibNamed:@"ContactCellView" owner:self options:nil];
-    }
-    
-    UILabel *contactName = (UILabel *)[_cellMain viewWithTag:1];
-    UIButton *addButton = (UIButton *)[_cellMain viewWithTag:2];
-    
-    if ([_arrayOfContacts count] > 0)
-    {
-        NSMutableDictionary *currentContact = [_arrayOfContacts objectAtIndex:indexPath.row];
-        contactName.text = [currentContact objectForKey:@"name"];
-        
-        addButton.tag = 1000 + indexPath.row;
-        [addButton addTarget:self action:@selector(btnAdd:) forControlEvents:UIControlEventTouchUpInside];
-        //mainImage.image = currentRecord.image;
-        //imageTitle.text = [NSString stringWithFormat:@"%@", currentRecord.title];
-        //creator.text = [NSString stringWithFormat:@"%@", currentRecord.creator];
-    }
-    
-    return _cellMain;
-}
 
 # pragma mark -
 # pragma mark Button Methods

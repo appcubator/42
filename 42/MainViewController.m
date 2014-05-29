@@ -11,6 +11,7 @@
 #import "LeftPanelViewController.h"
 #import "RightPanelViewController.h"
 #import "AppDelegate.h"
+#import "ContactViewController.h"
 
 #define CENTER_TAG 1
 #define LEFT_PANEL_TAG 2
@@ -18,19 +19,6 @@
 
 #define SLIDE_TIMING .25
 #define PANEL_WIDTH 60
-
-@interface MainViewController () <CenterViewControllerDelegate, UIGestureRecognizerDelegate>
-
-@property (nonatomic, strong) CenterViewController *centerViewController;
-@property (nonatomic, strong) LeftPanelViewController *leftPanelViewController;
-@property (nonatomic, strong) RightPanelViewController *rightPanelViewController;
-@property (nonatomic, assign) BOOL showingRightPanel;
-@property (nonatomic, assign) BOOL centerPanelPosition;
-@property (nonatomic, assign) BOOL movePanel;
-@property (nonatomic, assign) BOOL slideRight;
-@property (nonatomic, assign) CGPoint preVelocity;
-
-@end
 
 @implementation MainViewController
 
@@ -84,7 +72,7 @@
 {
     
     [self getLeftView];
-    [self getRightView];
+    [self getContactsView];
     
     self.centerViewController = [[CenterViewController alloc] init];
     self.centerViewController.view.tag = CENTER_TAG;
@@ -158,11 +146,25 @@
         [_rightPanelViewController didMoveToParentViewController:self];
     }
     
-    self.showingRightPanel = YES;
+//    self.showingRightPanel = YES;
     
     UIView *view = self.rightPanelViewController.view;
     return view;
     
+}
+
+- (UIView *)getContactsView
+{
+
+    ContactViewController *viewController = [[ContactViewController alloc] init];
+    viewController.peoplePickerDelegate = viewController;
+    viewController.delegate = viewController;
+    self.rightPanelViewController = viewController;
+    self.rightPanelViewController.view.tag = RIGHT_PANEL_TAG;
+    [self.view addSubview:self.rightPanelViewController.view];
+    [self addChildViewController:self.rightPanelViewController];
+
+    return self.rightPanelViewController.view;
 }
 
 #pragma mark -
@@ -312,7 +314,7 @@
                      }
                      completion:^(BOOL finished) {
                          if (finished) {
-                             [_rightPanelViewController panelActivated];
+                             //[_rightPanelViewController panelActivated];
                              _centerViewController.rightButton.tag = 0;
                          }
                      }];

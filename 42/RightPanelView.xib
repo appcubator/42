@@ -6,7 +6,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RightPanelViewController">
             <connections>
-                <outlet property="contactsTableView" destination="1AC-a4-aKp" id="2Gy-v4-MCG"/>
                 <outlet property="view" destination="iN0-l3-epB" id="TTG-pR-BXo"/>
             </connections>
         </placeholder>
@@ -15,15 +14,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="1AC-a4-aKp">
-                    <rect key="frame" x="0.0" y="63" width="320" height="523"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <connections>
-                        <outlet property="dataSource" destination="-1" id="QjS-ik-DQu"/>
-                        <outlet property="delegate" destination="-1" id="Fqt-bW-IfR"/>
-                    </connections>
-                </tableView>
                 <navigationBar contentMode="scaleToFill" fixedFrame="YES" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GEG-u3-ClX">
                     <rect key="frame" x="-8" y="19" width="328" height="44"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>

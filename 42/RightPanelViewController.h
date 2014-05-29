@@ -10,9 +10,6 @@
 
 @interface RightPanelViewController : UIViewController
 
-@property (strong, nonatomic) IBOutlet UITableView *contactsTableView;
-@property (strong, nonatomic) IBOutlet UITableViewCell *cellMain;
-
 @property (nonatomic, strong) NSMutableArray *arrayOfContacts;
 
 - (void)panelActivated;

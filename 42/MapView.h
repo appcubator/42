@@ -14,6 +14,8 @@
 @property (nonatomic, strong) UIButton* leftButton;
 @property (nonatomic, strong) UIButton* rightButton;
 @property (nonatomic, strong) UIButton* flagButton;
+@property (nonatomic, strong) UIButton* cancelButton;
+
 @property (nonatomic, strong) MKMapView *mkMapView;
 @property (nonatomic, strong) UIView* sendToPanel;
 @property (nonatomic, strong) UIButton* sendToButton;

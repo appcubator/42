@@ -53,7 +53,7 @@
     [mapView.leftButton addTarget:self action:@selector(btnMovePanelRight:) forControlEvents:UIControlEventTouchUpInside];
     [mapView.rightButton addTarget:self action:@selector(btnMovePanelLeft:) forControlEvents:UIControlEventTouchUpInside];
     [mapView.sendToButton addTarget:self action:@selector(btnSendTo:) forControlEvents:UIControlEventTouchUpInside];
-
+    [mapView.cancelButton addTarget:self action:@selector(cancelLocation:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 
@@ -145,10 +145,15 @@
 	PFUser *user = [PFUser currentUser];
 
     MapView *view = (MapView *)self.view;
+    
+    // show "Send" button
     UIView *sendToPanel = view.sendToPanel;
     CGRect newRect = CGRectMake(0, view.frame.size.height - sendToPanel.frame.size.height, sendToPanel.frame.size.width, sendToPanel.frame.size.height);
     sendToPanel.frame = newRect;
 
+    // show "X" button
+    UIButton *cancelButton = view.cancelButton;
+    cancelButton.hidden = NO;
     
     // update the propery on AppDelegat
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
@@ -225,8 +230,22 @@
 - (void)btnSendTo:(id)sender
 {
     SendToViewController *sendToViewController = [[SendToViewController alloc] initWithNibName:@"SendToViewController" bundle:nil];
-	[self.navigationController presentViewController:sendToViewController animated:YES completion:^{}];
+	[self.navigationController pushViewController:sendToViewController animated:YES];
     
+}
+
+- (void)cancelLocation:(id)sender
+{
+    MapView *view = (MapView *)self.view;
+    
+    // show "Send" button
+    UIView *sendToPanel = view.sendToPanel;
+    CGRect newRect = CGRectMake(0, view.frame.size.height, sendToPanel.frame.size.width, sendToPanel.frame.size.height);
+    sendToPanel.frame = newRect;
+    
+    // show "X" button
+    UIButton *cancelButton = view.cancelButton;
+    cancelButton.hidden = YES;
 }
 
 

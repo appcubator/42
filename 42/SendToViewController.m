@@ -159,6 +159,10 @@
     }];
 }
 
+- (IBAction)btnBack:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)resetData
 {
     

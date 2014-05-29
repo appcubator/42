@@ -25,6 +25,7 @@
     _leftButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _rightButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _flagButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    _cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _mkMapView = [[MKMapView alloc] init];
     
     _sendToButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -49,6 +50,12 @@
     _leftButton.tag = 1;
     [_leftButton setTitle:@"L" forState:UIControlStateNormal];
 
+
+    _cancelButton.frame = CGRectMake(30, 40 - 20, 40.0, 40.0);
+    _cancelButton.tag = 1;
+    _cancelButton.hidden = YES;
+    [_cancelButton setTitle:@"x" forState:UIControlStateNormal];
+
     
     _flagButton.frame = CGRectMake(self.frame.size.width/2 - 30, self.frame.size.height - 60 - 20, 60.0, 60.0);
     _flagButton.alpha = 0.900;
@@ -60,6 +67,7 @@
     [self addSubview:_rightButton];
     [self addSubview:_leftButton];
     [self addSubview:_flagButton];
+    [self addSubview:_cancelButton];
     
     
     _sendToPanel.backgroundColor = [UIColor purpleColor];

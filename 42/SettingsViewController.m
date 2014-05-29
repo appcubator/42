@@ -36,6 +36,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 - (IBAction)btnLogout:(id)sender {
     [PFUser logOut];
     [self.navigationController popToRootViewControllerAnimated:NO];
@@ -44,5 +45,7 @@
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [appDelegate presentWelcomeViewController];
 }
+
+
 
 @end

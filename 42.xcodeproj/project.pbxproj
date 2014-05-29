@@ -12,6 +12,9 @@
 		CE1B929119359519001489C8 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1B929019359519001489C8 /* Social.framework */; };
 		CE1B929519359793001489C8 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1B929319359793001489C8 /* SettingsViewController.m */; };
 		CE1B929619359793001489C8 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE1B929419359793001489C8 /* SettingsViewController.xib */; };
+		CE1B92991936FED5001489C8 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1B92981936FED5001489C8 /* AddressBookUI.framework */; };
+		CE1B929D193701B7001489C8 /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1B929B193701B7001489C8 /* ContactViewController.m */; };
+		CE1B929E193701B7001489C8 /* ContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE1B929C193701B7001489C8 /* ContactViewController.xib */; };
 		CEE97426192DA82800494F47 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97425192DA82800494F47 /* Foundation.framework */; };
 		CEE97428192DA82800494F47 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97427192DA82800494F47 /* CoreGraphics.framework */; };
 		CEE9742A192DA82800494F47 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97429192DA82800494F47 /* UIKit.framework */; };
@@ -80,6 +83,10 @@
 		CE1B929219359793001489C8 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		CE1B929319359793001489C8 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		CE1B929419359793001489C8 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
+		CE1B92981936FED5001489C8 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		CE1B929A193701B7001489C8 /* ContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactViewController.h; sourceTree = "<group>"; };
+		CE1B929B193701B7001489C8 /* ContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactViewController.m; sourceTree = "<group>"; };
+		CE1B929C193701B7001489C8 /* ContactViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactViewController.xib; sourceTree = "<group>"; };
 		CEE97422192DA82800494F47 /* 42.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 42.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE97425192DA82800494F47 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CEE97427192DA82800494F47 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -154,6 +161,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE1B92991936FED5001489C8 /* AddressBookUI.framework in Frameworks */,
 				CE1B929119359519001489C8 /* Social.framework in Frameworks */,
 				CE1B928F19359514001489C8 /* Accounts.framework in Frameworks */,
 				CEE974A1192DE62600494F47 /* AddressBook.framework in Frameworks */,
@@ -210,6 +218,7 @@
 		CEE97424192DA82800494F47 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CE1B92981936FED5001489C8 /* AddressBookUI.framework */,
 				CE1B929019359519001489C8 /* Social.framework */,
 				CE1B928E19359514001489C8 /* Accounts.framework */,
 				CEE974A0192DE62600494F47 /* AddressBook.framework */,
@@ -299,6 +308,9 @@
 				CEE974A5193109DD00494F47 /* SendToViewController.m */,
 				CE1B929219359793001489C8 /* SettingsViewController.h */,
 				CE1B929319359793001489C8 /* SettingsViewController.m */,
+				CE1B929A193701B7001489C8 /* ContactViewController.h */,
+				CE1B929B193701B7001489C8 /* ContactViewController.m */,
+				CE1B929C193701B7001489C8 /* ContactViewController.xib */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -430,6 +442,7 @@
 				CEE974AA19310C0C00494F47 /* SendToCellView.xib in Resources */,
 				CEE97439192DA82800494F47 /* Main.storyboard in Resources */,
 				CEE97462192DACED00494F47 /* WelcomeView.xib in Resources */,
+				CE1B929E193701B7001489C8 /* ContactViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,6 +502,7 @@
 				CEE97436192DA82800494F47 /* AppDelegate.m in Sources */,
 				CEE97484192DBE9A00494F47 /* CenterViewController.m in Sources */,
 				CEE97432192DA82800494F47 /* main.m in Sources */,
+				CE1B929D193701B7001489C8 /* ContactViewController.m in Sources */,
 				CEE9749C192DE13E00494F47 /* LeftPanelViewController.m in Sources */,
 				CEE97481192DB56100494F47 /* ActivityView.m in Sources */,
 				CEE9746B192DAF6100494F47 /* NewUserViewController.m in Sources */,

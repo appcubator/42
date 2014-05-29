@@ -158,14 +158,21 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 {
     PFQuery *query = [PFQuery queryWithClassName:@"LocationSent"];
     [query includeKey:@"from"];
-    [query includeKey:@"createdAt"];
-
     [query whereKey:@"to" equalTo: [PFUser currentUser]];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
             // The find succeeded.
-            _arrayOfLocationSent = [NSMutableArray arrayWithArray:objects];
-            NSLog(@"%@",_arrayOfLocationSent);
+            NSArray *sortedLocations = [objects sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+                    PFObject *firstObj = (PFObject *)a;
+                    PFObject *secondObj = (PFObject *)b;
+
+                    NSDate *first =  firstObj[@"date"];
+                    NSDate *second = secondObj[@"date"];
+                    return [second compare:first];
+            }];
+    
+            _arrayOfLocationSent = [NSMutableArray arrayWithArray:sortedLocations];
+
             [[NSNotificationCenter defaultCenter] postNotificationName: kLocationSentUpdateNotification
                                                                 object:nil];
         } else {

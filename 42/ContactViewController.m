@@ -74,5 +74,40 @@
     [mainViewController movePanelToOriginalPosition];
 }
 
+- (BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person{
+    
+    UIView *view = peoplePicker.topViewController.view;
+    UITableView *tableView = nil;
+    
+    for(UIView *uv in view.subviews)
+    {
+        if([uv isKindOfClass:[UITableView class]])
+        {
+            tableView = (UITableView*)uv;
+            break;
+        }
+    }
+    if(tableView != nil)
+    {
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:[tableView indexPathForSelectedRow]];
+        UIButton *btnAdd = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [btnAdd setTitle:@"Add" forState:UIControlStateNormal];
+
+        CGRect currentFrame = btnAdd.frame;
+        currentFrame.origin.x = cell.frame.size.width - 80;
+        btnAdd.frame = currentFrame;
+
+        [cell addSubview:btnAdd];
+
+        if(cell.accessoryType == UITableViewCellAccessoryNone){
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+        else{
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }        
+        [cell setSelected:NO animated:YES];
+    }
+    return NO;
+}
 
 @end

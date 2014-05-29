@@ -9,12 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "CenterViewController.h"
 #import "LeftPanelView.h"
+#import "RightPanelView.h"
 
 @interface MainViewController : UIViewController <CenterViewControllerDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) CenterViewController *centerViewController;
 @property (nonatomic, strong) LeftPanelViewController *leftPanelViewController;
-@property (nonatomic, strong) UIViewController *rightPanelViewController;
+@property (nonatomic, strong) RightPanelViewController *rightPanelViewController;
 @property (nonatomic, assign) BOOL showingRightPanel;
 @property (nonatomic, assign) BOOL centerPanelPosition;
 @property (nonatomic, assign) BOOL movePanel;

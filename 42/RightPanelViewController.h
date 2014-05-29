@@ -10,8 +10,10 @@
 
 @interface RightPanelViewController : UIViewController
 
-@property (nonatomic, strong) NSMutableArray *arrayOfContacts;
+@property (nonatomic, strong) NSMutableDictionary *dictOfContacts;
 
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UITableViewCell *cellMain;
 - (void)panelActivated;
 
 @end

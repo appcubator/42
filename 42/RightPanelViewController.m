@@ -11,9 +11,18 @@
 #import <AddressBook/AddressBook.h>
 #import <Parse/Parse.h>
 #import <AddressBookUI/AddressBookUI.h>
-
+#import "MainViewController.h"
+#import "NBPhoneNumberUtil.h"
+#import "UIButtonForRow.h"
 
 @implementation RightPanelViewController
+
+- (NSArray *)getSectionsArray
+{
+    NSArray *letterIndex = @[@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z"];
+    
+    return  letterIndex;
+}
 
 #pragma mark -
 #pragma mark View Did Load/Unload
@@ -79,9 +88,9 @@
     else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
         // The user has previously given access, add the contact
         
-        NSMutableArray *contacts = [self getContacts];
-        _arrayOfContacts = contacts;
-//        [_contactsTableView reloadData];
+        NSMutableDictionary *contacts = [self getContacts];
+        _dictOfContacts = contacts;
+        [_tableView reloadData];
     }
     else {
         // The user has previously denied access
@@ -91,9 +100,23 @@
     
 }
 
-- (NSMutableArray*) getContacts {
+- (NSMutableDictionary *) createEmptyDictionaryWithSectionKeys
+{
+    NSMutableDictionary *emptyDict = [[NSMutableDictionary alloc] init];
     
-    NSMutableArray *contactList=[[NSMutableArray alloc] init];
+    NSArray *sections = [self getSectionsArray];
+    
+    for (NSString *section in sections) {
+        [emptyDict setObject:[[NSMutableArray alloc] initWithArray:@[]] forKey:section];
+    }
+    
+    return emptyDict;
+}
+
+- (NSMutableDictionary *) getContacts {
+    
+    NSMutableDictionary *contactDict= [self createEmptyDictionaryWithSectionKeys];
+    
     ABAddressBookRef m_addressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     
     if (!m_addressbook) {
@@ -113,7 +136,18 @@
         CFStringRef firstName, lastName;
         firstName = ABRecordCopyValue(ref, kABPersonFirstNameProperty);
         lastName  = ABRecordCopyValue(ref, kABPersonLastNameProperty);
-        [dOfPerson setObject:[NSString stringWithFormat:@"%@ %@", firstName, lastName] forKey:@"name"];
+        NSString *firstNameStr, *lastNameStr;
+        firstNameStr = (__bridge NSString *)firstName;
+        lastNameStr = (__bridge NSString *)lastName;
+
+        NSString *fullName = [NSString stringWithFormat:@"%@ %@", firstNameStr ?:@"", lastNameStr ?:@""];
+        fullName = [fullName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
+        if (!fullName || [fullName isEqual:@""]) {
+            fullName = @"Unnamed";
+        }
+
+        [dOfPerson setObject:fullName forKey:@"name"];
         
         //For Email ids
         ABMutableMultiValueRef eMail  = ABRecordCopyValue(ref, kABPersonEmailProperty);
@@ -151,11 +185,34 @@
         CFRelease(ref);
         if (firstName != nil) { CFRelease(firstName); }
         if (lastName != nil) { CFRelease(lastName); }
-        [contactList addObject:dOfPerson];
+        
+        NSString *firstLetter = [fullName substringToIndex:1];
+        
+        if (firstLetter && [contactDict objectForKey:firstLetter])
+        {
+            NSMutableArray *arr = [contactDict objectForKey:firstLetter];
+            [arr addObject:dOfPerson];
+            [contactDict setObject:arr forKey:firstLetter];
+        }
 
     }
     
-    return contactList;
+    
+    // sort each sections
+    NSMutableDictionary *sortedContactDict = [[NSMutableDictionary alloc] init];
+    for(NSString *key in contactDict) {
+        NSMutableArray *contactstArr = [contactDict objectForKey:key];
+        NSArray *sortedArr = [contactstArr sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+            NSMutableDictionary *person1 = (NSMutableDictionary *)a;
+            NSMutableDictionary *person2 = (NSMutableDictionary *)b;
+            NSString *person1Name = [person1 objectForKey:@"name"];
+            NSString *person2Name = [person2 objectForKey:@"name"];
+            return [person1Name compare: person2Name];
+        }];
+        [sortedContactDict setObject:[NSMutableArray arrayWithArray:sortedArr] forKey:key];
+    }
+
+    return sortedContactDict;
 }
 
 #pragma mark -
@@ -163,17 +220,56 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return [[self getSectionsArray] count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_arrayOfContacts count];
+    NSString *key = [[self getSectionsArray] objectAtIndex:section];
+    NSMutableArray *arr = [_dictOfContacts objectForKey:key];
+    return [arr count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 54;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *cellMainNibID = @"cellMain";
+    
+    _cellMain = [tableView dequeueReusableCellWithIdentifier:cellMainNibID];
+    if (_cellMain == nil) {
+        [[NSBundle mainBundle] loadNibNamed:@"ContactCellView" owner:self options:nil];
+    }
+    
+    UILabel *contactName = (UILabel *)[_cellMain viewWithTag:1];
+    UIButtonForRow *addButton = (UIButtonForRow *)[_cellMain viewWithTag:2];
+    [addButton setIndexPath:indexPath];
+
+    NSString *sectionTitle = [[self getSectionsArray] objectAtIndex:indexPath.section];
+    NSMutableArray *sectionForKey = [_dictOfContacts objectForKey:sectionTitle];
+    NSMutableDictionary *currentContact = [sectionForKey objectAtIndex:indexPath.row];
+    contactName.text = [currentContact objectForKey:@"name"];
+    [addButton addTarget:self action:@selector(btnAdd:) forControlEvents:UIControlEventTouchUpInside];
+
+    return _cellMain;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
+{
+     return [[self getSectionsArray] indexOfObject:title];
+}
+
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
+{
+    return [self getSectionsArray];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [[self getSectionsArray] objectAtIndex:section];
 }
 
 
@@ -182,33 +278,76 @@
 
 
 - (void) btnAdd:(id)sender {
-    UIButton *b = (UIButton *)sender;
-    NSInteger row = b.tag - 1000;
-    NSMutableDictionary *currentContact = [_arrayOfContacts objectAtIndex:row];
+    
+    UIButtonForRow *btn = (UIButtonForRow *)sender;
+    NSIndexPath *indexPath = btn.indexPath;
+
+    NSLog(@"%@",indexPath);
+    NSLog(@"%d",indexPath.section);
+    NSLog(@"%d", indexPath.row);
+    
+    NSString *sectionTitle = [[self getSectionsArray] objectAtIndex:indexPath.section];
+    NSMutableArray *sectionForKey = [_dictOfContacts objectForKey:sectionTitle];
+    NSMutableDictionary *currentContact = [sectionForKey objectAtIndex:indexPath.row];
+
+    NSLog(@"%@",sectionTitle);
+    NSLog(@"%@",sectionForKey);
+    NSLog(@"%@",currentContact);
+
     NSString *mobileNumber = [currentContact objectForKey:@"Phone"];
 
-    PFQuery *query = [PFUser query];
-    [query whereKey:@"phone" equalTo:mobileNumber]; // find all the women
-    NSArray *users = [query findObjects];
+    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+    NSError *aError = nil;
+    NBPhoneNumber *userNumber = [phoneUtil parse:mobileNumber
+                                   defaultRegion:@"US" error:&aError];
+
     
-    // See if the user with phone number is there
-    if (users.count > 0) {
-        PFUser *otherUser = [users objectAtIndex:0];
+    if ([phoneUtil isValidNumber:userNumber]) {
         
-        // create an entry in the Follow table
-        PFObject *follow = [PFObject objectWithClassName:@"Follow"];
-        [follow setObject:[PFUser currentUser]  forKey:@"from"];
-        [follow setObject:otherUser forKey:@"to"];
-        [follow setObject:[NSDate date] forKey:@"date"];
-        [follow saveInBackground];
+        PFQuery *query = [PFUser query];
+        [query whereKey:@"phone" equalTo:[phoneUtil format:userNumber
+                                              numberFormat:NBEPhoneNumberFormatE164
+                                                     error:&aError]];
+        NSArray *users = [query findObjects];
+    
+        // See if the user with phone number is there
+        if (users.count > 0) {
+            PFUser *otherUser = [users objectAtIndex:0];
+        
+            // create an entry in the Follow table
+            PFObject *follow = [PFObject objectWithClassName:@"Follow"];
+            [follow setObject:[PFUser currentUser]  forKey:@"from"];
+            [follow setObject:otherUser forKey:@"to"];
+            [follow setObject:[NSDate date] forKey:@"date"];
+            [follow saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Great" message:@"User is added." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"OK", nil];
+                    [alert show];
+                }
+                else {
+                    
+                }
+            }];
+
+        }
+        else {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Wait" message:@"User is not yet on 42." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"OK", nil];
+            [alert show];
+        }
+        
     }
     else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Wait" message:@"User is not yet on 42." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"OK", nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Wait" message:@"Could not find valid phone number." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"OK", nil];
         [alert show];
     }
     
 }
 
+
+- (IBAction)btnBackPressed:(id)sender {
+    MainViewController* mainViewController = (MainViewController *) self.parentViewController;
+    [mainViewController movePanelToOriginalPosition];
+}
 
 #pragma mark -
 #pragma mark Default System Code

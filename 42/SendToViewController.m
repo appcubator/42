@@ -10,6 +10,8 @@
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
 
+#define ANIMATION_TIME 0.25
+
 @interface SendToViewController ()
 
 @end
@@ -44,7 +46,7 @@
             NSLog(@"Error: %@ %@", error, [error userInfo]);
         }
     }];
-    
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -125,21 +127,36 @@
                 [labelStr appendString:@", "];
             }
         }
-    
-        // display the bottom bar
-        CGRect frame = _bottomBar.frame;
-        frame.origin.y = self.view.frame.size.height - frame.size.height;
-        _bottomBar.frame = frame;
         _sendToLabel.text = labelStr;
+        
+        [self displayBottomBar];
     }
     else {
-
-        // hide the bottom bar
-        CGRect frame = _bottomBar.frame;
-        frame.origin.y = self.view.frame.size.height;
-        _bottomBar.frame = frame;
-
+        [self hideBottomBar];
     }
+}
+
+- (void)hideBottomBar {
+    
+    [UIView animateWithDuration:ANIMATION_TIME delay:0 options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         // hide the bottom bar
+                         CGRect frame = _bottomBar.frame;
+                         frame.origin.y = self.view.frame.size.height;
+                         _bottomBar.frame = frame;
+                     }
+                     completion:^(BOOL finished) { }];
+}
+
+- (void)displayBottomBar {
+    [UIView animateWithDuration:ANIMATION_TIME delay:0 options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         // display the bottom bar
+                         CGRect frame = _bottomBar.frame;
+                         frame.origin.y = self.view.frame.size.height - frame.size.height;
+                         _bottomBar.frame = frame;
+                     }
+                     completion:^(BOOL finished) { }];
 }
 
 - (IBAction)btnSendTo:(id)sender {
@@ -156,6 +173,7 @@
     
     [appDelegate sendLocationTo:listOfReceivers withBlock:^(void) {
         [self resetData];
+        [self.navigationController popViewControllerAnimated:YES];
     }];
 }
 

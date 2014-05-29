@@ -10,6 +10,7 @@
 #import "ActivityView.h"
 #import <Parse/Parse.h>
 #import "MainViewController.h"
+#import "AppDelegate.h"
 
 @interface LoginViewController ()
 
@@ -29,7 +30,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
     // Do any additional setup after loading the view from its nib.
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:_usernameField];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:_passwordField];
@@ -150,8 +150,10 @@
 		if (user) {
 			MainViewController *mapViewController = [[MainViewController alloc] init];
 			[(UINavigationController *)self.presentingViewController pushViewController:mapViewController animated:NO];
-			[self.presentingViewController dismissModalViewControllerAnimated:YES];
-            
+            [self.navigationController popToRootViewControllerAnimated:YES];
+            // show the welcome view
+            AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            [appDelegate presentMainViewController];
 		} else {
 			// Didn't get a user.
 			NSLog(@"%s didn't get a user!", __PRETTY_FUNCTION__);

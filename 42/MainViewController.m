@@ -72,7 +72,7 @@
 {
     
     [self getLeftView];
-    [self getContactsView];
+    [self getRightView];
     
     self.centerViewController = [[CenterViewController alloc] init];
     self.centerViewController.view.tag = CENTER_TAG;
@@ -314,7 +314,7 @@
                      }
                      completion:^(BOOL finished) {
                          if (finished) {
-                             //[_rightPanelViewController panelActivated];
+                             [_rightPanelViewController panelActivated];
                              _centerViewController.rightButton.tag = 0;
                          }
                      }];

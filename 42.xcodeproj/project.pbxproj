@@ -15,6 +15,7 @@
 		CE1B92991936FED5001489C8 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1B92981936FED5001489C8 /* AddressBookUI.framework */; };
 		CE1B929D193701B7001489C8 /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1B929B193701B7001489C8 /* ContactViewController.m */; };
 		CE1B929E193701B7001489C8 /* ContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE1B929C193701B7001489C8 /* ContactViewController.xib */; };
+		CE84F0EB1937993900AC6AE3 /* UIButtonForRow.m in Sources */ = {isa = PBXBuildFile; fileRef = CE84F0EA1937993900AC6AE3 /* UIButtonForRow.m */; };
 		CEE97426192DA82800494F47 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97425192DA82800494F47 /* Foundation.framework */; };
 		CEE97428192DA82800494F47 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97427192DA82800494F47 /* CoreGraphics.framework */; };
 		CEE9742A192DA82800494F47 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97429192DA82800494F47 /* UIKit.framework */; };
@@ -87,6 +88,8 @@
 		CE1B929A193701B7001489C8 /* ContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactViewController.h; sourceTree = "<group>"; };
 		CE1B929B193701B7001489C8 /* ContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactViewController.m; sourceTree = "<group>"; };
 		CE1B929C193701B7001489C8 /* ContactViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactViewController.xib; sourceTree = "<group>"; };
+		CE84F0E91937993900AC6AE3 /* UIButtonForRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIButtonForRow.h; sourceTree = "<group>"; };
+		CE84F0EA1937993900AC6AE3 /* UIButtonForRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIButtonForRow.m; sourceTree = "<group>"; };
 		CEE97422192DA82800494F47 /* 42.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 42.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE97425192DA82800494F47 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CEE97427192DA82800494F47 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -347,6 +350,8 @@
 				CEE9748D192DD12500494F47 /* PersonalPinAnnotation.m */,
 				CEE974AF1932834A00494F47 /* FriendPinAnnotation.h */,
 				CEE974B01932834A00494F47 /* FriendPinAnnotation.m */,
+				CE84F0E91937993900AC6AE3 /* UIButtonForRow.h */,
+				CE84F0EA1937993900AC6AE3 /* UIButtonForRow.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -502,6 +507,7 @@
 				CEE97436192DA82800494F47 /* AppDelegate.m in Sources */,
 				CEE97484192DBE9A00494F47 /* CenterViewController.m in Sources */,
 				CEE97432192DA82800494F47 /* main.m in Sources */,
+				CE84F0EB1937993900AC6AE3 /* UIButtonForRow.m in Sources */,
 				CE1B929D193701B7001489C8 /* ContactViewController.m in Sources */,
 				CEE9749C192DE13E00494F47 /* LeftPanelViewController.m in Sources */,
 				CEE97481192DB56100494F47 /* ActivityView.m in Sources */,

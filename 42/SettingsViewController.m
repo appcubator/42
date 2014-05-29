@@ -46,6 +46,9 @@
     [appDelegate presentWelcomeViewController];
 }
 
+- (IBAction)btnBack:(id)sender {
+    [self.navigationController popToRootViewControllerAnimated:NO];
+}
 
 
 @end

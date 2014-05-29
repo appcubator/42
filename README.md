@@ -38,5 +38,4 @@ XCode has the concept of Workspaces. When developing, you are supposed to work o
 
 ## Future Feature List ##
 - [ ] `Ask Friend` Button
-- [ ] `My Story`
-- 
+- [ ] `My Story` Feature

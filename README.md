@@ -28,7 +28,6 @@ XCode has the concept of Workspaces. When developing, you are supposed to work o
 - [ ] Matching and moving friend who are already on 42 to the top of the friend list
 - [ ] In app notification handling
 - [ ] Showing only the lates location of the user
-> - [ ] `Ask Friend` Button
 
 ## To-Do Backend ##
 - [ ] Validating Phone number
@@ -36,3 +35,8 @@ XCode has the concept of Workspaces. When developing, you are supposed to work o
 - [ ] Checking for dupe object
 -- User can not follow the other user twice
 -- User can not checkin withing 0.2 mi of the previous checkin for 5 mins (to prevent annoyance) 
+
+## Future Feature List ##
+- [ ] `Ask Friend` Button
+- [ ] `My Story`
+- 

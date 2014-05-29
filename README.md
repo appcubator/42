@@ -23,7 +23,8 @@ XCode has the concept of Workspaces. When developing, you are supposed to work o
 
 
 ## To-Do ##
-
+- [ ] Sort the addressbook and add the helper on the right
+- [ ] Normalize number when added user
 - [ ] Validating Phone number
 - [ ] Expiration of location
 - [ ] `Ask Friend` Button

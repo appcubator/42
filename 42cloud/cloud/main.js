@@ -8,21 +8,24 @@ Parse.Cloud.afterSave("LocationSent", function(request) {
   var sendToUser = request.object.get('to');
   var fromUser   = request.object.get('from');
 
-  var pushQuery = new Parse.Query(Parse.Installation);
-  pushQuery.equalTo('user', sendToUser);
+  request.object.get('from').fetch().then(function(fromUser) {
+	var fromUserName = fromUser.get('username');  
+	var pushQuery = new Parse.Query(Parse.Installation);
+  	pushQuery.equalTo('user', sendToUser);
     
-  Parse.Push.send({
-    where: pushQuery, // Set our Installation query
-    data: {
-      alert: fromUser.get('username') + " shared location with you!"
-    }
-  }, {
-    success: function() {
-      // Push was successful
-    },
-    error: function(error) {
-      throw "Got an error " + error.code + " : " + error.message;
-    }
+  	Parse.Push.send({
+   	  where: pushQuery, // Set our Installation query
+    	  data: {
+     	    alert: fromUserName + " shared location with you!"
+    	  }
+  	  }, {
+    	    success: function() {
+      	    // Push was successful
+    	  },
+    	  error: function(error) {
+      	    throw "Got an error " + error.code + " : " + error.message;
+    	  }
+  	});
   });
 });
 

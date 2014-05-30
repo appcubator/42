@@ -11,6 +11,7 @@
 #import "PersonalPinAnnotation.h"
 #import "RightPanelViewController.h"
 #import "LeftPanelViewController.h"
+#import <Parse/Parse.h>
 
 @protocol CenterViewControllerDelegate <NSObject>
 
@@ -34,4 +35,6 @@
 @property (strong, nonatomic) NSMutableArray *friendPins;
 
 
+- (void)showLocationSent:(PFObject *)locationSent;
+    
 @end

@@ -12,9 +12,10 @@
 @interface LeftPanelViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) IBOutlet UILabel *isSeenLabel;
 @property (strong, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (strong, nonatomic) IBOutlet UITableViewCell *cellMain;
+@property (strong, nonatomic) IBOutlet UIImageView *locationStatusView;
+@property (strong, nonatomic) IBOutlet UILabel *timeLabel;
 
 
 @end

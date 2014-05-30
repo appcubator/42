@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CenterViewController.h"
 
-@interface MainViewController : UIViewController <CenterViewControllerDelegate, UIGestureRecognizerDelegate>
+@interface MainViewController : UIViewController <UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) CenterViewController *centerViewController;
 @property (nonatomic, strong) LeftPanelViewController *leftPanelViewController;

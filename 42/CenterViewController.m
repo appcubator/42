@@ -147,9 +147,7 @@
     MapView *view = (MapView *)self.view;
     
     // show "Send" button
-    UIView *sendToPanel = view.sendToPanel;
-    CGRect newRect = CGRectMake(0, view.frame.size.height - sendToPanel.frame.size.height, sendToPanel.frame.size.width, sendToPanel.frame.size.height);
-    sendToPanel.frame = newRect;
+    [view showSendPanel];
 
     // show "X" button
     UIButton *cancelButton = view.cancelButton;
@@ -238,11 +236,8 @@
 {
     MapView *view = (MapView *)self.view;
     
-    // show "Send" button
-    UIView *sendToPanel = view.sendToPanel;
-    CGRect newRect = CGRectMake(0, view.frame.size.height, sendToPanel.frame.size.width, sendToPanel.frame.size.height);
-    sendToPanel.frame = newRect;
-    
+    [view hideSendPanel];
+
     // show "X" button
     UIButton *cancelButton = view.cancelButton;
     cancelButton.hidden = YES;

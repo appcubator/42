@@ -20,4 +20,7 @@
 @property (nonatomic, strong) UIView* sendToPanel;
 @property (nonatomic, strong) UIButton* sendToButton;
 
+- (void)showSendPanel;
+- (void)hideSendPanel;
+
 @end

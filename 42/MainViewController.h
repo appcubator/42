@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "CenterViewController.h"
-#import "LeftPanelView.h"
-#import "RightPanelView.h"
 
 @interface MainViewController : UIViewController <CenterViewControllerDelegate, UIGestureRecognizerDelegate>
 
@@ -17,7 +15,7 @@
 @property (nonatomic, strong) LeftPanelViewController *leftPanelViewController;
 @property (nonatomic, strong) RightPanelViewController *rightPanelViewController;
 @property (nonatomic, assign) BOOL showingRightPanel;
-@property (nonatomic, assign) BOOL centerPanelPosition;
+@property (nonatomic, assign) NSInteger centerPanelPosition;
 @property (nonatomic, assign) BOOL movePanel;
 @property (nonatomic, assign) BOOL slideRight;
 @property (nonatomic, assign) CGPoint preVelocity;

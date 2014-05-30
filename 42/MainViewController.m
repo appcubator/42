@@ -11,7 +11,6 @@
 #import "LeftPanelViewController.h"
 #import "RightPanelViewController.h"
 #import "AppDelegate.h"
-#import "ContactViewController.h"
 
 #define CENTER_TAG 1
 #define LEFT_PANEL_TAG 2
@@ -87,29 +86,6 @@
     
 }
 
-- (void)resetMainView
-{
-    // remove left view and reset variables, if needed
-    //    if (_leftPanelViewController != nil)
-    //    {
-    //        [self.leftPanelViewController.view removeFromSuperview];
-    //        self.leftPanelViewController = nil;
-    //
-    //        _centerViewController.leftButton.tag = 1;
-    //        self.showingLeftPanel = NO;
-    //    }
-    //
-    //
-    //    if (_rightPanelViewController != nil)
-    //    {
-    //        [self.rightPanelViewController.view removeFromSuperview];
-    //        self.rightPanelViewController = nil;
-    //
-    //        _centerViewController.rightButton.tag = 1;
-    //        self.showingRightPanel = NO;
-    //    }
-}
-
 - (UIView *)getLeftView
 {
     // init view if it doesn't already exist
@@ -153,20 +129,6 @@
     
 }
 
-- (UIView *)getContactsView
-{
-
-    ContactViewController *viewController = [[ContactViewController alloc] init];
-    viewController.peoplePickerDelegate = viewController;
-    viewController.delegate = viewController;
-    self.rightPanelViewController = viewController;
-    self.rightPanelViewController.view.tag = RIGHT_PANEL_TAG;
-    [self.view addSubview:self.rightPanelViewController.view];
-    [self addChildViewController:self.rightPanelViewController];
-
-    return self.rightPanelViewController.view;
-}
-
 #pragma mark -
 #pragma mark Swipe Gesture Setup/Actions
 
@@ -199,24 +161,6 @@
     
     CGPoint translatedPoint = [(UIPanGestureRecognizer*)sender translationInView:self.view];
     CGPoint velocity = [(UIPanGestureRecognizer*)sender velocityInView:[sender view]];
-    
-    if([(UIPanGestureRecognizer*)sender state] == UIGestureRecognizerStateBegan) {
-        //        UIView *childView = nil;
-        //
-        //        if(velocity.x > 0) {
-        //            if (!_showingRightPanel) {
-        //                childView = [self getLeftView];
-        //            }
-        //        } else {
-        //            if (!_showingLeftPanel) {
-        //                childView = [self getRightView];
-        //            }
-        //
-        //        }
-        //        // Make sure the view you're working with is front and center.
-        //        [self.view sendSubviewToBack:childView];
-        //        [[sender view] bringSubviewToFront:[(UIPanGestureRecognizer*)sender view]];
-    }
     
     if([(UIPanGestureRecognizer*)sender state] == UIGestureRecognizerStateEnded) {
         
@@ -355,7 +299,6 @@
                      completion:^(BOOL finished) {
                          if (finished) {
                              
-                             [self resetMainView];
                          }
                      }];
     

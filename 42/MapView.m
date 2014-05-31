@@ -9,6 +9,7 @@
 #import "MapView.h"
 #import <UIKit/UIKit.h>
 #import <MapKit/Mapkit.h>
+#define ANIMATION_TIME 0.25
 
 @implementation MapView
 
@@ -36,8 +37,8 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
-    _mkMapView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+
+    _mkMapView.frame = CGRectMake(0, 0, self.superview.frame.size.width, self.superview.frame.size.height);
 
     _rightButton.frame = CGRectMake(self.frame.size.width - 40 - 30, self.frame.size.height - 40 - 20, 40.0, 40.0);
     _rightButton.backgroundColor = [UIColor whiteColor];
@@ -57,7 +58,7 @@
     [_cancelButton setTitle:@"x" forState:UIControlStateNormal];
 
     
-    _flagButton.frame = CGRectMake(self.frame.size.width/2 - 30, self.frame.size.height - 60 - 20, 60.0, 60.0);
+    _flagButton.frame = CGRectMake(self.frame.size.width/2 - 20, self.frame.size.height - 60 - 10, 60.0, 60.0);
     _flagButton.alpha = 0.900;
     _flagButton.tag = 1;
     _flagButton.backgroundColor = [UIColor whiteColor];
@@ -70,29 +71,40 @@
     [self addSubview:_cancelButton];
     
     
-    _sendToPanel.backgroundColor = [UIColor purpleColor];
-    _sendToPanel.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, 90);
+    _sendToPanel.backgroundColor = [UIColor colorWithRed:1.0 green:0.49 blue:0.27 alpha:1.00];
+    _sendToPanel.frame = CGRectMake(0, self.superview.frame.size.height, self.superview.frame.size.height, 90);
 
-    [_sendToButton setTitle:@"Send" forState:UIControlStateNormal];
+    [_sendToButton setTitle:@"Send >>" forState:UIControlStateNormal];
     _sendToButton.frame = CGRectMake(0, 0, self.frame.size.width, 90);
-    _sendToButton.backgroundColor = [UIColor yellowColor];
+    _sendToButton.backgroundColor = [UIColor clearColor];
+    _sendToButton.tintColor = [UIColor whiteColor];
     [_sendToPanel addSubview:_sendToButton];
 
     [self addSubview:_sendToPanel];
+}
+
+- (void)showSendPanel {
     
-    self.autoresizesSubviews = YES;
-    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.backgroundColor = [UIColor colorWithWhite:0.333 alpha:1.000];
-    self.clearsContextBeforeDrawing = YES;
-    self.clipsToBounds = NO;
-    self.contentMode = UIViewContentModeScaleToFill;
-    self.contentStretch = CGRectFromString(@"{{0, 0}, {1, 1}}");
-    self.hidden = NO;
-    self.multipleTouchEnabled = NO;
-    self.opaque = YES;
-    self.tag = 0;
-    self.userInteractionEnabled = YES;
+    CGRect newRect = CGRectMake(0, self.superview.frame.size.height - _sendToPanel.frame.size.height, _sendToPanel.frame.size.width, _sendToPanel.frame.size.height);
     
+    [UIView animateWithDuration:ANIMATION_TIME delay:0 options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         _sendToPanel.frame = newRect;
+                     }
+                     completion:^(BOOL finished) { }];
+
+}
+
+- (void)hideSendPanel {
+    
+    CGRect newRect = CGRectMake(0, self.superview.frame.size.height, _sendToPanel.frame.size.width, _sendToPanel.frame.size.height);
+    
+    [UIView animateWithDuration:ANIMATION_TIME delay:0 options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         _sendToPanel.frame = newRect;
+                     }
+                     completion:^(BOOL finished) { }];
+
 }
 
 

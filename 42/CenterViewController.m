@@ -105,8 +105,6 @@
 - (void)locationManager:(CLLocationManager *)manager
     didUpdateToLocation:(CLLocation *)newLocation
            fromLocation:(CLLocation *)oldLocation {
-    
-    [self locationDidChange:newLocation];
 }
 
 
@@ -139,7 +137,7 @@
     [_selfPin updateLocation: _locationManager.location];
     [self centerMap];
     [_mkMapView addAnnotation:_selfPin];
-    
+
     CLLocationCoordinate2D currentCoordinate = _locationManager.location.coordinate;
 	PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	PFUser *user = [PFUser currentUser];
@@ -147,9 +145,7 @@
     MapView *view = (MapView *)self.view;
     
     // show "Send" button
-    UIView *sendToPanel = view.sendToPanel;
-    CGRect newRect = CGRectMake(0, view.frame.size.height - sendToPanel.frame.size.height, sendToPanel.frame.size.width, sendToPanel.frame.size.height);
-    sendToPanel.frame = newRect;
+    [view showSendPanel];
 
     // show "X" button
     UIButton *cancelButton = view.cancelButton;
@@ -179,7 +175,6 @@
 		}
 		if (succeeded) {
 			NSLog(@"Successfully saved!");
-			NSLog(@"%@", postObject);
 		} else {
 			NSLog(@"Failed to save.");
 		}
@@ -238,11 +233,8 @@
 {
     MapView *view = (MapView *)self.view;
     
-    // show "Send" button
-    UIView *sendToPanel = view.sendToPanel;
-    CGRect newRect = CGRectMake(0, view.frame.size.height, sendToPanel.frame.size.width, sendToPanel.frame.size.height);
-    sendToPanel.frame = newRect;
-    
+    [view hideSendPanel];
+
     // show "X" button
     UIButton *cancelButton = view.cancelButton;
     cancelButton.hidden = YES;
@@ -270,19 +262,21 @@
         PFUser *user = locationSent[@"from"];
         PFGeoPoint *location =  locationSent[@"location"];
         NSDate *when = locationSent[@"date"];
-
-    
-        CLLocationCoordinate2D newCoordinate = CLLocationCoordinate2DMake(location.latitude, location.longitude);
+        NSDate *now = [NSDate date];
+        NSTimeInterval interval = [now timeIntervalSinceDate:when];
+        double rawMinutes = interval / (60);
         
-        FriendPinAnnotation *newPin = [[FriendPinAnnotation alloc] initWithCoordinate:newCoordinate name:user.username u_id:user.objectId when:when];
+        if (rawMinutes < 42) {
+            CLLocationCoordinate2D newCoordinate = CLLocationCoordinate2DMake(location.latitude, location.longitude);
         
-        [_friendPins insertObject:newPin atIndex:0];
-        [_mkMapView addAnnotation:(id)newPin];
+            FriendPinAnnotation *newPin = [[FriendPinAnnotation alloc] initWithCoordinate:newCoordinate name:user.username u_id:locationSent.objectId when:when];
+        
+            [_friendPins insertObject:newPin atIndex:0];
+            [_mkMapView addAnnotation:(id)newPin];
+        }
     }
 
 }
-
-
 
 - (void)removeFriendPins {
     for(FriendPinAnnotation *pin in _friendPins) {
@@ -291,34 +285,37 @@
     [_friendPins removeAllObjects];
 }
 
-- (void)updatePinLat:(NSString *)lat PinLng:(NSString *)lng PinTime:(NSDate *)when forUser:(PFUser*)user withLocation: (CLLocation*)newLocation {
-    for (FriendPinAnnotation *pin in _friendPins) {
-        if (pin.ID == user.objectId) {
-            [_mkMapView removeAnnotation:(id)pin];
-            [pin updateLocation:newLocation];
-            [pin updateTime:when];
-            [_mkMapView addAnnotation:(id)pin];
-        }
-    }
-}
-
 - (void)showLocationSent:(PFObject *)locationSent {
    
-    PFUser *user = locationSent[@"from"];
     PFGeoPoint *location =  locationSent[@"location"];
 
     [self goToCoordinate:CLLocationCoordinate2DMake(location.latitude, location.longitude)];
     for (FriendPinAnnotation *pin in _friendPins) {
-        if (pin.ID == user.objectId) {
+        if (pin.ID == locationSent.objectId) {
             [_mkMapView selectAnnotation:pin animated:YES];
         }
     }
+
 }
 
 - (void) goToCoordinate: (CLLocationCoordinate2D)coordinate{
     MKCoordinateRegion region = _mkMapView.region;
     region.center = coordinate;
     [_mkMapView setRegion:region animated:YES];
+}
+
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id) annotation
+{
+    if ([annotation isKindOfClass:[MKUserLocation class]])
+        return nil;
+    
+    MKPinAnnotationView *newAnnotation = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"annotation1"];
+    newAnnotation.pinColor = MKPinAnnotationColorRed;
+    newAnnotation.animatesDrop = YES;
+    newAnnotation.canShowCallout = YES;
+    [newAnnotation setSelected:YES animated:YES];
+    
+    return newAnnotation;
 }
 
 

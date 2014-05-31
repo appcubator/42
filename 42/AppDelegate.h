@@ -10,6 +10,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
+#import "MainViewController.h"
 
 // In the app delegate we create a constant string to be used as an event name
 static NSString* const kLocationSentUpdateNotification= @"kLocationSentUpdateNotification";
@@ -18,6 +19,7 @@ static NSString* const kLocationSentUpdateNotification= @"kLocationSentUpdateNot
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) UIViewController *viewController;
+@property (nonatomic, strong) MainViewController *mainViewController;
 
 @property (nonatomic, strong) CLLocation *currentLocation;
 @property (nonatomic, strong) NSMutableArray *arrayOfLocationSent;
@@ -26,5 +28,6 @@ static NSString* const kLocationSentUpdateNotification= @"kLocationSentUpdateNot
 - (void)presentMainViewController;
 - (void)sendLocationTo:(NSMutableArray *)receivers withBlock:(void (^)(void))callbackBlock;
 - (void)updateLocationSent;
+- (MainViewController *)getMainViewController;
 
 @end

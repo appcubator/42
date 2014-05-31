@@ -10,4 +10,12 @@
 
 @interface SettingsViewController : UIViewController
 
+@property (strong, nonatomic) NSDictionary *menuItemsDict;
+@property (strong, nonatomic) IBOutlet UITableViewCell *cellMain;
+
+@property (strong, nonatomic) IBOutlet UILabel *optionLabel;
+@property (strong, nonatomic) IBOutlet UILabel *dataLabel;
+@property (strong, nonatomic) IBOutlet UILabel *arrowLabel;
+
+
 @end

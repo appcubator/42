@@ -101,13 +101,18 @@
         // already there
         [_arrayOfReceivers removeObject:@(indexPath.row)];
         cell.backgroundColor = [UIColor whiteColor];
+        [tableView cellForRowAtIndexPath:indexPath].accessoryType = UITableViewCellAccessoryNone;
+
     }
     else {
         [_arrayOfReceivers addObject:@(indexPath.row)];
         cell.contentView.backgroundColor = [UIColor greenColor];
+        [tableView cellForRowAtIndexPath:indexPath].accessoryType = UITableViewCellAccessoryCheckmark;
+
     }
-    
+
     [self setupListOfReceivers];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void) setupListOfReceivers

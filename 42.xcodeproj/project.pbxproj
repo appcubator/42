@@ -13,16 +13,15 @@
 		CE1B929519359793001489C8 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1B929319359793001489C8 /* SettingsViewController.m */; };
 		CE1B929619359793001489C8 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE1B929419359793001489C8 /* SettingsViewController.xib */; };
 		CE1B92991936FED5001489C8 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1B92981936FED5001489C8 /* AddressBookUI.framework */; };
-		CE1B929D193701B7001489C8 /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1B929B193701B7001489C8 /* ContactViewController.m */; };
-		CE1B929E193701B7001489C8 /* ContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE1B929C193701B7001489C8 /* ContactViewController.xib */; };
 		CE84F0EB1937993900AC6AE3 /* UIButtonForRow.m in Sources */ = {isa = PBXBuildFile; fileRef = CE84F0EA1937993900AC6AE3 /* UIButtonForRow.m */; };
+		CE84F0F0193819E100AC6AE3 /* ContactCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE84F0EF193819E100AC6AE3 /* ContactCellView.xib */; };
+		CE84F0F4193916C500AC6AE3 /* SettingsCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE84F0F3193916C500AC6AE3 /* SettingsCellView.xib */; };
 		CEE97426192DA82800494F47 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97425192DA82800494F47 /* Foundation.framework */; };
 		CEE97428192DA82800494F47 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97427192DA82800494F47 /* CoreGraphics.framework */; };
 		CEE9742A192DA82800494F47 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97429192DA82800494F47 /* UIKit.framework */; };
 		CEE97430192DA82800494F47 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CEE9742E192DA82800494F47 /* InfoPlist.strings */; };
 		CEE97432192DA82800494F47 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE97431192DA82800494F47 /* main.m */; };
 		CEE97436192DA82800494F47 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE97435192DA82800494F47 /* AppDelegate.m */; };
-		CEE97439192DA82800494F47 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEE97437192DA82800494F47 /* Main.storyboard */; };
 		CEE9743C192DA82800494F47 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE9743B192DA82800494F47 /* ViewController.m */; };
 		CEE9743E192DA82800494F47 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CEE9743D192DA82800494F47 /* Images.xcassets */; };
 		CEE97445192DA82800494F47 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97444192DA82800494F47 /* XCTest.framework */; };
@@ -51,13 +50,10 @@
 		CEE97487192DBEA700494F47 /* MapView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE97486192DBEA700494F47 /* MapView.m */; };
 		CEE9748E192DD12500494F47 /* PersonalPinAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE9748D192DD12500494F47 /* PersonalPinAnnotation.m */; };
 		CEE97491192DE03400494F47 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE97490192DE03400494F47 /* MainViewController.m */; };
-		CEE97496192DE12C00494F47 /* LeftPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE97493192DE12C00494F47 /* LeftPanelView.m */; };
-		CEE97497192DE12C00494F47 /* RightPanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE97495192DE12C00494F47 /* RightPanelView.m */; };
 		CEE9749C192DE13E00494F47 /* LeftPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE97499192DE13E00494F47 /* LeftPanelViewController.m */; };
 		CEE9749D192DE13E00494F47 /* RightPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE9749B192DE13E00494F47 /* RightPanelViewController.m */; };
 		CEE9749F192DE39400494F47 /* RightPanelView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEE9749E192DE39400494F47 /* RightPanelView.xib */; };
 		CEE974A1192DE62600494F47 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE974A0192DE62600494F47 /* AddressBook.framework */; };
-		CEE974A3192DEE1500494F47 /* ContactCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEE974A2192DEE1500494F47 /* ContactCellView.xib */; };
 		CEE974A7193109DD00494F47 /* SendToViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE974A5193109DD00494F47 /* SendToViewController.m */; };
 		CEE974A8193109DD00494F47 /* SendToViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEE974A6193109DD00494F47 /* SendToViewController.xib */; };
 		CEE974AA19310C0C00494F47 /* SendToCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEE974A919310C0C00494F47 /* SendToCellView.xib */; };
@@ -85,11 +81,13 @@
 		CE1B929319359793001489C8 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		CE1B929419359793001489C8 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
 		CE1B92981936FED5001489C8 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
-		CE1B929A193701B7001489C8 /* ContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactViewController.h; sourceTree = "<group>"; };
-		CE1B929B193701B7001489C8 /* ContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactViewController.m; sourceTree = "<group>"; };
-		CE1B929C193701B7001489C8 /* ContactViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactViewController.xib; sourceTree = "<group>"; };
 		CE84F0E91937993900AC6AE3 /* UIButtonForRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIButtonForRow.h; sourceTree = "<group>"; };
 		CE84F0EA1937993900AC6AE3 /* UIButtonForRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIButtonForRow.m; sourceTree = "<group>"; };
+		CE84F0EC1938157F00AC6AE3 /* 120 - iPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "120 - iPhone@2x.png"; path = "designs/120 - iPhone@2x.png"; sourceTree = "<group>"; };
+		CE84F0ED1938158C00AC6AE3 /* 80 - Spotlight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "80 - Spotlight@2x.png"; path = "designs/80 - Spotlight@2x.png"; sourceTree = "<group>"; };
+		CE84F0EE1938159500AC6AE3 /* 58 - Settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "58 - Settings@2x.png"; path = "designs/58 - Settings@2x.png"; sourceTree = "<group>"; };
+		CE84F0EF193819E100AC6AE3 /* ContactCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactCellView.xib; sourceTree = "<group>"; };
+		CE84F0F3193916C500AC6AE3 /* SettingsCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsCellView.xib; sourceTree = "<group>"; };
 		CEE97422192DA82800494F47 /* 42.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 42.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE97425192DA82800494F47 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CEE97427192DA82800494F47 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -100,7 +98,6 @@
 		CEE97433192DA82800494F47 /* 42-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "42-Prefix.pch"; sourceTree = "<group>"; };
 		CEE97434192DA82800494F47 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		CEE97435192DA82800494F47 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		CEE97438192DA82800494F47 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CEE9743A192DA82800494F47 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		CEE9743B192DA82800494F47 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		CEE9743D192DA82800494F47 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -138,17 +135,12 @@
 		CEE9748D192DD12500494F47 /* PersonalPinAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalPinAnnotation.m; sourceTree = "<group>"; };
 		CEE9748F192DE03400494F47 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		CEE97490192DE03400494F47 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
-		CEE97492192DE12C00494F47 /* LeftPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftPanelView.h; sourceTree = "<group>"; };
-		CEE97493192DE12C00494F47 /* LeftPanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftPanelView.m; sourceTree = "<group>"; };
-		CEE97494192DE12C00494F47 /* RightPanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightPanelView.h; sourceTree = "<group>"; };
-		CEE97495192DE12C00494F47 /* RightPanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightPanelView.m; sourceTree = "<group>"; };
 		CEE97498192DE13E00494F47 /* LeftPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftPanelViewController.h; sourceTree = "<group>"; };
 		CEE97499192DE13E00494F47 /* LeftPanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftPanelViewController.m; sourceTree = "<group>"; };
 		CEE9749A192DE13E00494F47 /* RightPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightPanelViewController.h; sourceTree = "<group>"; };
 		CEE9749B192DE13E00494F47 /* RightPanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightPanelViewController.m; sourceTree = "<group>"; };
 		CEE9749E192DE39400494F47 /* RightPanelView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RightPanelView.xib; sourceTree = "<group>"; };
 		CEE974A0192DE62600494F47 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
-		CEE974A2192DEE1500494F47 /* ContactCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactCellView.xib; sourceTree = "<group>"; };
 		CEE974A4193109DD00494F47 /* SendToViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendToViewController.h; sourceTree = "<group>"; };
 		CEE974A5193109DD00494F47 /* SendToViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendToViewController.m; sourceTree = "<group>"; };
 		CEE974A6193109DD00494F47 /* SendToViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendToViewController.xib; sourceTree = "<group>"; };
@@ -201,6 +193,9 @@
 		CEE97419192DA82800494F47 = {
 			isa = PBXGroup;
 			children = (
+				CE84F0EE1938159500AC6AE3 /* 58 - Settings@2x.png */,
+				CE84F0ED1938158C00AC6AE3 /* 80 - Spotlight@2x.png */,
+				CE84F0EC1938157F00AC6AE3 /* 120 - iPhone@2x.png */,
 				CEE9742B192DA82800494F47 /* 42 */,
 				CEE9744A192DA82800494F47 /* 42Tests */,
 				CEE97424192DA82800494F47 /* Frameworks */,
@@ -252,7 +247,6 @@
 				CEE9745C192DAA1B00494F47 /* Controllers */,
 				CEE97434192DA82800494F47 /* AppDelegate.h */,
 				CEE97435192DA82800494F47 /* AppDelegate.m */,
-				CEE97437192DA82800494F47 /* Main.storyboard */,
 				CEE9743A192DA82800494F47 /* ViewController.h */,
 				CEE9743B192DA82800494F47 /* ViewController.m */,
 				CEE9743D192DA82800494F47 /* Images.xcassets */,
@@ -311,9 +305,6 @@
 				CEE974A5193109DD00494F47 /* SendToViewController.m */,
 				CE1B929219359793001489C8 /* SettingsViewController.h */,
 				CE1B929319359793001489C8 /* SettingsViewController.m */,
-				CE1B929A193701B7001489C8 /* ContactViewController.h */,
-				CE1B929B193701B7001489C8 /* ContactViewController.m */,
-				CE1B929C193701B7001489C8 /* ContactViewController.xib */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -322,10 +313,6 @@
 			isa = PBXGroup;
 			children = (
 				CE1B929419359793001489C8 /* SettingsViewController.xib */,
-				CEE97492192DE12C00494F47 /* LeftPanelView.h */,
-				CEE97493192DE12C00494F47 /* LeftPanelView.m */,
-				CEE97494192DE12C00494F47 /* RightPanelView.h */,
-				CEE97495192DE12C00494F47 /* RightPanelView.m */,
 				CEE97461192DACED00494F47 /* WelcomeView.xib */,
 				CEE9746A192DAF6100494F47 /* NewUserView.xib */,
 				CEE97465192DAF2A00494F47 /* LoginView.xib */,
@@ -335,10 +322,11 @@
 				CEE97485192DBEA700494F47 /* MapView.h */,
 				CEE97486192DBEA700494F47 /* MapView.m */,
 				CEE9749E192DE39400494F47 /* RightPanelView.xib */,
-				CEE974A2192DEE1500494F47 /* ContactCellView.xib */,
 				CEE974A919310C0C00494F47 /* SendToCellView.xib */,
 				CEE974AB193164B700494F47 /* LeftPanelView.xib */,
 				CEE974AD1931660000494F47 /* LocationSentCellView.xib */,
+				CE84F0EF193819E100AC6AE3 /* ContactCellView.xib */,
+				CE84F0F3193916C500AC6AE3 /* SettingsCellView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -435,19 +423,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE1B929619359793001489C8 /* SettingsViewController.xib in Resources */,
+				CE84F0F4193916C500AC6AE3 /* SettingsCellView.xib in Resources */,
 				CEE9746C192DAF6100494F47 /* NewUserView.xib in Resources */,
 				CEE97467192DAF2A00494F47 /* LoginView.xib in Resources */,
 				CEE9749F192DE39400494F47 /* RightPanelView.xib in Resources */,
 				CEE974AE1931660000494F47 /* LocationSentCellView.xib in Resources */,
 				CEE974A8193109DD00494F47 /* SendToViewController.xib in Resources */,
 				CEE974AC193164B700494F47 /* LeftPanelView.xib in Resources */,
-				CEE974A3192DEE1500494F47 /* ContactCellView.xib in Resources */,
+				CE84F0F0193819E100AC6AE3 /* ContactCellView.xib in Resources */,
 				CEE9743E192DA82800494F47 /* Images.xcassets in Resources */,
 				CEE97430192DA82800494F47 /* InfoPlist.strings in Resources */,
 				CEE974AA19310C0C00494F47 /* SendToCellView.xib in Resources */,
-				CEE97439192DA82800494F47 /* Main.storyboard in Resources */,
 				CEE97462192DACED00494F47 /* WelcomeView.xib in Resources */,
-				CE1B929E193701B7001489C8 /* ContactViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -508,12 +495,9 @@
 				CEE97484192DBE9A00494F47 /* CenterViewController.m in Sources */,
 				CEE97432192DA82800494F47 /* main.m in Sources */,
 				CE84F0EB1937993900AC6AE3 /* UIButtonForRow.m in Sources */,
-				CE1B929D193701B7001489C8 /* ContactViewController.m in Sources */,
 				CEE9749C192DE13E00494F47 /* LeftPanelViewController.m in Sources */,
 				CEE97481192DB56100494F47 /* ActivityView.m in Sources */,
 				CEE9746B192DAF6100494F47 /* NewUserViewController.m in Sources */,
-				CEE97496192DE12C00494F47 /* LeftPanelView.m in Sources */,
-				CEE97497192DE12C00494F47 /* RightPanelView.m in Sources */,
 				CEE97487192DBEA700494F47 /* MapView.m in Sources */,
 				CEE974B11932834A00494F47 /* FriendPinAnnotation.m in Sources */,
 				CEE974A7193109DD00494F47 /* SendToViewController.m in Sources */,
@@ -547,14 +531,6 @@
 				CEE9742F192DA82800494F47 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		CEE97437192DA82800494F47 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CEE97438192DA82800494F47 /* Base */,
-			);
-			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 		CEE9744D192DA82800494F47 /* InfoPlist.strings */ = {
@@ -646,7 +622,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5911A917935A4312BECFEC43 /* Pods.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -665,7 +641,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5911A917935A4312BECFEC43 /* Pods.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (

@@ -77,23 +77,31 @@
     return [appDelegate.arrayOfLocationSent count];
 }
 
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    NSMutableArray *arrayOfLocationSent = appDelegate.arrayOfLocationSent;
+    PFObject *currentLocationSent = [arrayOfLocationSent objectAtIndex:indexPath.row];
+    [[appDelegate getMainViewController].centerViewController showLocationSent:currentLocationSent];
+    [[appDelegate getMainViewController] movePanelToOriginalPosition];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellMainNibID = @"cellMain";
 
     _cellMain = [tableView dequeueReusableCellWithIdentifier:cellMainNibID];
-    
+
     if (_cellMain == nil) {
         [[NSBundle mainBundle] loadNibNamed:@"LocationSentCellView" owner:self options:nil];
     }
     
     UILabel *usernameLabel = (UILabel *)[_cellMain viewWithTag:1];
-    UILabel *seenLabel = (UILabel *)[_cellMain viewWithTag:2];
+    UIImageView *locationStatusView = (UIImageView *)[_cellMain viewWithTag:2];
+    UILabel *timeLabel = (UILabel *)[_cellMain viewWithTag:3];
 
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     NSMutableArray *arrayOfLocationSent = appDelegate.arrayOfLocationSent;
@@ -102,13 +110,44 @@
         PFObject *currentLocationSent = [arrayOfLocationSent objectAtIndex:indexPath.row];
         PFUser* sender = currentLocationSent[@"from"];
         usernameLabel.text = sender.username;
-        if (currentLocationSent[@"isSeen"]) {
-            seenLabel.text = @"Seen";
+        NSDate *when = currentLocationSent[@"date"];
+        NSDate *now = [NSDate date];
+        NSTimeInterval interval = [now timeIntervalSinceDate:when];
+        double rawMinutes = interval / (60);
+        
+        if (rawMinutes < 42) {
+            locationStatusView.backgroundColor = [UIColor blueColor];
         }
         else {
-            seenLabel.text = @"Not Seen";
+            locationStatusView.backgroundColor = [UIColor clearColor];
+            locationStatusView.layer.borderColor = [UIColor blueColor].CGColor;
+            locationStatusView.layer.borderWidth = 2.0f;
+        }
+        
+        int second = 1;
+        int minute = second*60;
+        int hour = minute*60;
+        int day = hour*24;
+        // interval can be before (negative) or after (positive)
+        int num = abs(interval);
+        NSString *unit = @"day";
+        
+        if (num >= day) {
+            num /= day;
+            if (num > 1) unit = @"days";
+        } else if (num >= hour) {
+            num /= hour;
+            unit = (num > 1) ? @"hours" : @"hour";
+        } else if (num >= minute) {
+            num /= minute;
+            unit = (num > 1) ? @"minutes" : @"minute";
+        } else if (num >= second) {
+            num /= second;
+            unit = (num > 1) ? @"seconds" : @"second";
         }
 
+        timeLabel.text = [NSString stringWithFormat:@"%d %@", num, unit];
+        
     }
     
     return _cellMain;

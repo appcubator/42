@@ -20,7 +20,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 
 - (void)sendLocationTo:(NSMutableArray *)receivers withBlock:(void (^)(void))callbackBlock
 {
-    NSLog(@"Loctaion %@", _currentLocation);
+
     NSMutableArray *locationSentList = [[NSMutableArray alloc] init];
     PFUser *currentUser = [PFUser currentUser];
 
@@ -66,8 +66,6 @@ static NSString * const defaultsLocationKey = @"currentLocation";
     
 	// Grab values from NSUserDefaults:
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	
-    
     
 	if ([PFUser currentUser]) {
         [self presentMainViewController];
@@ -99,25 +97,32 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
 didReceiveRemoteNotification:(NSDictionary *)userInfo {
     // Handle the push here
     [PFPush handlePush:userInfo];
+    [self updateLocationSent];
+}
+
+- (MainViewController *)getMainViewController
+{
+    if (_mainViewController == nil)
+    {
+        self.mainViewController = [[MainViewController alloc] init];
+    }
+    
+    return _mainViewController;
 }
 
 - (void)presentMainViewController {
-	UINavigationController *navController = nil;
-    // Skip straight to the main view.
-    MainViewController *mapViewController = [[MainViewController alloc] init];
-    
-    navController = [[UINavigationController alloc] initWithRootViewController:mapViewController];
+	
+    UINavigationController *navController = nil;
+    navController = [[UINavigationController alloc] initWithRootViewController:[self getMainViewController]];
     navController.navigationBarHidden = YES;
-
     self.viewController = navController;
     self.window.rootViewController = self.viewController;
 }
 
+
 - (void)presentWelcomeViewController {
 	// Go to the welcome screen and have them log in or create an account.
 	WelcomeViewController *welcomeViewController = [[WelcomeViewController alloc] initWithNibName:@"WelcomeView" bundle:nil];
-	welcomeViewController.title = @"Welcome to Anywall";
-	
 	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:welcomeViewController];
 	navController.navigationBarHidden = YES;
     
@@ -168,9 +173,13 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
                     NSDate *first =  firstObj[@"date"];
                     NSDate *second = secondObj[@"date"];
+                
+                    if (first == nil) return NSOrderedDescending;
+                    if (second == nil) return NSOrderedAscending;
+
                     return [second compare:first];
             }];
-    
+
             _arrayOfLocationSent = [NSMutableArray arrayWithArray:sortedLocations];
 
             [[NSNotificationCenter defaultCenter] postNotificationName: kLocationSentUpdateNotification

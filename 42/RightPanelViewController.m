@@ -7,7 +7,6 @@
 //
 
 #import "RightPanelViewController.h"
-#import "RightPanelView.h"
 #import <AddressBook/AddressBook.h>
 #import <Parse/Parse.h>
 #import <AddressBookUI/AddressBookUI.h>
@@ -281,19 +280,10 @@
     
     UIButtonForRow *btn = (UIButtonForRow *)sender;
     NSIndexPath *indexPath = btn.indexPath;
-
-    NSLog(@"%@",indexPath);
-    NSLog(@"%d",indexPath.section);
-    NSLog(@"%d", indexPath.row);
     
     NSString *sectionTitle = [[self getSectionsArray] objectAtIndex:indexPath.section];
     NSMutableArray *sectionForKey = [_dictOfContacts objectForKey:sectionTitle];
     NSMutableDictionary *currentContact = [sectionForKey objectAtIndex:indexPath.row];
-
-    NSLog(@"%@",sectionTitle);
-    NSLog(@"%@",sectionForKey);
-    NSLog(@"%@",currentContact);
-
     NSString *mobileNumber = [currentContact objectForKey:@"Phone"];
 
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];

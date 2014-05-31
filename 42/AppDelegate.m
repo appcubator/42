@@ -20,7 +20,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 
 - (void)sendLocationTo:(NSMutableArray *)receivers withBlock:(void (^)(void))callbackBlock
 {
-    NSLog(@"Loctaion %@", _currentLocation);
+
     NSMutableArray *locationSentList = [[NSMutableArray alloc] init];
     PFUser *currentUser = [PFUser currentUser];
 
@@ -97,6 +97,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
 didReceiveRemoteNotification:(NSDictionary *)userInfo {
     // Handle the push here
     [PFPush handlePush:userInfo];
+    [self updateLocationSent];
 }
 
 - (MainViewController *)getMainViewController
@@ -172,9 +173,13 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
                     NSDate *first =  firstObj[@"date"];
                     NSDate *second = secondObj[@"date"];
+                
+                    if (first == nil) return NSOrderedDescending;
+                    if (second == nil) return NSOrderedAscending;
+
                     return [second compare:first];
             }];
-    
+
             _arrayOfLocationSent = [NSMutableArray arrayWithArray:sortedLocations];
 
             [[NSNotificationCenter defaultCenter] postNotificationName: kLocationSentUpdateNotification

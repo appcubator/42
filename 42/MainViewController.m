@@ -209,8 +209,6 @@
     
     if([(UIPanGestureRecognizer*)sender state] == UIGestureRecognizerStateChanged) {
         if(velocity.x > 0) {
-            NSLog(@"RIGHT");
-            NSLog(@"%f",_leftPanelViewController.view.center.x);
             if (_leftPanelViewController.view.center.x == _centerViewController.view.frame.size.width / 2) {
                 return;
             }

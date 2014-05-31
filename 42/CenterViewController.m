@@ -105,8 +105,6 @@
 - (void)locationManager:(CLLocationManager *)manager
     didUpdateToLocation:(CLLocation *)newLocation
            fromLocation:(CLLocation *)oldLocation {
-    
-    [self locationDidChange:newLocation];
 }
 
 
@@ -177,7 +175,6 @@
 		}
 		if (succeeded) {
 			NSLog(@"Successfully saved!");
-			NSLog(@"%@", postObject);
 		} else {
 			NSLog(@"Failed to save.");
 		}

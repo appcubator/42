@@ -20,8 +20,14 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        
         // Custom initialization
+        _menuItemsDict = @{ @"My Account": [NSArray arrayWithObjects: @"Username", @"Mobile Number", @"Email", nil],
+                            @"More Information": [NSArray arrayWithObjects: @"Support", @"Privacy Policy", nil],
+                            @"Account Action":[NSArray arrayWithObjects: @"Log Out", nil] };
+        
     }
+    
     return self;
 }
 
@@ -37,7 +43,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)btnLogout:(id)sender {
+- (void)logout {
     [PFUser logOut];
     [self.navigationController popToRootViewControllerAnimated:NO];
     
@@ -48,6 +54,85 @@
 
 - (IBAction)btnBack:(id)sender {
     [self.navigationController popToRootViewControllerAnimated:NO];
+}
+
+#pragma mark -
+#pragma mark UITableView Datasource/Delegate
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return [[_menuItemsDict allKeys] count];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSString *key = [[_menuItemsDict allKeys]objectAtIndex:section];
+    NSMutableArray *arr = [_menuItemsDict objectForKey:key];
+    return [arr count];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 44;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *cellMainNibID = @"cellMain";
+    NSString *sectTitle = [self tableView:tableView titleForHeaderInSection:indexPath.section];
+    NSString *rowTitle = [[_menuItemsDict objectForKey:sectTitle] objectAtIndex:indexPath.row];
+
+    _cellMain = [tableView dequeueReusableCellWithIdentifier:cellMainNibID];
+
+    if (_cellMain == nil) {
+        [[NSBundle mainBundle] loadNibNamed:@"SettingsCellView" owner:self options:nil];
+    }
+    
+    UILabel *optionLabel = (UILabel *)[_cellMain viewWithTag:1];
+    UILabel *dataLabel = (UILabel *)[_cellMain viewWithTag:2];
+    UILabel *arrowLabel = (UILabel *)[_cellMain viewWithTag:3];
+
+    optionLabel.text = rowTitle;
+    
+    if ([rowTitle isEqual:@"Username"]) {
+        dataLabel.text = [PFUser currentUser].username;
+        arrowLabel.hidden = NO;
+    }
+
+    if ([rowTitle isEqual:@"Mobile Number"]) {
+        dataLabel.text = [PFUser currentUser][@"phone"];
+        arrowLabel.hidden = NO;
+    }
+    
+    if ([rowTitle isEqual:@"Email"]) {
+        dataLabel.text = [PFUser currentUser].email;
+        arrowLabel.hidden = NO;
+    }
+    
+    if ([rowTitle isEqual:@"Log Out"]) {
+        dataLabel.hidden = YES;
+        arrowLabel.hidden = YES;
+    }
+    
+
+    return _cellMain;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [[_menuItemsDict allKeys] objectAtIndex:section];
+}
+
+- (void) tableView: (UITableView *) tableView didSelectRowAtIndexPath: (NSIndexPath *) indexPath {
+    
+    NSString *sectTitle = [self tableView:tableView titleForHeaderInSection:indexPath.section];
+    NSString *rowTitle = [[_menuItemsDict objectForKey:sectTitle] objectAtIndex:indexPath.row];
+    
+    if ([rowTitle isEqual:@"Log Out"]) {
+        [self logout];
+    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 

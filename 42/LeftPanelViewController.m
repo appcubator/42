@@ -130,11 +130,7 @@
         int day = hour*24;
         // interval can be before (negative) or after (positive)
         int num = abs(interval);
-        NSString *beforeOrAfter = @"before";
         NSString *unit = @"day";
-        if (interval > 0) {
-            beforeOrAfter = @"after";
-        }
         
         if (num >= day) {
             num /= day;
@@ -149,8 +145,8 @@
             num /= second;
             unit = (num > 1) ? @"seconds" : @"second";
         }
-        
-        timeLabel.text = [NSString stringWithFormat:@"%d %@ ago", num, unit];
+
+        timeLabel.text = [NSString stringWithFormat:@"%d %@", num, unit];
         
     }
     

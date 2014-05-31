@@ -178,8 +178,15 @@
     
     [appDelegate sendLocationTo:listOfReceivers withBlock:^(void) {
         [self resetData];
-        [self.navigationController popViewControllerAnimated:YES];
     }];
+    //[self.navigationController popViewControllerAnimated:YES];
+    
+//    UIView *myView = [[self.view subviews] objectAtIndex:0];
+//    self.view.backgroundColor = [UIColor clearColor];
+//    self.view.superview.superview.backgroundColor =[UIColor redColor];
+//    self.view.superview.layer.opacity = 0.5;
+    [self addFallAnimationForLayer:self.view.layer];
+
 }
 
 - (IBAction)btnBack:(id)sender {
@@ -191,5 +198,33 @@
     
 }
 
+- (void)addFallAnimationForLayer:(CALayer *)layer{
+    
+    // The keyPath to animate
+    NSString *keyPath = @"transform";
+    
+    // Allocate a CAKeyFrameAnimation for the specified keyPath.
+    CAKeyframeAnimation *translation = [CAKeyframeAnimation animationWithKeyPath:keyPath];
+    
+    // Set animation duration and repeat
+    translation.duration = 0.2f;
+    translation.repeatCount = 1;
+    
+    // Allocate array to hold the values to interpolate
+    NSMutableArray *values = [[NSMutableArray alloc] init];
+    
+    // Add the start value
+    // The animation starts at a y offset of 0.0
+    [values addObject:[NSValue valueWithCATransform3D: CATransform3DScale (layer.transform, 1, 1, 1)]];
+    
+    // Add the end value
+    [values addObject:[NSValue valueWithCATransform3D: CATransform3DScale (layer.transform, 0.6, 0.6, 0.6)]];
+
+    // Set the values that should be interpolated during the animation
+    translation.values = values;
+    
+    [layer addAnimation:translation forKey:keyPath];
+    [layer setTransform:CATransform3DScale (layer.transform, 0.6, 0.6, 0.6)];
+}
 
 @end

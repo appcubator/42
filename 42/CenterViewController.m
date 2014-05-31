@@ -79,6 +79,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [_mkMapView setShowsUserLocation:YES];
+    MapView *view = (MapView *)self.view;
 }
 
 
@@ -225,8 +226,17 @@
 - (void)btnSendTo:(id)sender
 {
     SendToViewController *sendToViewController = [[SendToViewController alloc] initWithNibName:@"SendToViewController" bundle:nil];
-	[self.navigationController pushViewController:sendToViewController animated:YES];
+//	[self.navigationController pushViewController:sendToViewController animated:NO];
     
+    [self.parentViewController addChildViewController:sendToViewController];
+    sendToViewController.view.frame = CGRectMake(0, 0, sendToViewController.view.frame.size.width, sendToViewController.view.frame.size.height);
+
+    [self.view.superview addSubview:sendToViewController.view];
+    [self.view.superview bringSubviewToFront:sendToViewController.view];
+    MapView *view = (MapView *)self.view;
+    
+    // show "Send" button
+    [view hideSendPanel];
 }
 
 - (void)cancelLocation:(id)sender

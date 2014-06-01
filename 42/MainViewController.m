@@ -75,7 +75,6 @@
     
     self.centerViewController = [[CenterViewController alloc] init];
     self.centerViewController.view.tag = CENTER_TAG;
-    self.centerViewController.delegate = self;
     
     [self.view addSubview:self.centerViewController.view];
     [self addChildViewController:_centerViewController];

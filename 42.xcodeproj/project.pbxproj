@@ -16,6 +16,7 @@
 		CE84F0EB1937993900AC6AE3 /* UIButtonForRow.m in Sources */ = {isa = PBXBuildFile; fileRef = CE84F0EA1937993900AC6AE3 /* UIButtonForRow.m */; };
 		CE84F0F0193819E100AC6AE3 /* ContactCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE84F0EF193819E100AC6AE3 /* ContactCellView.xib */; };
 		CE84F0F4193916C500AC6AE3 /* SettingsCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE84F0F3193916C500AC6AE3 /* SettingsCellView.xib */; };
+		CE84F0F8193AB12100AC6AE3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE84F0F6193AB12100AC6AE3 /* Model.xcdatamodeld */; };
 		CEE97426192DA82800494F47 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97425192DA82800494F47 /* Foundation.framework */; };
 		CEE97428192DA82800494F47 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97427192DA82800494F47 /* CoreGraphics.framework */; };
 		CEE9742A192DA82800494F47 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97429192DA82800494F47 /* UIKit.framework */; };
@@ -88,6 +89,7 @@
 		CE84F0EE1938159500AC6AE3 /* 58 - Settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "58 - Settings@2x.png"; path = "designs/58 - Settings@2x.png"; sourceTree = "<group>"; };
 		CE84F0EF193819E100AC6AE3 /* ContactCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactCellView.xib; sourceTree = "<group>"; };
 		CE84F0F3193916C500AC6AE3 /* SettingsCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsCellView.xib; sourceTree = "<group>"; };
+		CE84F0F7193AB12100AC6AE3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		CEE97422192DA82800494F47 /* 42.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 42.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE97425192DA82800494F47 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CEE97427192DA82800494F47 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -190,6 +192,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CE84F0F5193AB11100AC6AE3 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				CE84F0F6193AB12100AC6AE3 /* Model.xcdatamodeld */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
 		CEE97419192DA82800494F47 = {
 			isa = PBXGroup;
 			children = (
@@ -242,6 +252,7 @@
 		CEE9742B192DA82800494F47 /* 42 */ = {
 			isa = PBXGroup;
 			children = (
+				CE84F0F5193AB11100AC6AE3 /* Models */,
 				CEE97488192DD09F00494F47 /* Classes */,
 				CEE97460192DAA7C00494F47 /* Views */,
 				CEE9745C192DAA1B00494F47 /* Controllers */,
@@ -491,6 +502,7 @@
 				CEE9745F192DAA3300494F47 /* WelcomeViewController.m in Sources */,
 				CE1B929519359793001489C8 /* SettingsViewController.m in Sources */,
 				CEE9749D192DE13E00494F47 /* RightPanelViewController.m in Sources */,
+				CE84F0F8193AB12100AC6AE3 /* Model.xcdatamodeld in Sources */,
 				CEE97436192DA82800494F47 /* AppDelegate.m in Sources */,
 				CEE97484192DBE9A00494F47 /* CenterViewController.m in Sources */,
 				CEE97432192DA82800494F47 /* main.m in Sources */,
@@ -727,6 +739,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		CE84F0F6193AB12100AC6AE3 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				CE84F0F7193AB12100AC6AE3 /* Model.xcdatamodel */,
+			);
+			currentVersion = CE84F0F7193AB12100AC6AE3 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = CEE9741A192DA82800494F47 /* Project object */;
 }

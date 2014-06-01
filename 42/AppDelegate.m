@@ -65,7 +65,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
      UIRemoteNotificationTypeSound];
     
 	// Grab values from NSUserDefaults:
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	// NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
 	if ([PFUser currentUser]) {
         [self presentMainViewController];

@@ -154,6 +154,28 @@
 		return;
 	}
     
+    // BEGIN VALIDATION CLIENT CODE
+    /* todo uncomment
+    [PFCloud callFunctionInBackground:@"sendValidationSMS"
+             withParameters:@{ phoneNumber:userNumber }
+             block:^(NSString *result, NSError *error) {
+         if (!error) {
+             // ask user for verication code
+             // when they press enter in that view, execute the following code
+             // BEGIN BLOCK
+             [PFCloud callFunctionInBackground:@"checkSMSValidationCode"
+                      withParameters:@{ phoneNumber:userNumber }
+                      block:^(NSString *result, NSError *error) {
+                 if (!error) {
+                     // put the rest of the code of the function (below the VALIDATION CLIENT CODE) here instead.
+                 }
+             }];
+             // END BLOCK
+         }
+    }];
+     */
+    // END VALIDATION CLIENT CODE
+    
 	// Everything looks good; try to log in.
 	// Disable the done button for now.
 	_doneButton.enabled = NO;

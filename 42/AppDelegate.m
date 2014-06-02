@@ -14,7 +14,8 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 #import "MainViewController.h"
 
 #import <Parse/Parse.h>
-
+#import <CoreData/CoreData.h>
+#import <AddressBook/AddressBook.h>
 
 @implementation AppDelegate
 
@@ -52,6 +53,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [self setUpCoreDataStack];
     // Override point for customization after application launch.
 	
 	// ****************************************************************************
@@ -68,6 +70,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 	// NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
 	if ([PFUser currentUser]) {
+        [self checkForAddressBookPermissions];
         [self presentMainViewController];
 	} else {
 		// Go to the welcome screen and have them log in or create an account.
@@ -79,6 +82,40 @@ static NSString * const defaultsLocationKey = @"currentLocation";
     [self.window makeKeyAndVisible];
     return YES;
 
+}
+
+-(void)setUpCoreDataStack
+{
+    NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:[NSBundle allBundles]];
+    NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+    
+    NSURL *url = [[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:@"Database.sqlite"];
+    
+    NSDictionary *options = @{NSPersistentStoreFileProtectionKey: NSFileProtectionComplete,
+                              NSMigratePersistentStoresAutomaticallyOption:@YES};
+    NSError *error = nil;
+    NSPersistentStore *store = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:options error:&error];
+    if (!store)
+    {
+        NSLog(@"Error adding persistent store. Error %@",error);
+        
+        NSError *deleteError = nil;
+        if ([[NSFileManager defaultManager] removeItemAtURL:url error:&deleteError])
+        {
+            error = nil;
+            store = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:options error:&error];
+        }
+        
+        if (!store)
+        {
+            // Also inform the user...
+            NSLog(@"Failed to create persistent store. Error %@. Delete error %@",error,deleteError);
+            abort();
+        }
+    }
+    
+    self.managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+    self.managedObjectContext.persistentStoreCoordinator = psc;
 }
 
 - (void)application:(UIApplication *)application
@@ -157,6 +194,183 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (NSArray *)getUnregisteredContacts {
+    
+    NSManagedObjectContext *moc = [self managedObjectContext];
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"ContactModel" inManagedObjectContext:moc];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    // Set example predicate and sort orderings...
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                              @"user_id = nil"];
+    [request setPredicate:predicate];
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
+                                        initWithKey:@"name" ascending:YES];
+    [request setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+
+    NSError *error = nil;
+    NSArray *array = [moc executeFetchRequest:request error:&error];
+    if (array == nil)
+    {
+        NSLog(@"%@",error);
+    }
+    
+    return array;
+}
+
+- (NSArray *)getRegisteredContacts {
+    
+    NSManagedObjectContext *moc = [self managedObjectContext];
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"ContactModel" inManagedObjectContext:moc];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    // Set example predicate and sort orderings...
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                              @"user_id != nil"];
+    [request setPredicate:predicate];
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
+                                        initWithKey:@"name" ascending:YES];
+    [request setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    
+    NSError *error = nil;
+    NSArray *array = [moc executeFetchRequest:request error:&error];
+    if (array == nil)
+    {
+        NSLog(@"%@",error);
+    }
+    
+    return array;
+}
+
+- (void)checkForAddressBookPermissions
+{
+    // Request authorization to Address Book
+    ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, NULL);
+    
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
+        
+        ABAddressBookRequestAccessWithCompletion(addressBookRef, ^(bool granted, CFErrorRef error) {
+            if (granted) {
+                [self cacheAllContacts];
+            } else {
+                // User denied access
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"App wont werk!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+                [alertView show];
+            }
+        });
+    }
+    else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
+        // The user has previously given access, add the contact
+        [self checkForAddressBookUpdates];
+    }
+    else {
+        // The user has previously denied access
+        // Send an alert telling user to change privacy setting in settings app
+    }
+    
+}
+
+- (void)checkForAddressBookUpdates {
+    [self cacheAllContacts];
+}
+
+
+- (void)cacheAllContacts
+{
+    
+    NSManagedObjectContext *context =
+    [self managedObjectContext];
+    
+    ABAddressBookRef m_addressbook = ABAddressBookCreateWithOptions(NULL, NULL);
+    
+    if (!m_addressbook) {
+        NSLog(@"Problem opening address book");
+    }
+    
+    CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(m_addressbook);
+    CFIndex nPeople = ABAddressBookGetPersonCount(m_addressbook);
+    
+    for (int i=0;i < nPeople; i++) {
+        
+        NSManagedObject *dOfPerson;
+        dOfPerson = [NSEntityDescription
+                      insertNewObjectForEntityForName:@"ContactModel"
+                      inManagedObjectContext:context];
+        
+        ABRecordRef ref = CFArrayGetValueAtIndex(allPeople,i);
+        
+        //For username and surname
+        ABMultiValueRef phones = ABRecordCopyValue(ref, kABPersonPhoneProperty);
+        CFStringRef firstName, lastName;
+        firstName = ABRecordCopyValue(ref, kABPersonFirstNameProperty);
+        lastName  = ABRecordCopyValue(ref, kABPersonLastNameProperty);
+        NSString *firstNameStr, *lastNameStr;
+        firstNameStr = (__bridge NSString *)firstName;
+        lastNameStr = (__bridge NSString *)lastName;
+        
+        NSString *fullName = [NSString stringWithFormat:@"%@ %@", firstNameStr ?:@"", lastNameStr ?:@""];
+        fullName = [fullName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        
+        if (!fullName || [fullName isEqual:@""]) {
+            fullName = @"Unnamed";
+        }
+        
+        [dOfPerson setValue:fullName forKey:@"name"];
+        
+        //For Email ids
+        ABMutableMultiValueRef eMail  = ABRecordCopyValue(ref, kABPersonEmailProperty);
+        
+        CFStringRef emailRef = ABMultiValueCopyValueAtIndex(eMail, 0);
+        NSString *email = (NSString *) CFBridgingRelease(emailRef);
+        if (email != nil) {
+            [dOfPerson setValue:email forKey:@"email"];
+        }
+        
+        //For Phone number
+        for(CFIndex i = 0; i < ABMultiValueGetCount(phones); i++) {
+            CFStringRef mobileLabelref = ABMultiValueCopyLabelAtIndex(phones, i);
+            CFStringRef mobileNumberref = ABMultiValueCopyValueAtIndex(phones, i);
+            
+            NSString *mobileLabel = (NSString *) CFBridgingRelease(mobileLabelref);
+            NSString *mobileNumber = (NSString *) CFBridgingRelease(mobileNumberref);
+            
+            if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneMobileLabel])
+            {
+                [dOfPerson setValue:mobileNumber forKey:@"Phone"];
+                break;
+            }
+            else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneIPhoneLabel])
+            {
+                [dOfPerson setValue:mobileNumber forKey:@"Phone"];
+                break;
+            }
+            else {
+                [dOfPerson setValue:mobileNumber forKey:@"Phone"];
+            }
+            
+        }
+        
+        CFRelease(ref);
+        if (firstName != nil) { CFRelease(firstName); }
+        if (lastName != nil) { CFRelease(lastName); }
+        
+    }
+    
+
+    NSError *error;
+    [context save:&error];
+    
+    if (error != nil) {
+        NSLog(@"%@",error);
+    }
 }
 
 - (void)updateLocationSent

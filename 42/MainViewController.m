@@ -255,7 +255,6 @@
                      }
                      completion:^(BOOL finished) {
                          if (finished) {
-                             [_rightPanelViewController panelActivated];
                              _centerViewController.rightButton.tag = 0;
                          }
                      }];

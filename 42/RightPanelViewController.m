@@ -7,12 +7,12 @@
 //
 
 #import "RightPanelViewController.h"
-#import <AddressBook/AddressBook.h>
 #import <Parse/Parse.h>
-#import <AddressBookUI/AddressBookUI.h>
 #import "MainViewController.h"
 #import "NBPhoneNumberUtil.h"
 #import "UIButtonForRow.h"
+#import "AppDelegate.h"
+
 
 @implementation RightPanelViewController
 
@@ -29,6 +29,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _dictOfContacts = [self getContacts];
+
 }
 
 - (void)viewDidUnload
@@ -65,39 +67,6 @@
 #pragma mark -
 #pragma mark Array Setup
 
-- (void)panelActivated
-{
-    
-    // Request authorization to Address Book
-    ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, NULL);
-
-    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
-        
-        ABAddressBookRequestAccessWithCompletion(addressBookRef, ^(bool granted, CFErrorRef error) {
-            if (granted) {
-                [self panelActivated];
-
-            } else {
-                // User denied access
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"App wont werk!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
-                [alertView show];
-            }
-        });
-    }
-    else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
-        // The user has previously given access, add the contact
-        
-        NSMutableDictionary *contacts = [self getContacts];
-        _dictOfContacts = contacts;
-        [_tableView reloadData];
-    }
-    else {
-        // The user has previously denied access
-        // Send an alert telling user to change privacy setting in settings app
-    }
-
-    
-}
 
 - (NSMutableDictionary *) createEmptyDictionaryWithSectionKeys
 {
@@ -114,79 +83,18 @@
 
 - (NSMutableDictionary *) getContacts {
     
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    NSArray *usersArray = [appDelegate getUnregisteredContacts];
+    NSLog(@"%d", [usersArray count]);
+
     NSMutableDictionary *contactDict= [self createEmptyDictionaryWithSectionKeys];
-    
-    ABAddressBookRef m_addressbook = ABAddressBookCreateWithOptions(NULL, NULL);
-    
-    if (!m_addressbook) {
-        NSLog(@"opening address book");
-    }
-    
-    CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(m_addressbook);
-    CFIndex nPeople = ABAddressBookGetPersonCount(m_addressbook);
-    
+    NSInteger nPeople = [usersArray count];
+
     for (int i=0;i < nPeople; i++) {
-        NSMutableDictionary *dOfPerson=[NSMutableDictionary dictionary];
         
-        ABRecordRef ref = CFArrayGetValueAtIndex(allPeople,i);
-        
-        //For username and surname
-        ABMultiValueRef phones = ABRecordCopyValue(ref, kABPersonPhoneProperty);
-        CFStringRef firstName, lastName;
-        firstName = ABRecordCopyValue(ref, kABPersonFirstNameProperty);
-        lastName  = ABRecordCopyValue(ref, kABPersonLastNameProperty);
-        NSString *firstNameStr, *lastNameStr;
-        firstNameStr = (__bridge NSString *)firstName;
-        lastNameStr = (__bridge NSString *)lastName;
-
-        NSString *fullName = [NSString stringWithFormat:@"%@ %@", firstNameStr ?:@"", lastNameStr ?:@""];
-        fullName = [fullName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-
-        if (!fullName || [fullName isEqual:@""]) {
-            fullName = @"Unnamed";
-        }
-
-        [dOfPerson setObject:fullName forKey:@"name"];
-        
-        //For Email ids
-        ABMutableMultiValueRef eMail  = ABRecordCopyValue(ref, kABPersonEmailProperty);
-        
-        CFStringRef emailRef = ABMultiValueCopyValueAtIndex(eMail, 0);
-        NSString *email = (NSString *) CFBridgingRelease(emailRef);
-        if (email != nil) {
-            [dOfPerson setObject:email forKey:@"email"];
-        }
+        NSMutableDictionary *dOfPerson=usersArray[i];
     
-        //For Phone number
-        for(CFIndex i = 0; i < ABMultiValueGetCount(phones); i++) {
-            CFStringRef mobileLabelref = ABMultiValueCopyLabelAtIndex(phones, i);
-            CFStringRef mobileNumberref = ABMultiValueCopyValueAtIndex(phones, i);
-
-            NSString *mobileLabel = (NSString *) CFBridgingRelease(mobileLabelref);
-            NSString *mobileNumber = (NSString *) CFBridgingRelease(mobileNumberref);
-            
-            if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneMobileLabel])
-            {
-                [dOfPerson setObject:mobileNumber forKey:@"Phone"];
-                break;
-            }
-            else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneIPhoneLabel])
-            {
-                [dOfPerson setObject:mobileNumber forKey:@"Phone"];
-                break;
-            }
-            else {
-                [dOfPerson setObject:mobileNumber forKey:@"Phone"];
-            }
-
-        }
-
-        CFRelease(ref);
-        if (firstName != nil) { CFRelease(firstName); }
-        if (lastName != nil) { CFRelease(lastName); }
-        
-        NSString *firstLetter = [fullName substringToIndex:1];
-        
+        NSString *firstLetter = [[usersArray[i] valueForKey:@"name"] substringToIndex:1];
         if (firstLetter && [contactDict objectForKey:firstLetter])
         {
             NSMutableArray *arr = [contactDict objectForKey:firstLetter];
@@ -195,23 +103,8 @@
         }
 
     }
-    
-    
-    // sort each sections
-    NSMutableDictionary *sortedContactDict = [[NSMutableDictionary alloc] init];
-    for(NSString *key in contactDict) {
-        NSMutableArray *contactstArr = [contactDict objectForKey:key];
-        NSArray *sortedArr = [contactstArr sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
-            NSMutableDictionary *person1 = (NSMutableDictionary *)a;
-            NSMutableDictionary *person2 = (NSMutableDictionary *)b;
-            NSString *person1Name = [person1 objectForKey:@"name"];
-            NSString *person2Name = [person2 objectForKey:@"name"];
-            return [person1Name compare: person2Name];
-        }];
-        [sortedContactDict setObject:[NSMutableArray arrayWithArray:sortedArr] forKey:key];
-    }
 
-    return sortedContactDict;
+    return contactDict;
 }
 
 #pragma mark -
@@ -250,7 +143,7 @@
     NSString *sectionTitle = [[self getSectionsArray] objectAtIndex:indexPath.section];
     NSMutableArray *sectionForKey = [_dictOfContacts objectForKey:sectionTitle];
     NSMutableDictionary *currentContact = [sectionForKey objectAtIndex:indexPath.row];
-    contactName.text = [currentContact objectForKey:@"name"];
+    contactName.text = [currentContact valueForKey:@"name"];
     [addButton addTarget:self action:@selector(btnAdd:) forControlEvents:UIControlEventTouchUpInside];
 
     return _cellMain;

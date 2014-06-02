@@ -14,6 +14,5 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UITableViewCell *cellMain;
-- (void)panelActivated;
 
 @end

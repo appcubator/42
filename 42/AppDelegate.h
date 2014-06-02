@@ -24,10 +24,16 @@ static NSString* const kLocationSentUpdateNotification= @"kLocationSentUpdateNot
 @property (nonatomic, strong) CLLocation *currentLocation;
 @property (nonatomic, strong) NSMutableArray *arrayOfLocationSent;
 
+@property (nonatomic,strong) NSManagedObjectContext* managedObjectContext;
+@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+
 - (void)presentWelcomeViewController;
 - (void)presentMainViewController;
 - (void)sendLocationTo:(NSMutableArray *)receivers withBlock:(void (^)(void))callbackBlock;
 - (void)updateLocationSent;
 - (MainViewController *)getMainViewController;
+- (NSArray *)getUnregisteredContacts;
+- (NSArray *)getRegisteredContacts;
 
 @end

@@ -28,8 +28,6 @@
 {
     [super viewDidLoad];
     [self setupView];
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [appDelegate updateLocationSent];
 }
 
 - (void)viewDidUnload

@@ -217,7 +217,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSArray *array = [moc executeFetchRequest:request error:&error];
     if (array == nil)
     {
-        NSLog(@"%@",error);
+        NSLog(@"get unregistered %@",error);
     }
     
     return array;
@@ -244,7 +244,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSArray *array = [moc executeFetchRequest:request error:&error];
     if (array == nil)
     {
-        NSLog(@"%@",error);
+        NSLog(@"get registered %@",error);
     }
     
     return array;
@@ -369,7 +369,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [context save:&error];
     
     if (error != nil) {
-        NSLog(@"%@",error);
+        NSLog(@"yolo1 %@",error);
     }
 }
 
@@ -403,6 +403,12 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
             NSLog(@"Error: %@ %@", error, [error userInfo]);
         }
     }];
+}
+
+- (void)logout
+{
+    [PFUser logOut];
+    _arrayOfLocationSent = nil;
 }
 
 @end

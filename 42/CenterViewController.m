@@ -168,7 +168,7 @@
 	[postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
 		if (error) {
 			NSLog(@"Couldn't save!");
-			NSLog(@"%@", error);
+			NSLog(@"sup %@", error);
 			UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[error userInfo] objectForKey:@"error"] message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
 			[alertView show];
 			return;
@@ -185,7 +185,7 @@
 - (void)btnMovePanelRight:(id)sender
 {
     UIButton *button = sender;
-    NSLog(@"%ld", (long)button.tag);
+    NSLog(@"btn Move Panel Right called. Tag:  %ld", (long)button.tag);
     
     switch (button.tag) {
         case 0: {
@@ -206,6 +206,7 @@
 - (void)btnMovePanelLeft:(id)sender
 {
     UIButton *button = sender;
+    NSLog(@"btn Move Panel Left called. Tag:  %ld", (long)button.tag);
     switch (button.tag) {
         case 0: {
             [_delegate movePanelToOriginalPosition];

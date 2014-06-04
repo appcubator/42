@@ -44,11 +44,11 @@
 }
 
 - (void)logout {
-    [PFUser logOut];
-    [self.navigationController popToRootViewControllerAnimated:NO];
-    
-    // show the welcome view
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [appDelegate logout];
+
+    // show the welcome view
+    [self.navigationController popToRootViewControllerAnimated:NO];
     [appDelegate presentWelcomeViewController];
 }
 

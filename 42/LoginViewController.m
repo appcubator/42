@@ -148,11 +148,15 @@
 		[activityView removeFromSuperview];
         
 		if (user) {
-			MainViewController *mapViewController = [[MainViewController alloc] init];
+            AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+
+            // make sure we get update this on a per-login basis, not just when the controller loads.
+            [appDelegate updateLocationSent];
+
+            // show the welcome screen
+  			MainViewController *mapViewController = [appDelegate getMainViewController];
 			[(UINavigationController *)self.presentingViewController pushViewController:mapViewController animated:NO];
             [self.navigationController popToRootViewControllerAnimated:YES];
-            // show the welcome view
-            AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
             [appDelegate presentMainViewController];
 		} else {
 			// Didn't get a user.

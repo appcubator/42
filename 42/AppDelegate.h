@@ -32,6 +32,7 @@ static NSString* const kLocationSentUpdateNotification= @"kLocationSentUpdateNot
 - (void)presentMainViewController;
 - (void)sendLocationTo:(NSMutableArray *)receivers withBlock:(void (^)(void))callbackBlock;
 - (void)updateLocationSent;
+- (void)logout;
 - (MainViewController *)getMainViewController;
 - (NSArray *)getUnregisteredContacts;
 - (NSArray *)getRegisteredContacts;

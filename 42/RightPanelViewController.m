@@ -98,7 +98,7 @@
     
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     NSArray *usersArray = [appDelegate getUnregisteredContacts];
-    NSLog(@"%d", [usersArray count]);
+    NSLog(@"Number of unregistered contacts: %d", [usersArray count]);
 
     NSMutableDictionary *contactDict= [self createEmptyDictionaryWithSectionKeys];
     NSInteger nPeople = [usersArray count];

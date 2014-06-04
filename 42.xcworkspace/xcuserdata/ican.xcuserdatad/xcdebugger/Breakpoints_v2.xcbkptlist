@@ -9,29 +9,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "42/CenterViewController.m"
-            timestampString = "423267618.233384"
+            filePath = "42/AppDelegate.m"
+            timestampString = "423432943.077099"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "317"
-            endingLineNumber = "317"
-            landmarkName = "-mapView:viewForAnnotation:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "42/CenterViewController.m"
-            timestampString = "423379035.625312"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
-            landmarkName = "-btnMovePanelRight:"
+            startingLineNumber = "404"
+            endingLineNumber = "404"
+            landmarkName = "-cacheAllContacts"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

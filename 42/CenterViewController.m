@@ -184,42 +184,12 @@
 
 - (void)btnMovePanelRight:(id)sender
 {
-    UIButton *button = sender;
-    NSLog(@"%ld", (long)button.tag);
-    
-    switch (button.tag) {
-        case 0: {
-            [_delegate movePanelToOriginalPosition];
-            break;
-        }
-            
-        case 1: {
-            [_delegate movePanelRight];
-            break;
-        }
-            
-        default:
-            break;
-    }
+    [_delegate movePanelRight];
 }
 
 - (void)btnMovePanelLeft:(id)sender
 {
-    UIButton *button = sender;
-    switch (button.tag) {
-        case 0: {
-            [_delegate movePanelToOriginalPosition];
-            break;
-        }
-            
-        case 1: {
-            [_delegate movePanelLeft];
-            break;
-        }
-            
-        default:
-            break;
-    }
+    [_delegate movePanelLeft];
 }
 
 - (void)btnSendTo:(id)sender

@@ -9,18 +9,31 @@
 #import "RightPanelViewController.h"
 #import <Parse/Parse.h>
 #import "MainViewController.h"
-#import "NBPhoneNumberUtil.h"
 #import "UIButtonForRow.h"
 #import "AppDelegate.h"
 
 
 @implementation RightPanelViewController
 
-- (NSArray *)getSectionsArray
+- (NSArray *)getLettersArray
 {
     NSArray *letterIndex = @[@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", @"J", @"K", @"L", @"M", @"N", @"O", @"P", @"Q", @"R", @"S", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z"];
     
     return  letterIndex;
+}
+
+- (NSArray *)getSectionsArray
+{
+    NSArray *sectionsArray = @[@"Active Users"];
+    sectionsArray = [sectionsArray arrayByAddingObjectsFromArray:[NSArray arrayWithArray:[self getLettersArray]]];
+    return sectionsArray;
+}
+
+- (NSArray *)getSectionTitlesArray
+{
+    NSArray *sectionsArray = @[@"*"];
+    sectionsArray = [sectionsArray arrayByAddingObjectsFromArray:[NSArray arrayWithArray:[self getLettersArray]]];
+    return sectionsArray;
 }
 
 #pragma mark -
@@ -104,6 +117,9 @@
 
     }
 
+    NSArray *activeUsersArray = [appDelegate getRegisteredContacts];
+    [contactDict setObject:activeUsersArray forKey:@"Active Users"];
+
     return contactDict;
 }
 
@@ -124,7 +140,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 54;
+    return 44;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -144,19 +160,26 @@
     NSMutableArray *sectionForKey = [_dictOfContacts objectForKey:sectionTitle];
     NSMutableDictionary *currentContact = [sectionForKey objectAtIndex:indexPath.row];
     contactName.text = [currentContact valueForKey:@"name"];
-    [addButton addTarget:self action:@selector(btnAdd:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if ([currentContact valueForKey:@"isFollowed"])
+    {
+        addButton.hidden = YES;
+    }
+    else {
+        [addButton addTarget:self action:@selector(btnAdd:) forControlEvents:UIControlEventTouchUpInside];
+    }
 
     return _cellMain;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
-     return [[self getSectionsArray] indexOfObject:title];
+     return [[self getSectionTitlesArray] indexOfObject:title];
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
-    return [self getSectionsArray];
+    return [self getSectionTitlesArray];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -177,20 +200,10 @@
     NSString *sectionTitle = [[self getSectionsArray] objectAtIndex:indexPath.section];
     NSMutableArray *sectionForKey = [_dictOfContacts objectForKey:sectionTitle];
     NSMutableDictionary *currentContact = [sectionForKey objectAtIndex:indexPath.row];
-    NSString *mobileNumber = [currentContact objectForKey:@"Phone"];
-
-    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
-    NSError *aError = nil;
-    NBPhoneNumber *userNumber = [phoneUtil parse:mobileNumber
-                                   defaultRegion:@"US" error:&aError];
-
+    NSString *mobileNumber = [currentContact objectForKey:@"phone"];
     
-    if ([phoneUtil isValidNumber:userNumber]) {
-        
         PFQuery *query = [PFUser query];
-        [query whereKey:@"phone" equalTo:[phoneUtil format:userNumber
-                                              numberFormat:NBEPhoneNumberFormatE164
-                                                     error:&aError]];
+        [query whereKey:@"phone" equalTo:mobileNumber];
         NSArray *users = [query findObjects];
     
         // See if the user with phone number is there
@@ -217,12 +230,6 @@
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Wait" message:@"User is not yet on 42." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"OK", nil];
             [alert show];
         }
-        
-    }
-    else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Wait" message:@"Could not find valid phone number." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"OK", nil];
-        [alert show];
-    }
     
 }
 

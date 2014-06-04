@@ -12,6 +12,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 #import "AppDelegate.h"
 #import "WelcomeViewController.h"
 #import "MainViewController.h"
+#import "NBPhoneNumberUtil.h"
 
 #import <Parse/Parse.h>
 #import <CoreData/CoreData.h>
@@ -89,7 +90,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
     NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:[NSBundle allBundles]];
     NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
     
-    NSURL *url = [[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:@"Database.sqlite"];
+    NSURL *url = [[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:@"db_dev.sqlite"];
     
     NSDictionary *options = @{NSPersistentStoreFileProtectionKey: NSFileProtectionComplete,
                               NSMigratePersistentStoresAutomaticallyOption:@YES};
@@ -206,7 +207,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
     // Set example predicate and sort orderings...
     NSPredicate *predicate = [NSPredicate predicateWithFormat:
-                              @"user_id = nil"];
+                              @"username = nil"];
     [request setPredicate:predicate];
     
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
@@ -233,7 +234,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
     // Set example predicate and sort orderings...
     NSPredicate *predicate = [NSPredicate predicateWithFormat:
-                              @"user_id != nil"];
+                              @"username != nil"];
     [request setPredicate:predicate];
     
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
@@ -246,6 +247,8 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     {
         NSLog(@"%@",error);
     }
+    
+    NSLog(@"%@",array);
     
     return array;
 }
@@ -280,8 +283,51 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
 - (void)checkForAddressBookUpdates {
     [self cacheAllContacts];
+    [self checkForFollowing];
 }
 
+- (void)checkForFollowing {
+    PFQuery *query = [PFQuery queryWithClassName:@"Follow"];
+    [query includeKey:@"to"];
+    [query whereKey:@"from" equalTo: [PFUser currentUser]];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *arr, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            for (PFObject *obj in arr) {
+                PFUser *user = obj[@"to"];
+                
+                NSManagedObjectContext *context = [self managedObjectContext];
+                NSEntityDescription *entityDescription = [NSEntityDescription
+                                                          entityForName:@"ContactModel" inManagedObjectContext:context];
+                NSFetchRequest *request = [[NSFetchRequest alloc] init];
+                [request setEntity:entityDescription];
+                
+                // Set example predicate and sort orderings ...
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                                          @"username = %@",[user username]];
+                [request setPredicate:predicate];
+                
+                NSError *error = nil;
+                NSArray *array = [context executeFetchRequest:request error:&error];
+                if ([array count] > 0) {
+                    NSManagedObject* userObject = [array objectAtIndex:0];
+                    [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"isFollowed"];
+                    [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"is42user"];
+                }
+                
+                [context save:&error];
+                
+                if (error != nil) {
+                    NSLog(@"%@",error);
+                }
+            }
+
+        } else {
+            // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    }];
+}
 
 - (void)cacheAllContacts
 {
@@ -300,12 +346,18 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
     for (int i=0;i < nPeople; i++) {
         
+        ABRecordRef ref = CFArrayGetValueAtIndex(allPeople,i);
+        NSInteger recordID = ABRecordGetRecordID(ref);
+        NSString *recordIDStr = [NSString stringWithFormat:@"%d", recordID];
+        
+        if (![self isUserUnique:recordIDStr]) {
+            continue;
+        }
+
         NSManagedObject *dOfPerson;
         dOfPerson = [NSEntityDescription
-                      insertNewObjectForEntityForName:@"ContactModel"
-                      inManagedObjectContext:context];
-        
-        ABRecordRef ref = CFArrayGetValueAtIndex(allPeople,i);
+                     insertNewObjectForEntityForName:@"ContactModel"
+                     inManagedObjectContext:context];
         
         //For username and surname
         ABMultiValueRef phones = ABRecordCopyValue(ref, kABPersonPhoneProperty);
@@ -324,7 +376,8 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         }
         
         [dOfPerson setValue:fullName forKey:@"name"];
-        
+        [dOfPerson setValue:recordIDStr forKey:@"ab_id"];
+
         //For Email ids
         ABMutableMultiValueRef eMail  = ABRecordCopyValue(ref, kABPersonEmailProperty);
         
@@ -334,6 +387,9 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
             [dOfPerson setValue:email forKey:@"email"];
         }
         
+        NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+        NSError *aError = nil;
+
         //For Phone number
         for(CFIndex i = 0; i < ABMultiValueGetCount(phones); i++) {
             CFStringRef mobileLabelref = ABMultiValueCopyLabelAtIndex(phones, i);
@@ -341,19 +397,27 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
             
             NSString *mobileLabel = (NSString *) CFBridgingRelease(mobileLabelref);
             NSString *mobileNumber = (NSString *) CFBridgingRelease(mobileNumberref);
-            
+            NBPhoneNumber *userNumber = [phoneUtil parse:mobileNumber
+                                           defaultRegion:@"US" error:&aError];
+
+            if ([phoneUtil isValidNumber:userNumber]) {
+                mobileNumber = [phoneUtil format:userNumber
+                                numberFormat:NBEPhoneNumberFormatE164
+                                           error:&aError];
+            }
+
             if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneMobileLabel])
             {
-                [dOfPerson setValue:mobileNumber forKey:@"Phone"];
+                [dOfPerson setValue:mobileNumber forKey:@"phone"];
                 break;
             }
             else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneIPhoneLabel])
             {
-                [dOfPerson setValue:mobileNumber forKey:@"Phone"];
+                [dOfPerson setValue:mobileNumber forKey:@"phone"];
                 break;
             }
             else {
-                [dOfPerson setValue:mobileNumber forKey:@"Phone"];
+                [dOfPerson setValue:mobileNumber forKey:@"phone"];
             }
             
         }
@@ -371,6 +435,82 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     if (error != nil) {
         NSLog(@"%@",error);
     }
+    
+    [self queryAllNumbersFor42activity];
+}
+
+- (void)queryAllNumbersFor42activity
+{
+    NSManagedObjectContext *moc = [self managedObjectContext];
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"ContactModel" inManagedObjectContext:moc];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    NSError *error = nil;
+    NSArray *array = [moc executeFetchRequest:request error:&error];
+    if (array == nil)
+    {
+        NSLog(@"%@",error);
+    }
+    
+    NSMutableArray *contactNumbers = [array valueForKey:@"phone"];
+
+    PFQuery *query = [PFUser query];
+    [query whereKey:@"phone" containedIn:contactNumbers];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        [self updateContactsWithUsers: objects];
+    }];
+}
+
+- (void)updateContactsWithUsers:(NSArray *)array {
+    
+    for (NSObject *user in array) {
+        NSManagedObjectContext *context = [self managedObjectContext];
+        NSEntityDescription *entityDescription = [NSEntityDescription
+                                                  entityForName:@"ContactModel" inManagedObjectContext:context];
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        [request setEntity:entityDescription];
+        
+        // Set example predicate and sort orderings ...
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                                  @"phone = %@",[user valueForKey:@"phone"]];
+        [request setPredicate:predicate];
+        
+        NSError *error = nil;
+        NSArray *array = [context executeFetchRequest:request error:&error];
+        if ([array count] > 0) {
+            NSManagedObject* userObject = [array objectAtIndex:0];
+            [userObject setValue:[user valueForKey:@"username"] forKey:@"username"];
+            [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"is42user"];
+        }
+        
+        [context save:&error];
+        
+        if (error != nil) {
+            NSLog(@"%@",error);
+        }
+    }
+}
+
+- (BOOL)isUserUnique:(NSString *)ab_id
+{
+    
+    NSManagedObjectContext *moc = [self managedObjectContext];
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"ContactModel" inManagedObjectContext:moc];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    // Set example predicate and sort orderings ...
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                              @"ab_id = %@",ab_id];
+    [request setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSArray *array = [moc executeFetchRequest:request error:&error];
+
+    return [array count] < 1;
 }
 
 - (void)updateLocationSent

@@ -140,7 +140,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 44;
+    return 52;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -154,6 +154,8 @@
     
     UILabel *contactName = (UILabel *)[_cellMain viewWithTag:1];
     UIButtonForRow *addButton = (UIButtonForRow *)[_cellMain viewWithTag:2];
+    UIButtonForRow *textAddButton = (UIButtonForRow *)[_cellMain viewWithTag:3];
+
     [addButton setIndexPath:indexPath];
 
     NSString *sectionTitle = [[self getSectionsArray] objectAtIndex:indexPath.section];
@@ -164,9 +166,21 @@
     if ([currentContact valueForKey:@"isFollowed"])
     {
         addButton.hidden = YES;
+        textAddButton.hidden = YES;
     }
     else {
-        [addButton addTarget:self action:@selector(btnAdd:) forControlEvents:UIControlEventTouchUpInside];
+        if (indexPath.section == 0) {
+            // registered user
+            [addButton addTarget:self action:@selector(btnAdd:) forControlEvents:UIControlEventTouchUpInside];
+            addButton.hidden = NO;
+            textAddButton.hidden = YES;
+        }
+        else {
+            // unregistered user
+            [textAddButton addTarget:self action:@selector(btnAdd:) forControlEvents:UIControlEventTouchUpInside];
+            textAddButton.hidden = NO;
+            addButton.hidden = YES;
+        }
     }
 
     return _cellMain;

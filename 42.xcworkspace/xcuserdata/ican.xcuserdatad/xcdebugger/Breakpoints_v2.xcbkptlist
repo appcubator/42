@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "42/AppDelegate.m"
-            timestampString = "423432943.077099"
+            timestampString = "423590582.186318"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "404"
-            endingLineNumber = "404"
+            startingLineNumber = "419"
+            endingLineNumber = "419"
             landmarkName = "-cacheAllContacts"
             landmarkType = "5">
          </BreakpointContent>

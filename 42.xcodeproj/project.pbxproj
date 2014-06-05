@@ -18,6 +18,7 @@
 		CE84F0F4193916C500AC6AE3 /* SettingsCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE84F0F3193916C500AC6AE3 /* SettingsCellView.xib */; };
 		CE84F0F8193AB12100AC6AE3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE84F0F6193AB12100AC6AE3 /* Model.xcdatamodeld */; };
 		CECA15A5193C2D4300EB2343 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CECA15A4193C2D4300EB2343 /* CoreData.framework */; };
+		CECA15A7193F804400EB2343 /* Arial Rounded Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CECA15A6193F804400EB2343 /* Arial Rounded Bold.ttf */; };
 		CEE97426192DA82800494F47 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97425192DA82800494F47 /* Foundation.framework */; };
 		CEE97428192DA82800494F47 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97427192DA82800494F47 /* CoreGraphics.framework */; };
 		CEE9742A192DA82800494F47 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97429192DA82800494F47 /* UIKit.framework */; };
@@ -92,6 +93,7 @@
 		CE84F0F3193916C500AC6AE3 /* SettingsCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsCellView.xib; sourceTree = "<group>"; };
 		CE84F0F7193AB12100AC6AE3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		CECA15A4193C2D4300EB2343 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		CECA15A6193F804400EB2343 /* Arial Rounded Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Arial Rounded Bold.ttf"; sourceTree = "<group>"; };
 		CEE97422192DA82800494F47 /* 42.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 42.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE97425192DA82800494F47 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CEE97427192DA82800494F47 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -273,6 +275,7 @@
 		CEE9742C192DA82800494F47 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CECA15A6193F804400EB2343 /* Arial Rounded Bold.ttf */,
 				CEE9742D192DA82800494F47 /* 42-Info.plist */,
 				CEE9742E192DA82800494F47 /* InfoPlist.strings */,
 				CEE97431192DA82800494F47 /* main.m */,
@@ -448,6 +451,7 @@
 				CE84F0F0193819E100AC6AE3 /* ContactCellView.xib in Resources */,
 				CEE9743E192DA82800494F47 /* Images.xcassets in Resources */,
 				CEE97430192DA82800494F47 /* InfoPlist.strings in Resources */,
+				CECA15A7193F804400EB2343 /* Arial Rounded Bold.ttf in Resources */,
 				CEE974AA19310C0C00494F47 /* SendToCellView.xib in Resources */,
 				CEE97462192DACED00494F47 /* WelcomeView.xib in Resources */,
 			);

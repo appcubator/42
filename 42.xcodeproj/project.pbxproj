@@ -212,7 +212,6 @@
 				CE84F0ED1938158C00AC6AE3 /* 80 - Spotlight@2x.png */,
 				CE84F0EC1938157F00AC6AE3 /* 120 - iPhone@2x.png */,
 				CEE9742B192DA82800494F47 /* 42 */,
-				CEE9744A192DA82800494F47 /* 42Tests */,
 				CEE97424192DA82800494F47 /* Frameworks */,
 				CEE97423192DA82800494F47 /* Products */,
 				5911A917935A4312BECFEC43 /* Pods.xcconfig */,
@@ -279,6 +278,7 @@
 				CEE9742D192DA82800494F47 /* 42-Info.plist */,
 				CEE9742E192DA82800494F47 /* InfoPlist.strings */,
 				CEE97431192DA82800494F47 /* main.m */,
+				CEE9744A192DA82800494F47 /* 42Tests */,
 				CEE97433192DA82800494F47 /* 42-Prefix.pch */,
 			);
 			name = "Supporting Files";
@@ -291,7 +291,7 @@
 				CEE9744B192DA82800494F47 /* Supporting Files */,
 			);
 			path = 42Tests;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		CEE9744B192DA82800494F47 /* Supporting Files */ = {
 			isa = PBXGroup;

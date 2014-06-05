@@ -52,11 +52,10 @@
     [_leftButton setTitle:@"L" forState:UIControlStateNormal];
 
 
-    _cancelButton.frame = CGRectMake(30, 40 - 20, 40.0, 40.0);
+    _cancelButton.frame = CGRectMake(24, 36, 56.0, 56.0);
     _cancelButton.tag = 1;
     _cancelButton.hidden = YES;
-    [_cancelButton setTitle:@"x" forState:UIControlStateNormal];
-
+    [_cancelButton setBackgroundImage:[UIImage imageNamed:@"cancel-icon"] forState:UIControlStateNormal];
     
     _flagButton.frame = CGRectMake(self.frame.size.width/2 - 20, self.frame.size.height - 60 - 10, 60.0, 60.0);
     _flagButton.alpha = 0.900;
@@ -72,10 +71,15 @@
     
     
     _sendToPanel.backgroundColor = [UIColor colorWithRed:1.0 green:0.49 blue:0.27 alpha:1.00];
-    _sendToPanel.frame = CGRectMake(0, self.superview.frame.size.height, self.superview.frame.size.height, 90);
-
-    [_sendToButton setTitle:@"Send >>" forState:UIControlStateNormal];
-    _sendToButton.frame = CGRectMake(0, 0, self.frame.size.width, 90);
+    _sendToPanel.frame = CGRectMake(0, self.superview.frame.size.height, self.superview.frame.size.width, 90);
+    
+    UIImage *sendImage = [UIImage imageNamed:@"send-icon"];
+    UIImageView *sendImageView = [[UIImageView alloc] initWithImage:sendImage];
+    [sendImageView setFrame:CGRectMake(_sendToPanel.frame.size.width - 76, 25, 57, 41)];
+    [_sendToPanel addSubview:sendImageView];
+    
+    [_sendToButton setTitle:@"Send" forState:UIControlStateNormal];
+    _sendToButton.frame = CGRectMake(0, 0, self.frame.size.width, 80);
     _sendToButton.backgroundColor = [UIColor clearColor];
     _sendToButton.tintColor = [UIColor whiteColor];
     [_sendToPanel addSubview:_sendToButton];

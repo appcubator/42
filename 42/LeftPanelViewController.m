@@ -172,6 +172,12 @@
     [super didReceiveMemoryWarning];
 }
 
+- (IBAction)btnGoRight:(id)sender {
+    MainViewController* mainViewController = (MainViewController *) self.parentViewController;
+    [mainViewController movePanelToOriginalPosition];
+}
+
+
 - (IBAction)btnSettings:(id)sender {
     SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController" bundle:nil];
 	[self.navigationController pushViewController:settingsViewController animated:YES];

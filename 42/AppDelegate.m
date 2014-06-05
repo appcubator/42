@@ -263,7 +263,6 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         NSLog(@"get registered %@",error);
     }
     
-    NSLog(@"%@",array);
     
     return array;
 }

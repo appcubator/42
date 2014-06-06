@@ -23,12 +23,17 @@
                                              selector:@selector(locationSentDidChange)
                                                  name:kLocationSentUpdateNotification
                                                object:nil];
+    _refreshControl = [[UIRefreshControl alloc] init];
+    [_refreshControl addTarget:self action:@selector(refreshInvoked:forState:) forControlEvents:UIControlEventValueChanged];
+    _refreshControl.tintColor = [UIColor magentaColor];
 
+    [self setRefreshControl:_refreshControl];
 }
 
 - (void)locationSentDidChange
 {
     [_tableView reloadData];
+    [_refreshControl endRefreshing];
 }
 
 - (void)viewDidUnload
@@ -151,6 +156,12 @@
     }
     
     return _cellMain;
+}
+
+-(void) refreshInvoked:(id)sender forState:(UIControlState)state {
+    // Refresh table here...
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [appDelegate updateLocationSent];
 }
 
 

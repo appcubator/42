@@ -16,6 +16,6 @@
 @property (strong, nonatomic) IBOutlet UITableViewCell *cellMain;
 @property (strong, nonatomic) IBOutlet UIImageView *locationStatusView;
 @property (strong, nonatomic) IBOutlet UILabel *timeLabel;
-
+@property (strong, nonatomic) UIRefreshControl *refreshControl;
 
 @end

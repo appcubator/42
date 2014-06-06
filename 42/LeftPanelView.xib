@@ -15,7 +15,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <navigationBar contentMode="scaleToFill" fixedFrame="YES" translucent="NO" backIndicatorImage="BA42505A-08AD-4DF8-B591-CCCB2367B7A3" translatesAutoresizingMaskIntoConstraints="NO" id="vpA-Nw-jBg">
+                <navigationBar contentMode="scaleToFill" fixedFrame="YES" translucent="NO" backIndicatorImage="68BEB665-6F51-4E9F-9983-3ADAD5F4DD92" translatesAutoresizingMaskIntoConstraints="NO" id="vpA-Nw-jBg">
                     <rect key="frame" x="0.0" y="18" width="320" height="44"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="0.37696896560737425" blue="0.69769430709930913" alpha="1" colorSpace="calibratedRGB"/>
@@ -73,7 +73,7 @@
         </view>
     </objects>
     <resources>
-        <image name="BA42505A-08AD-4DF8-B591-CCCB2367B7A3" width="193" height="44">
+        <image name="68BEB665-6F51-4E9F-9983-3ADAD5F4DD92" width="193" height="44">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOzxYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISksLzU4VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA

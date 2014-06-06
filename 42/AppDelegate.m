@@ -72,6 +72,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
     
 	if ([PFUser currentUser]) {
         [self checkForAddressBookPermissions];
+        [self updateLocationSent];
         [self presentMainViewController];
 	} else {
 		// Go to the welcome screen and have them log in or create an account.

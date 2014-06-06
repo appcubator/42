@@ -154,20 +154,6 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     navController = [[UINavigationController alloc] initWithRootViewController:[self getMainViewController]];
     navController.navigationBarHidden = YES;
 
-//    [[UINavigationBar appearance] setTitleTextAttributes:
-//     [NSDictionary dictionaryWithObjectsAndKeys:
-//      [UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0],
-//      NSForegroundColorAttributeName,
-//      [UIFont fontWithName:@"ArialRoundedMTBold" size:0.0],
-//      NSFontAttributeName,
-//      nil]];
-
-    for( NSString *strFamilyName in [UIFont familyNames] ) {
-        for( NSString *strFontName in [UIFont fontNamesForFamilyName:strFamilyName] ) {
-            NSLog(@"%@", strFontName);
-        }
-    }
-    
     self.viewController = navController;
     self.window.rootViewController = self.viewController;
 }

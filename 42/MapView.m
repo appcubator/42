@@ -71,17 +71,20 @@
     
     
     _sendToPanel.backgroundColor = [UIColor colorWithRed:1.0 green:0.49 blue:0.27 alpha:1.00];
-    _sendToPanel.frame = CGRectMake(0, self.superview.frame.size.height, self.superview.frame.size.width, 90);
+    _sendToPanel.frame = CGRectMake(0, self.superview.frame.size.height, self.superview.frame.size.width, 72);
     
     UIImage *sendImage = [UIImage imageNamed:@"send-icon"];
     UIImageView *sendImageView = [[UIImageView alloc] initWithImage:sendImage];
-    [sendImageView setFrame:CGRectMake(_sendToPanel.frame.size.width - 76, 25, 57, 41)];
+    [sendImageView setFrame:CGRectMake(_sendToPanel.frame.size.width - 76, 16, 57, 41)];
     [_sendToPanel addSubview:sendImageView];
     
     [_sendToButton setTitle:@"Send" forState:UIControlStateNormal];
-    _sendToButton.frame = CGRectMake(0, 0, self.frame.size.width, 80);
+    _sendToButton.frame = CGRectMake(0, 0, self.frame.size.width, 72);
     _sendToButton.backgroundColor = [UIColor clearColor];
     _sendToButton.tintColor = [UIColor whiteColor];
+    _sendToButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    _sendToButton.contentEdgeInsets = UIEdgeInsetsMake(0, 24, 0, 0);
+    _sendToButton.titleLabel.font = [UIFont fontWithName:@"ArialRoundedMTBold" size:18.00];
     [_sendToPanel addSubview:_sendToButton];
 
     [self addSubview:_sendToPanel];

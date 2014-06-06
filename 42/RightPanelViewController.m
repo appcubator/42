@@ -8,9 +8,11 @@
 
 #import "RightPanelViewController.h"
 #import <Parse/Parse.h>
+#import <MessageUI/MessageUI.h>
 #import "MainViewController.h"
 #import "UIButtonForRow.h"
 #import "AppDelegate.h"
+#import <CoreData/CoreData.h>
 
 
 @implementation RightPanelViewController
@@ -156,7 +158,6 @@
     UIButtonForRow *addButton = (UIButtonForRow *)[_cellMain viewWithTag:2];
     UIButtonForRow *textAddButton = (UIButtonForRow *)[_cellMain viewWithTag:3];
 
-    [addButton setIndexPath:indexPath];
 
     NSString *sectionTitle = [[self getSectionsArray] objectAtIndex:indexPath.section];
     NSMutableArray *sectionForKey = [_dictOfContacts objectForKey:sectionTitle];
@@ -171,13 +172,15 @@
     else {
         if (indexPath.section == 0) {
             // registered user
+            [addButton setIndexPath:indexPath];
             [addButton addTarget:self action:@selector(btnAdd:) forControlEvents:UIControlEventTouchUpInside];
             addButton.hidden = NO;
             textAddButton.hidden = YES;
         }
         else {
             // unregistered user
-            [textAddButton addTarget:self action:@selector(btnAdd:) forControlEvents:UIControlEventTouchUpInside];
+            [textAddButton setIndexPath:indexPath];
+            [textAddButton addTarget:self action:@selector(btnMessage:) forControlEvents:UIControlEventTouchUpInside];
             textAddButton.hidden = NO;
             addButton.hidden = YES;
         }
@@ -206,44 +209,72 @@
 # pragma mark Button Methods
 
 
-- (void) btnAdd:(id)sender {
+- (void)btnAdd:(id)sender {
     
     UIButtonForRow *btn = (UIButtonForRow *)sender;
     NSIndexPath *indexPath = btn.indexPath;
     
     NSString *sectionTitle = [[self getSectionsArray] objectAtIndex:indexPath.section];
     NSMutableArray *sectionForKey = [_dictOfContacts objectForKey:sectionTitle];
-    NSMutableDictionary *currentContact = [sectionForKey objectAtIndex:indexPath.row];
-    NSString *mobileNumber = [currentContact objectForKey:@"phone"];
+    NSManagedObject *currentContact = [sectionForKey objectAtIndex:indexPath.row];
+    NSString *mobileNumber = [currentContact valueForKey:@"phone"];
     
-        PFQuery *query = [PFUser query];
-        [query whereKey:@"phone" equalTo:mobileNumber];
-        NSArray *users = [query findObjects];
+    PFQuery *query = [PFUser query];
+    [query whereKey:@"phone" equalTo:mobileNumber];
+    NSArray *users = [query findObjects];
     
-        // See if the user with phone number is there
-        if (users.count > 0) {
-            PFUser *otherUser = [users objectAtIndex:0];
-        
-            // create an entry in the Follow table
-            PFObject *follow = [PFObject objectWithClassName:@"Follow"];
-            [follow setObject:[PFUser currentUser]  forKey:@"from"];
-            [follow setObject:otherUser forKey:@"to"];
-            [follow setObject:[NSDate date] forKey:@"date"];
-            [follow saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if (succeeded) {
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Great" message:@"User is added." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"OK", nil];
-                    [alert show];
-                }
-                else {
-                    
-                }
-            }];
+    // See if the user with phone number is there
+    if (users.count > 0) {
+        PFUser *otherUser = [users objectAtIndex:0];
+    
+        // create an entry in the Follow table
+        PFObject *follow = [PFObject objectWithClassName:@"Follow"];
+        [follow setObject:[PFUser currentUser]  forKey:@"from"];
+        [follow setObject:otherUser forKey:@"to"];
+        [follow setObject:[NSDate date] forKey:@"date"];
+        [follow saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Great" message:@"User is added." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"OK", nil];
+                [alert show];
+            }
+            else {
+                
+            }
+        }];
 
-        }
-        else {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Wait" message:@"User is not yet on 42." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"OK", nil];
-            [alert show];
-        }
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Wait" message:@"User is not yet on 42." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"OK", nil];
+        [alert show];
+    }
+}
+
+-(void)btnMessage:(id)sender
+{
+    UIButtonForRow *btn = (UIButtonForRow *)sender;
+    NSIndexPath *indexPath = btn.indexPath;
+    
+    NSString *sectionTitle = [[self getSectionsArray] objectAtIndex:indexPath.section];
+    NSMutableArray *sectionForKey = [_dictOfContacts objectForKey:sectionTitle];
+    NSManagedObject *currentContact = [sectionForKey objectAtIndex:indexPath.row];
+    NSString *mobileNumber = [currentContact valueForKey:@"phone"];
+
+    if(![MFMessageComposeViewController canSendText]) {
+        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [warningAlert show];
+        return;
+    }
+    
+    NSArray *recipents = @[mobileNumber];
+    NSString *message = [NSString stringWithFormat:@"I'd love you to use this app called 42, but you're not cool enough. Sorry."];
+    
+    MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
+    messageController.messageComposeDelegate = self;
+    [messageController setRecipients:recipents];
+    [messageController setBody:message];
+    
+    // Present message view controller on screen
+    [self presentViewController:messageController animated:YES completion:nil];
     
 }
 
@@ -252,6 +283,8 @@
     MainViewController* mainViewController = (MainViewController *) self.parentViewController;
     [mainViewController movePanelToOriginalPosition];
 }
+
+
 
 #pragma mark -
 #pragma mark Default System Code

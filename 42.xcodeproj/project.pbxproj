@@ -13,6 +13,7 @@
 		CE1B929519359793001489C8 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1B929319359793001489C8 /* SettingsViewController.m */; };
 		CE1B929619359793001489C8 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE1B929419359793001489C8 /* SettingsViewController.xib */; };
 		CE1B92991936FED5001489C8 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1B92981936FED5001489C8 /* AddressBookUI.framework */; };
+		CE4B293F1941780100FDA0BB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE4B293E1941780100FDA0BB /* MessageUI.framework */; };
 		CE84F0EB1937993900AC6AE3 /* UIButtonForRow.m in Sources */ = {isa = PBXBuildFile; fileRef = CE84F0EA1937993900AC6AE3 /* UIButtonForRow.m */; };
 		CE84F0F0193819E100AC6AE3 /* ContactCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE84F0EF193819E100AC6AE3 /* ContactCellView.xib */; };
 		CE84F0F4193916C500AC6AE3 /* SettingsCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE84F0F3193916C500AC6AE3 /* SettingsCellView.xib */; };
@@ -84,6 +85,7 @@
 		CE1B929319359793001489C8 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		CE1B929419359793001489C8 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
 		CE1B92981936FED5001489C8 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		CE4B293E1941780100FDA0BB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		CE84F0E91937993900AC6AE3 /* UIButtonForRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIButtonForRow.h; sourceTree = "<group>"; };
 		CE84F0EA1937993900AC6AE3 /* UIButtonForRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIButtonForRow.m; sourceTree = "<group>"; };
 		CE84F0EC1938157F00AC6AE3 /* 120 - iPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "120 - iPhone@2x.png"; path = "designs/120 - iPhone@2x.png"; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE4B293F1941780100FDA0BB /* MessageUI.framework in Frameworks */,
 				CECA15A5193C2D4300EB2343 /* CoreData.framework in Frameworks */,
 				CE1B92991936FED5001489C8 /* AddressBookUI.framework in Frameworks */,
 				CE1B929119359519001489C8 /* Social.framework in Frameworks */,
@@ -230,6 +233,7 @@
 		CEE97424192DA82800494F47 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CE4B293E1941780100FDA0BB /* MessageUI.framework */,
 				CECA15A4193C2D4300EB2343 /* CoreData.framework */,
 				CE1B92981936FED5001489C8 /* AddressBookUI.framework */,
 				CE1B929019359519001489C8 /* Social.framework */,

@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
 
-@interface RightPanelViewController : UIViewController
+@interface RightPanelViewController : UIViewController <MFMessageComposeViewControllerDelegate>
 
 @property (nonatomic, strong) NSMutableDictionary *dictOfContacts;
 

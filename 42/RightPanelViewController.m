@@ -265,6 +265,14 @@
         return;
     }
     
+    if ([mobileNumber isEqual:nil]) {
+        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"This user does not have a number!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [warningAlert show];
+        return;
+    }
+    
+    NSLog(@"%@",mobileNumber);
+    
     NSArray *recipents = @[mobileNumber];
     NSString *message = [NSString stringWithFormat:@"I'd love you to use this app called 42, but you're not cool enough. Sorry."];
     
@@ -285,6 +293,28 @@
 }
 
 
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult) result
+{
+    switch (result) {
+        case MessageComposeResultCancelled:
+            break;
+            
+        case MessageComposeResultFailed:
+        {
+            UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Failed to send SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [warningAlert show];
+            break;
+        }
+            
+        case MessageComposeResultSent:
+            break;
+            
+        default:
+            break;
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 #pragma mark -
 #pragma mark Default System Code

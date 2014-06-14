@@ -9,6 +9,9 @@
 #import "MapView.h"
 #import <UIKit/UIKit.h>
 #import <MapKit/Mapkit.h>
+#import "FortyTwoMap.h"
+
+
 #define ANIMATION_TIME 0.25
 
 @implementation MapView
@@ -27,7 +30,7 @@
     _rightButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _flagButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _mkMapView = [[MKMapView alloc] init];
+    _mkMapView = [[FortyTwoMap alloc] init];
     
     _sendToButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _sendToPanel = [[UIView alloc] init];

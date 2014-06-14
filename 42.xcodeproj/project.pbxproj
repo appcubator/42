@@ -13,11 +13,15 @@
 		CE1B929519359793001489C8 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1B929319359793001489C8 /* SettingsViewController.m */; };
 		CE1B929619359793001489C8 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE1B929419359793001489C8 /* SettingsViewController.xib */; };
 		CE1B92991936FED5001489C8 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1B92981936FED5001489C8 /* AddressBookUI.framework */; };
+		CE4ABAB9194BD5A2005D2BA2 /* FortyTwoMap.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4ABAB8194BD5A2005D2BA2 /* FortyTwoMap.m */; };
 		CE4B293F1941780100FDA0BB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE4B293E1941780100FDA0BB /* MessageUI.framework */; };
 		CE84F0EB1937993900AC6AE3 /* UIButtonForRow.m in Sources */ = {isa = PBXBuildFile; fileRef = CE84F0EA1937993900AC6AE3 /* UIButtonForRow.m */; };
 		CE84F0F0193819E100AC6AE3 /* ContactCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE84F0EF193819E100AC6AE3 /* ContactCellView.xib */; };
 		CE84F0F4193916C500AC6AE3 /* SettingsCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE84F0F3193916C500AC6AE3 /* SettingsCellView.xib */; };
 		CE84F0F8193AB12100AC6AE3 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE84F0F6193AB12100AC6AE3 /* Model.xcdatamodeld */; };
+		CEA9C9AC1947891F00D0785E /* ComposePinAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA9C9AB1947891F00D0785E /* ComposePinAnnotation.m */; };
+		CEA9C9AE19478A6600D0785E /* CalloutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEA9C9AD19478A6600D0785E /* CalloutView.xib */; };
+		CEA9C9B119478F8C00D0785E /* ComposeCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA9C9B019478F8C00D0785E /* ComposeCalloutView.m */; };
 		CECA15A5193C2D4300EB2343 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CECA15A4193C2D4300EB2343 /* CoreData.framework */; };
 		CECA15A7193F804400EB2343 /* Arial Rounded Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CECA15A6193F804400EB2343 /* Arial Rounded Bold.ttf */; };
 		CEE97426192DA82800494F47 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97425192DA82800494F47 /* Foundation.framework */; };
@@ -85,6 +89,8 @@
 		CE1B929319359793001489C8 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		CE1B929419359793001489C8 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
 		CE1B92981936FED5001489C8 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		CE4ABAB7194BD5A2005D2BA2 /* FortyTwoMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FortyTwoMap.h; sourceTree = "<group>"; };
+		CE4ABAB8194BD5A2005D2BA2 /* FortyTwoMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FortyTwoMap.m; sourceTree = "<group>"; };
 		CE4B293E1941780100FDA0BB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		CE84F0E91937993900AC6AE3 /* UIButtonForRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIButtonForRow.h; sourceTree = "<group>"; };
 		CE84F0EA1937993900AC6AE3 /* UIButtonForRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIButtonForRow.m; sourceTree = "<group>"; };
@@ -94,6 +100,11 @@
 		CE84F0EF193819E100AC6AE3 /* ContactCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContactCellView.xib; sourceTree = "<group>"; };
 		CE84F0F3193916C500AC6AE3 /* SettingsCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsCellView.xib; sourceTree = "<group>"; };
 		CE84F0F7193AB12100AC6AE3 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		CEA9C9AA1947891F00D0785E /* ComposePinAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposePinAnnotation.h; sourceTree = "<group>"; };
+		CEA9C9AB1947891F00D0785E /* ComposePinAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposePinAnnotation.m; sourceTree = "<group>"; };
+		CEA9C9AD19478A6600D0785E /* CalloutView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CalloutView.xib; sourceTree = "<group>"; };
+		CEA9C9AF19478F8C00D0785E /* ComposeCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeCalloutView.h; sourceTree = "<group>"; };
+		CEA9C9B019478F8C00D0785E /* ComposeCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeCalloutView.m; sourceTree = "<group>"; };
 		CECA15A4193C2D4300EB2343 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		CECA15A6193F804400EB2343 /* Arial Rounded Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Arial Rounded Bold.ttf"; sourceTree = "<group>"; };
 		CEE97422192DA82800494F47 /* 42.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 42.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -349,6 +360,9 @@
 				CEE974AD1931660000494F47 /* LocationSentCellView.xib */,
 				CE84F0EF193819E100AC6AE3 /* ContactCellView.xib */,
 				CE84F0F3193916C500AC6AE3 /* SettingsCellView.xib */,
+				CEA9C9AD19478A6600D0785E /* CalloutView.xib */,
+				CEA9C9AF19478F8C00D0785E /* ComposeCalloutView.h */,
+				CEA9C9B019478F8C00D0785E /* ComposeCalloutView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -362,6 +376,10 @@
 				CEE974B01932834A00494F47 /* FriendPinAnnotation.m */,
 				CE84F0E91937993900AC6AE3 /* UIButtonForRow.h */,
 				CE84F0EA1937993900AC6AE3 /* UIButtonForRow.m */,
+				CEA9C9AA1947891F00D0785E /* ComposePinAnnotation.h */,
+				CEA9C9AB1947891F00D0785E /* ComposePinAnnotation.m */,
+				CE4ABAB7194BD5A2005D2BA2 /* FortyTwoMap.h */,
+				CE4ABAB8194BD5A2005D2BA2 /* FortyTwoMap.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -445,6 +463,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE1B929619359793001489C8 /* SettingsViewController.xib in Resources */,
+				CEA9C9AE19478A6600D0785E /* CalloutView.xib in Resources */,
 				CE84F0F4193916C500AC6AE3 /* SettingsCellView.xib in Resources */,
 				CEE9746C192DAF6100494F47 /* NewUserView.xib in Resources */,
 				CEE97467192DAF2A00494F47 /* LoginView.xib in Resources */,
@@ -509,6 +528,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEA9C9B119478F8C00D0785E /* ComposeCalloutView.m in Sources */,
 				CEE97491192DE03400494F47 /* MainViewController.m in Sources */,
 				CEE9743C192DA82800494F47 /* ViewController.m in Sources */,
 				CEE9745F192DAA3300494F47 /* WelcomeViewController.m in Sources */,
@@ -522,10 +542,12 @@
 				CEE9749C192DE13E00494F47 /* LeftPanelViewController.m in Sources */,
 				CEE97481192DB56100494F47 /* ActivityView.m in Sources */,
 				CEE9746B192DAF6100494F47 /* NewUserViewController.m in Sources */,
+				CEA9C9AC1947891F00D0785E /* ComposePinAnnotation.m in Sources */,
 				CEE97487192DBEA700494F47 /* MapView.m in Sources */,
 				CEE974B11932834A00494F47 /* FriendPinAnnotation.m in Sources */,
 				CEE974A7193109DD00494F47 /* SendToViewController.m in Sources */,
 				CEE9748E192DD12500494F47 /* PersonalPinAnnotation.m in Sources */,
+				CE4ABAB9194BD5A2005D2BA2 /* FortyTwoMap.m in Sources */,
 				CEE97466192DAF2A00494F47 /* LoginViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -585,7 +607,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Ilteris Kaan Canberk (XCQK96ATSZ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ilteris Kaan Canberk (XCQK96ATSZ)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;

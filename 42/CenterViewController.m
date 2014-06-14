@@ -15,6 +15,8 @@
 #import "SendToViewController.h"
 #import <Parse/Parse.h>
 #import "AppDelegate.h"
+#import "ComposeCalloutView.h"
+#import "ComposePinAnnotation.h"
 
 @interface CenterViewController ()
 
@@ -131,7 +133,7 @@
 - (void)btnDropFlag:(id)sender {
     
     if(!_selfPin) {
-        _selfPin = [[PersonalPinAnnotation alloc] init];
+        _selfPin = [[ComposePinAnnotation alloc] init];
     }
     [_mkMapView removeAnnotation:_selfPin];
     [_selfPin updateLocation: _locationManager.location];
@@ -286,6 +288,23 @@
     [newAnnotation setSelected:YES animated:YES];
     
     return newAnnotation;
+}
+
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+    
+    if ([view isKindOfClass:ComposePinAnnotation.class]) {
+        ComposePinAnnotation *annotationView = (ComposePinAnnotation *)view;
+        [annotationView setShowCustomCallout:YES animated:YES];
+    }
+    
+}
+
+-(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
+    
+    if ([view isKindOfClass:[ComposePinAnnotation class]]) {
+        [((ComposePinAnnotation *)view) setShowCustomCallout:NO animated:YES];
+    }
+
 }
 
 

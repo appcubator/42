@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/Mapkit.h>
+#import "FortyTwoMap.h"
 
 @interface MapView : UIView
 
@@ -16,7 +17,7 @@
 @property (nonatomic, strong) UIButton* flagButton;
 @property (nonatomic, strong) UIButton* cancelButton;
 
-@property (nonatomic, strong) MKMapView *mkMapView;
+@property (nonatomic, strong) FortyTwoMap *mkMapView;
 @property (nonatomic, strong) UIView* sendToPanel;
 @property (nonatomic, strong) UIButton* sendToButton;
 

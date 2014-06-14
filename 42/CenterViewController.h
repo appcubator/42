@@ -12,6 +12,8 @@
 #import "RightPanelViewController.h"
 #import "LeftPanelViewController.h"
 #import <Parse/Parse.h>
+#import "ComposePinAnnotation.h"
+#import "FortyTwoMap.h"
 
 @protocol CenterViewControllerDelegate <NSObject>
 
@@ -27,10 +29,10 @@
 @property (nonatomic, assign) id<CenterViewControllerDelegate> delegate;
 @property (nonatomic, weak) UIButton *leftButton;
 @property (nonatomic, weak) UIButton *rightButton;
-@property (strong, nonatomic) MKMapView *mkMapView;
+@property (strong, nonatomic) FortyTwoMap *mkMapView;
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
-@property (strong, nonatomic) PersonalPinAnnotation *selfPin;
+@property (strong, nonatomic) ComposePinAnnotation *selfPin;
 
 @property (strong, nonatomic) NSMutableArray *friendPins;
 

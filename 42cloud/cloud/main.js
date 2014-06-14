@@ -89,10 +89,11 @@ Parse.Cloud.afterSave("LocationSent", function(request) {
     	  data: {
      	    alert: fromUserName + " shared location with you!"
     	  }
-  	  }, {
-    	    success: function() {
-      	    // Push was successful
-    	  },
+  	},
+	{
+    	  success: function() {
+    	    console.log(fromUserName + " shared location with you!");
+	  },
     	  error: function(error) {
       	    throw "Got an error " + error.code + " : " + error.message;
     	  }

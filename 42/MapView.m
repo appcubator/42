@@ -26,13 +26,13 @@
         // Initialization code
     }
     
-    _leftButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _rightButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _flagButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _cancelButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    _leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _flagButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
     _mkMapView = [[FortyTwoMap alloc] init];
     
-    _sendToButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    _sendToButton = [UIButton buttonWithType:UIButtonTypeSystem];
     _sendToPanel = [[UIView alloc] init];
     
     _sendLocationMode = NO;
@@ -45,17 +45,13 @@
 
     _mkMapView.frame = CGRectMake(0, 0, self.superview.frame.size.width, self.superview.frame.size.height);
 
-    _rightButton.frame = CGRectMake(self.frame.size.width - 40 - 30, self.frame.size.height - 40 - 20, 40.0, 40.0);
-    _rightButton.backgroundColor = [UIColor whiteColor];
+    _rightButton.frame = CGRectMake(self.frame.size.width - 40 - 24, self.frame.size.height - 40 - 20, 40.0, 40.0);
     _rightButton.tag = 1;
-    [_rightButton setTitle:@"R" forState:UIControlStateNormal];
+    [_rightButton setImage:[UIImage imageNamed:@"right-button"] forState:UIControlStateNormal];
 
-
-    _leftButton.frame = CGRectMake(30, self.frame.size.height - 40 - 20, 40.0, 40.0);
-    _leftButton.backgroundColor = [UIColor whiteColor];
+    _leftButton.frame = CGRectMake(24, self.frame.size.height - 40 - 20, 40.0, 40.0);
     _leftButton.tag = 1;
-    [_leftButton setTitle:@"L" forState:UIControlStateNormal];
-
+    [_leftButton setImage:[UIImage imageNamed:@"left-button"] forState:UIControlStateNormal];
 
     _cancelButton.frame = CGRectMake(24, 36, 56.0, 56.0);
     _cancelButton.tag = 1;
@@ -66,11 +62,9 @@
         _cancelButton.hidden = NO;
     }
 
-    _flagButton.frame = CGRectMake(self.frame.size.width/2 - 20, self.frame.size.height - 60 - 10, 60.0, 60.0);
-    _flagButton.alpha = 0.900;
+    _flagButton.frame = CGRectMake(self.frame.size.width/2 - 30, self.frame.size.height - 60 - 10, 60.0, 60.0);
     _flagButton.tag = 1;
-    _flagButton.backgroundColor = [UIColor whiteColor];
-    [_flagButton setTitle:@"C" forState:UIControlStateNormal];
+    [_flagButton setImage:[UIImage imageNamed:@"center-button"] forState:UIControlStateNormal];
     
     [self addSubview:_mkMapView];
     [self addSubview:_rightButton];

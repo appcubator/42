@@ -19,10 +19,8 @@
         _calloutView = (ComposeCalloutView *)[[[NSBundle mainBundle] loadNibNamed:@"CalloutView" owner:self options:nil] objectAtIndex:0];
         _showCustomCallout = NO;
         CGRect calloutViewFrame = _calloutView.frame;
-        calloutViewFrame.origin = CGPointMake(
-                                              _mapView.frame.size.width / 2 - calloutViewFrame.size.width / 2,
-                                              _mapView.frame.size.height / 2 -  calloutViewFrame.size.height / 2 - 72);
-
+        calloutViewFrame.origin = CGPointMake(0,0);
+        
         _calloutView.frame = calloutViewFrame;
         
     }

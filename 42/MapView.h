@@ -21,7 +21,10 @@
 @property (nonatomic, strong) UIView* sendToPanel;
 @property (nonatomic, strong) UIButton* sendToButton;
 
+@property (nonatomic) BOOL sendLocationMode;
+
 - (void)showSendPanel;
 - (void)hideSendPanel;
+- (void)showSendLocationMode;
 
 @end

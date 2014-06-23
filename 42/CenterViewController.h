@@ -32,7 +32,8 @@
 @property (strong, nonatomic) FortyTwoMap *mkMapView;
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
-@property (strong, nonatomic) ComposePinAnnotation *selfPin;
+@property (strong, nonatomic) PersonalPinAnnotation *selfPin;
+
 
 @property (strong, nonatomic) NSMutableArray *friendPins;
 

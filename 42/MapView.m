@@ -35,6 +35,8 @@
     _sendToButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _sendToPanel = [[UIView alloc] init];
     
+    _sendLocationMode = NO;
+
     return self;
 }
 
@@ -59,7 +61,11 @@
     _cancelButton.tag = 1;
     _cancelButton.hidden = YES;
     [_cancelButton setBackgroundImage:[UIImage imageNamed:@"cancel-icon"] forState:UIControlStateNormal];
-    
+
+    if (_sendLocationMode) {
+        _cancelButton.hidden = NO;
+    }
+
     _flagButton.frame = CGRectMake(self.frame.size.width/2 - 20, self.frame.size.height - 60 - 10, 60.0, 60.0);
     _flagButton.alpha = 0.900;
     _flagButton.tag = 1;
@@ -75,6 +81,12 @@
     
     _sendToPanel.backgroundColor = [UIColor colorWithRed:1.0 green:0.49 blue:0.27 alpha:1.00];
     _sendToPanel.frame = CGRectMake(0, self.superview.frame.size.height, self.superview.frame.size.width, 72);
+    
+    if (_sendLocationMode) {
+        CGRect newRect = CGRectMake(0, self.superview.frame.size.height - _sendToPanel.frame.size.height, _sendToPanel.frame.size.width, _sendToPanel.frame.size.height);
+        _sendToPanel.hidden = false;
+        _sendToPanel.frame = newRect;
+    }
     
     UIImage *sendImage = [UIImage imageNamed:@"send-icon"];
     UIImageView *sendImageView = [[UIImageView alloc] initWithImage:sendImage];
@@ -93,12 +105,19 @@
     [self addSubview:_sendToPanel];
 }
 
+- (void) showSendLocationMode {
+    _sendLocationMode = YES;
+    [self showSendPanel];
+    _cancelButton.hidden = NO;
+}
+
 - (void)showSendPanel {
     
     CGRect newRect = CGRectMake(0, self.superview.frame.size.height - _sendToPanel.frame.size.height, _sendToPanel.frame.size.width, _sendToPanel.frame.size.height);
     
     [UIView animateWithDuration:ANIMATION_TIME delay:0 options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
+                         _sendToPanel.hidden = false;
                          _sendToPanel.frame = newRect;
                      }
                      completion:^(BOOL finished) { }];

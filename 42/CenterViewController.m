@@ -43,9 +43,12 @@
     MapView* mapView = [[MapView alloc] init];
     self.view = mapView;
 
+    
     _mkMapView = mapView.mkMapView;
     _mkMapView.showsUserLocation=YES;
     _mkMapView.delegate = self;
+
+    //_selfPin = [[ComposePinAnnotation alloc] initWithMapView: _mkMapView];
 
     _locationManager = [[CLLocationManager alloc] init];
     _locationManager.delegate = self;
@@ -131,28 +134,22 @@
 }
 
 - (void)btnDropFlag:(id)sender {
+
+    MapView *view = (MapView *)self.view;
     
-    if(!_selfPin) {
-        _selfPin = [[ComposePinAnnotation alloc] init];
-    }
-    [_mkMapView removeAnnotation:_selfPin];
-    [_selfPin updateLocation: _locationManager.location];
+    // show "Send" button
+    [view showSendLocationMode];
+    
     [self centerMap];
-    [_mkMapView addAnnotation:_selfPin];
+    ComposePinAnnotation *composePin = [[ComposePinAnnotation alloc] initWithMapView: _mkMapView];
+    [_mkMapView addAnnotation:composePin];
+    [_mkMapView selectAnnotation:composePin animated:YES];
 
     CLLocationCoordinate2D currentCoordinate = _locationManager.location.coordinate;
 	PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	PFUser *user = [PFUser currentUser];
 
-    MapView *view = (MapView *)self.view;
-    
-    // show "Send" button
-    [view showSendPanel];
 
-    // show "X" button
-    UIButton *cancelButton = view.cancelButton;
-    cancelButton.hidden = NO;
-    
     // update the propery on AppDelegat
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [appDelegate setCurrentLocation: _locationManager.location];
@@ -292,8 +289,8 @@
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     
-    if ([view isKindOfClass:ComposePinAnnotation.class]) {
-        ComposePinAnnotation *annotationView = (ComposePinAnnotation *)view;
+    if ([view.annotation isKindOfClass:ComposePinAnnotation.class]) {
+        ComposePinAnnotation *annotationView = (ComposePinAnnotation *)view.annotation;
         [annotationView setShowCustomCallout:YES animated:YES];
     }
     
@@ -301,8 +298,9 @@
 
 -(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
     
-    if ([view isKindOfClass:[ComposePinAnnotation class]]) {
-        [((ComposePinAnnotation *)view) setShowCustomCallout:NO animated:YES];
+    if ([view.annotation isKindOfClass:ComposePinAnnotation.class]) {
+        ComposePinAnnotation *annotationView = (ComposePinAnnotation *)view.annotation;
+        [annotationView setShowCustomCallout:NO animated:YES];
     }
 
 }

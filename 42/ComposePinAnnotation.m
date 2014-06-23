@@ -15,17 +15,31 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        _title = @"HEY";
+        _title = @"H";
         _calloutView = (ComposeCalloutView *)[[[NSBundle mainBundle] loadNibNamed:@"CalloutView" owner:self options:nil] objectAtIndex:0];
         _showCustomCallout = NO;
-//        CGRect calloutViewFrame = _calloutView.frame;
-//        calloutViewFrame.origin = CGPointMake(-calloutViewFrame.size.width/2 + 15, -calloutViewFrame.size.height);
-//        _calloutView.frame = calloutViewFrame;
-        
+        CGRect calloutViewFrame = _calloutView.frame;
+        calloutViewFrame.origin = CGPointMake(
+                                              _mapView.frame.size.width / 2 - calloutViewFrame.size.width / 2,
+                                              _mapView.frame.size.height / 2 -  calloutViewFrame.size.height / 2 - 72);
+
+        _calloutView.frame = calloutViewFrame;
         
     }
     return self;
 }
+
+- (id)initWithMapView:(FortyTwoMap*)mapView {
+    _mapView = mapView;
+    self = [super init];
+    if (self) {
+
+    }
+    
+    return  self;
+}
+
+
 
 /*
 // Only override drawRect: if you perform custom drawing.
@@ -35,7 +49,7 @@
     // Drawing code
 }
 */
-- (void)setShowCustomCallout:(BOOL)showCustomCallout
+- (void)v:(BOOL)showCustomCallout
 {
     [self setShowCustomCallout:showCustomCallout animated:NO];
 }

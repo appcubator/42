@@ -20,21 +20,15 @@
 {
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(locationSentDidChange)
-                                                 name:kLocationSentUpdateNotification
+                                             selector:@selector(updatedLocationSent)
+                                                 name:kLocationSentUpdatedNotification
                                                object:nil];
-    _refreshControl = [[UIRefreshControl alloc] init];
-    [_refreshControl addTarget:self action:@selector(refreshInvoked:forState:) forControlEvents:UIControlEventValueChanged];
-    _refreshControl.tintColor = [UIColor magentaColor];
-
-    [self setRefreshControl:_refreshControl];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updatingLocationSent)
+                                                 name:kLocationSentUpdatingNotification
+                                               object:nil];
 }
 
-- (void)locationSentDidChange
-{
-    [_tableView reloadData];
-    [_refreshControl endRefreshing];
-}
 
 - (void)viewDidUnload
 {
@@ -158,12 +152,32 @@
     return _cellMain;
 }
 
--(void) refreshInvoked:(id)sender forState:(UIControlState)state {
-    // Refresh table here...
+- (void)updatingLocationSent
+{
+
+    // _refreshButton.transform = CGAffineTransformMakeRotation(M_PI / -4);
+   // [_refreshButton setTransform:CGAffineTransformMakeRotation(M_PI / -2)];
+    
+    
+    _refreshAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    _refreshAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
+    _refreshAnimation.toValue = [NSNumber numberWithFloat: 2*M_PI];
+    _refreshAnimation.duration = 1.0f;
+    _refreshAnimation.removedOnCompletion = NO;
+    [_refreshButton.layer addAnimation:_refreshAnimation forKey:@"MyAnimation"];
+    
+}
+
+- (void)updatedLocationSent
+{
+    [_tableView reloadData];
+    _refreshAnimation.removedOnCompletion = YES;
+}
+
+- (IBAction)btnRefresh:(id)sender {
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [appDelegate updateLocationSent];
 }
-
 
 #pragma mark -
 #pragma mark Default System Code
@@ -188,10 +202,5 @@
     [mainViewController movePanelToOriginalPosition];
 }
 
-
-- (IBAction)btnSettings:(id)sender {
-    SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController" bundle:nil];
-	[self.navigationController pushViewController:settingsViewController animated:YES];
-}
 
 @end

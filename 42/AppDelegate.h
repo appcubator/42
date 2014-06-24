@@ -13,7 +13,8 @@
 #import "MainViewController.h"
 
 // In the app delegate we create a constant string to be used as an event name
-static NSString* const kLocationSentUpdateNotification= @"kLocationSentUpdateNotification";
+static NSString* const kLocationSentUpdatedNotification= @"kLocationSentUpdateNotification";
+static NSString* const kLocationSentUpdatingNotification= @"kLocationSentUpdatingNotification";
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

@@ -89,6 +89,7 @@
     
     UIImage *sendImage = [UIImage imageNamed:@"send-icon"];
     UIImageView *sendImageView = [[UIImageView alloc] initWithImage:sendImage];
+    sendImageView.contentMode = UIViewContentModeCenter;
     [sendImageView setFrame:CGRectMake(_sendToPanel.frame.size.width - 76, 16, 57, 41)];
     [_sendToPanel addSubview:sendImageView];
     

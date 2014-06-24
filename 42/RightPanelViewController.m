@@ -13,7 +13,7 @@
 #import "UIButtonForRow.h"
 #import "AppDelegate.h"
 #import <CoreData/CoreData.h>
-
+#import "SettingsViewController.h"
 
 @implementation RightPanelViewController
 
@@ -314,6 +314,11 @@
     }
     
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)btnSettings:(id)sender {
+    SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController" bundle:nil];
+	[self.navigationController pushViewController:settingsViewController animated:YES];
 }
 
 #pragma mark -

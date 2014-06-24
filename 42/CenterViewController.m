@@ -71,7 +71,7 @@
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(locationSentDidChange)
-                                                 name:kLocationSentUpdateNotification
+                                                 name:kLocationSentUpdatedNotification
                                                object:nil];
 
     _mkMapView.region = MKCoordinateRegionMake(CLLocationCoordinate2DMake(37.332495f, -122.029095f), MKCoordinateSpanMake(0.008516f, 0.021801f));
@@ -173,7 +173,6 @@
 	[postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
 		if (error) {
 			NSLog(@"Couldn't save!");
-			NSLog(@"sup %@", error);
 			UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[error userInfo] objectForKey:@"error"] message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
 			[alertView show];
 			return;
@@ -259,11 +258,12 @@
         NSDate *now = [NSDate date];
         NSTimeInterval interval = [now timeIntervalSinceDate:when];
         double rawMinutes = interval / (60);
-        
+        NSString *message = locationSent[@"message"];
+
         if (rawMinutes < 42) {
             CLLocationCoordinate2D newCoordinate = CLLocationCoordinate2DMake(location.latitude, location.longitude);
         
-            FriendPinAnnotation *newPin = [[FriendPinAnnotation alloc] initWithCoordinate:newCoordinate name:user.username u_id:locationSent.objectId when:when];
+            FriendPinAnnotation *newPin = [[FriendPinAnnotation alloc] initWithCoordinate:newCoordinate name:user.username u_id:locationSent.objectId when:when message:message];
         
             [_friendPins insertObject:newPin atIndex:0];
             [_mkMapView addAnnotation:(id)newPin];

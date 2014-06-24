@@ -42,6 +42,21 @@
                                     <action selector="btnBack:" destination="-1" id="EPm-3t-icp"/>
                                 </connections>
                             </barButtonItem>
+                            <barButtonItem key="rightBarButtonItem" style="plain" id="HEK-zp-lZQ">
+                                <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="kmf-0X-VKF">
+                                    <rect key="frame" x="290" y="11" width="22" height="22"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" image="settings-icon">
+                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="btnSettings:" destination="-1" eventType="touchUpInside" id="aMV-v4-kop"/>
+                                    </connections>
+                                </button>
+                                <connections>
+                                    <action selector="btnSettings:" destination="-1" id="79A-aO-Vnr"/>
+                                </connections>
+                            </barButtonItem>
                         </navigationItem>
                     </items>
                 </navigationBar>
@@ -63,5 +78,6 @@
     </objects>
     <resources>
         <image name="left-arrow" width="17" height="22"/>
+        <image name="settings-icon" width="22" height="22"/>
     </resources>
 </document>

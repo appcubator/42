@@ -10,4 +10,6 @@
 
 @interface ComposeCalloutView : UIView
 
+@property (strong, nonatomic) IBOutlet UITextField *textField;
+
 @end

@@ -22,6 +22,7 @@ static NSString* const kLocationSentUpdateNotification= @"kLocationSentUpdateNot
 @property (nonatomic, strong) MainViewController *mainViewController;
 
 @property (nonatomic, strong) CLLocation *currentLocation;
+@property (nonatomic, strong) NSString *currentMessage;
 @property (nonatomic, strong) NSMutableArray *arrayOfLocationSent;
 
 @property (nonatomic,strong) NSManagedObjectContext* managedObjectContext;

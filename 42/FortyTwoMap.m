@@ -8,6 +8,7 @@
 
 #import "FortyTwoMap.h"
 #import "ComposeCalloutView.h"
+#import "ComposePinAnnotation.h"
 
 @implementation FortyTwoMap
 
@@ -35,7 +36,11 @@
     
     if ([view isKindOfClass:ComposeCalloutView.class]) {
         return nil; // todo: add a new delegate method to the map protocol to handle callout taps
-    } else {
+    }
+    else if ([view isKindOfClass:ComposePinAnnotation.class]) {
+        return nil;
+    }
+    else {
         return view;
     }
 }

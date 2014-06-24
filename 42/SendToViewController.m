@@ -178,8 +178,10 @@
     
     [appDelegate sendLocationTo:listOfReceivers withBlock:^(void) {
         [self resetData];
-        [self.navigationController popViewControllerAnimated:YES];
     }];
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
 }
 
 - (IBAction)btnBack:(id)sender {

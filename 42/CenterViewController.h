@@ -33,6 +33,7 @@
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) PersonalPinAnnotation *selfPin;
+@property (strong, nonatomic) ComposePinAnnotation *composePin;
 
 
 @property (strong, nonatomic) NSMutableArray *friendPins;

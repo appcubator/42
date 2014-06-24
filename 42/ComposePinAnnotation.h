@@ -17,6 +17,7 @@
 @property (nonatomic, strong) ComposeCalloutView *calloutView;
 @property (nonatomic) BOOL showCustomCallout;
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
+//@property (nonatomic, strong) MKAnnotationView *view;
 
 - (id)initWithMapView:(FortyTwoMap *)mapView;
 - (void)setShowCustomCallout:(BOOL)showCustomCallout animated:(BOOL)animated;

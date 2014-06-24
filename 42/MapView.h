@@ -26,5 +26,6 @@
 - (void)showSendPanel;
 - (void)hideSendPanel;
 - (void)showSendLocationMode;
+- (void)hideSendLocationMode;
 
 @end

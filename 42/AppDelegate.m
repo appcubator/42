@@ -23,6 +23,9 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 - (void)sendLocationTo:(NSMutableArray *)receivers withBlock:(void (^)(void))callbackBlock
 {
 
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"locationSent" object:self];
+
     NSMutableArray *locationSentList = [[NSMutableArray alloc] init];
     PFUser *currentUser = [PFUser currentUser];
 
@@ -37,6 +40,10 @@ static NSString * const defaultsLocationKey = @"currentLocation";
         [locationSentObject setObject:[NSDate date] forKey:@"date"];
         [locationSentObject setObject:currentPoint forKey:@"location"];
         
+        if (_currentMessage != nil) {
+            [locationSentObject setObject:_currentMessage forKey:@"message"];
+        }
+
         [locationSentList addObject:locationSentObject];
     }
 

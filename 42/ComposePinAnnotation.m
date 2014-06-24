@@ -14,30 +14,31 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        
         // Initialization code
         _title = @"H";
+        
         _calloutView = (ComposeCalloutView *)[[[NSBundle mainBundle] loadNibNamed:@"CalloutView" owner:self options:nil] objectAtIndex:0];
         _showCustomCallout = NO;
         CGRect calloutViewFrame = _calloutView.frame;
-        calloutViewFrame.origin = CGPointMake(0,0);
         
+        calloutViewFrame.origin = CGPointMake(-_calloutView.frame.size.width / 2 - 8, -_calloutView.frame.size.height - 18);
         _calloutView.frame = calloutViewFrame;
         
+        MKPinAnnotationView *pinView = [[MKPinAnnotationView alloc] initWithAnnotation:self.annotation reuseIdentifier:@"compose-pin"];
+
+        [self addSubview:pinView];
+        self.canShowCallout = NO;
+
     }
     return self;
 }
 
-- (id)initWithMapView:(FortyTwoMap*)mapView {
-    _mapView = mapView;
+- (id)initWithMapView:(FortyTwoMap *)mapView {
+    self.mapView = mapView;
     self = [super init];
-    if (self) {
-
-    }
-    
     return  self;
 }
-
-
 
 /*
 // Only override drawRect: if you perform custom drawing.
@@ -47,7 +48,7 @@
     // Drawing code
 }
 */
-- (void)v:(BOOL)showCustomCallout
+- (void)setShowCustomCallout:(BOOL)showCustomCallout
 {
     [self setShowCustomCallout:showCustomCallout animated:NO];
 }
@@ -67,6 +68,7 @@
         animationBlock = ^{
             self.calloutView.alpha = 1.0f;
             [self addSubview:self.calloutView];
+            [self bringSubviewToFront:self.calloutView];
         };
         
     } else {
@@ -86,9 +88,11 @@
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     if (self.showCustomCallout && CGRectContainsPoint(self.calloutView.frame, point)) {
+        [_calloutView.textField becomeFirstResponder];
         return self.calloutView;
         
     } else {
+        [_calloutView.textField  resignFirstResponder];
         return nil;
     }
 }
@@ -100,5 +104,6 @@
 - (void)updateCoordinate:(CLLocationCoordinate2D)coor {
     _coordinate = coor;
 }
+
 
 @end

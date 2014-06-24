@@ -48,8 +48,8 @@
     _mkMapView.showsUserLocation=YES;
     _mkMapView.delegate = self;
 
-    //_selfPin = [[ComposePinAnnotation alloc] initWithMapView: _mkMapView];
-
+    _composePin = [[ComposePinAnnotation alloc] init];
+    
     _locationManager = [[CLLocationManager alloc] init];
     _locationManager.delegate = self;
     
@@ -58,7 +58,10 @@
     [mapView.leftButton addTarget:self action:@selector(btnMovePanelRight:) forControlEvents:UIControlEventTouchUpInside];
     [mapView.rightButton addTarget:self action:@selector(btnMovePanelLeft:) forControlEvents:UIControlEventTouchUpInside];
     [mapView.sendToButton addTarget:self action:@selector(btnSendTo:) forControlEvents:UIControlEventTouchUpInside];
-    [mapView.cancelButton addTarget:self action:@selector(cancelLocation:) forControlEvents:UIControlEventTouchUpInside];
+    [mapView.cancelButton addTarget:self action:@selector(clearLocation:) forControlEvents:UIControlEventTouchUpInside];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearLocation:) name:@"locationSent" object:nil];
+
 }
 
 
@@ -141,11 +144,14 @@
     [view showSendLocationMode];
     
     [self centerMap];
-    ComposePinAnnotation *composePin = [[ComposePinAnnotation alloc] initWithMapView: _mkMapView];
-    [_mkMapView addAnnotation:composePin];
-    [_mkMapView selectAnnotation:composePin animated:YES];
+
 
     CLLocationCoordinate2D currentCoordinate = _locationManager.location.coordinate;
+
+    [_composePin updateCoordinate:currentCoordinate];
+    [_mkMapView addAnnotation:_composePin];
+    [_mkMapView selectAnnotation:_composePin animated:YES];
+
 	PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	PFUser *user = [PFUser currentUser];
 
@@ -194,19 +200,38 @@
 - (void)btnSendTo:(id)sender
 {
     SendToViewController *sendToViewController = [[SendToViewController alloc] initWithNibName:@"SendToViewController" bundle:nil];
-	[self.navigationController pushViewController:sendToViewController animated:YES];
     
+    NSString *message = _composePin.calloutView.textField.text;
+    
+    // update the propery on AppDelegate
+    if (message != nil && ![message  isEqual: @""]) {
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        [appDelegate setCurrentMessage: message];
+    }
+
+	[self.navigationController pushViewController:sendToViewController animated:YES];
+
 }
 
-- (void)cancelLocation:(id)sender
+- (void)clearLocation:(id)sender
 {
     MapView *view = (MapView *)self.view;
     
-    [view hideSendPanel];
+    [view hideSendLocationMode];
 
     // show "X" button
     UIButton *cancelButton = view.cancelButton;
     cancelButton.hidden = YES;
+    
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [appDelegate setCurrentMessage: nil];
+    [appDelegate setCurrentLocation: nil];
+
+    [_composePin.calloutView.textField setText:@""];
+    [_composePin setShowCustomCallout:NO animated:YES];
+    [_mkMapView removeAnnotation:_composePin];
+
+
 }
 
 
@@ -275,16 +300,14 @@
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id) annotation
 {
-    if ([annotation isKindOfClass:[MKUserLocation class]])
-        return nil;
     
-    MKPinAnnotationView *newAnnotation = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"annotation1"];
-    newAnnotation.pinColor = MKPinAnnotationColorRed;
-    newAnnotation.animatesDrop = YES;
-    newAnnotation.canShowCallout = YES;
-    [newAnnotation setSelected:YES animated:YES];
+    if ([annotation isKindOfClass:ComposePinAnnotation.class])
+    {
+        ComposePinAnnotation *newAnnotation = (ComposePinAnnotation *)annotation;
+        return newAnnotation;
+    }
     
-    return newAnnotation;
+    return nil;
 }
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
@@ -298,10 +321,6 @@
 
 -(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
     
-    if ([view.annotation isKindOfClass:ComposePinAnnotation.class]) {
-        ComposePinAnnotation *annotationView = (ComposePinAnnotation *)view.annotation;
-        [annotationView setShowCustomCallout:NO animated:YES];
-    }
 
 }
 

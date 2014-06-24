@@ -24,6 +24,11 @@
                                            [[UIScreen mainScreen] applicationFrame].size.height)];
     if (self) {
         // Initialization code
+        
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+		[center addObserver:self selector:@selector(noticeShowKeyboard:) name:UIKeyboardDidShowNotification object:nil];
+		[center addObserver:self selector:@selector(noticeHideKeyboard:) name:UIKeyboardDidHideNotification object:nil];
+
     }
     
     _leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -105,6 +110,12 @@
     _cancelButton.hidden = NO;
 }
 
+- (void) hideSendLocationMode {
+    _sendLocationMode = NO;
+    [self hideSendPanel];
+    _cancelButton.hidden = YES;
+}
+
 - (void)showSendPanel {
     
     CGRect newRect = CGRectMake(0, self.superview.frame.size.height - _sendToPanel.frame.size.height, _sendToPanel.frame.size.width, _sendToPanel.frame.size.height);
@@ -115,6 +126,10 @@
                          _sendToPanel.frame = newRect;
                      }
                      completion:^(BOOL finished) { }];
+    
+    _rightButton.hidden = YES;
+    _leftButton.hidden = YES;
+    _flagButton.hidden = YES;
 
 }
 
@@ -128,8 +143,32 @@
                      }
                      completion:^(BOOL finished) { }];
 
+    _rightButton.hidden = NO;
+    _leftButton.hidden = NO;
+    _flagButton.hidden = NO;
+
 }
 
+- (void) noticeShowKeyboard:(NSNotification *)inNotification {
+    
+    NSDictionary* keyboardInfo = [inNotification userInfo];
+    NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
+    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
+    
+    _sendToPanel.frame = CGRectMake(0, self.superview.frame.size.height - keyboardFrameBeginRect.size.height - 72, self.superview.frame.size.width, 72);
+}
+
+-(void) noticeHideKeyboard:(NSNotification *)inNotification {
+    
+    _sendToPanel.backgroundColor = [UIColor colorWithRed:1.0 green:0.49 blue:0.27 alpha:1.00];
+    _sendToPanel.frame = CGRectMake(0, self.superview.frame.size.height, self.superview.frame.size.width, 72);
+    
+    if (_sendLocationMode) {
+        CGRect newRect = CGRectMake(0, self.superview.frame.size.height - _sendToPanel.frame.size.height, _sendToPanel.frame.size.width, _sendToPanel.frame.size.height);
+        _sendToPanel.hidden = false;
+        _sendToPanel.frame = newRect;
+    }
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.

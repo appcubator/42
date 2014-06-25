@@ -15,7 +15,7 @@
 #import "ComposePinAnnotation.h"
 #import "FortyTwoMap.h"
 
-@protocol CenterViewControllerDelegate <NSObject>
+@protocol CenterViewControllerDelegate <NSObject, MFMessageComposeViewControllerDelegate>
 
 @optional
 - (void)movePanelLeft;

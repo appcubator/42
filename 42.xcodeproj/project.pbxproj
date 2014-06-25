@@ -14,6 +14,7 @@
 		CE1B929619359793001489C8 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE1B929419359793001489C8 /* SettingsViewController.xib */; };
 		CE1B92991936FED5001489C8 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1B92981936FED5001489C8 /* AddressBookUI.framework */; };
 		CE4ABAB9194BD5A2005D2BA2 /* FortyTwoMap.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4ABAB8194BD5A2005D2BA2 /* FortyTwoMap.m */; };
+		CE4ABABC195A34A2005D2BA2 /* UIButtonWithData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4ABABB195A34A2005D2BA2 /* UIButtonWithData.m */; };
 		CE4B293F1941780100FDA0BB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE4B293E1941780100FDA0BB /* MessageUI.framework */; };
 		CE84F0EB1937993900AC6AE3 /* UIButtonForRow.m in Sources */ = {isa = PBXBuildFile; fileRef = CE84F0EA1937993900AC6AE3 /* UIButtonForRow.m */; };
 		CE84F0F0193819E100AC6AE3 /* ContactCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE84F0EF193819E100AC6AE3 /* ContactCellView.xib */; };
@@ -91,6 +92,8 @@
 		CE1B92981936FED5001489C8 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		CE4ABAB7194BD5A2005D2BA2 /* FortyTwoMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FortyTwoMap.h; sourceTree = "<group>"; };
 		CE4ABAB8194BD5A2005D2BA2 /* FortyTwoMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FortyTwoMap.m; sourceTree = "<group>"; };
+		CE4ABABA195A34A2005D2BA2 /* UIButtonWithData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIButtonWithData.h; sourceTree = "<group>"; };
+		CE4ABABB195A34A2005D2BA2 /* UIButtonWithData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIButtonWithData.m; sourceTree = "<group>"; };
 		CE4B293E1941780100FDA0BB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		CE84F0E91937993900AC6AE3 /* UIButtonForRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIButtonForRow.h; sourceTree = "<group>"; };
 		CE84F0EA1937993900AC6AE3 /* UIButtonForRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIButtonForRow.m; sourceTree = "<group>"; };
@@ -380,6 +383,8 @@
 				CEA9C9AB1947891F00D0785E /* ComposePinAnnotation.m */,
 				CE4ABAB7194BD5A2005D2BA2 /* FortyTwoMap.h */,
 				CE4ABAB8194BD5A2005D2BA2 /* FortyTwoMap.m */,
+				CE4ABABA195A34A2005D2BA2 /* UIButtonWithData.h */,
+				CE4ABABB195A34A2005D2BA2 /* UIButtonWithData.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -549,6 +554,7 @@
 				CEE9748E192DD12500494F47 /* PersonalPinAnnotation.m in Sources */,
 				CE4ABAB9194BD5A2005D2BA2 /* FortyTwoMap.m in Sources */,
 				CEE97466192DAF2A00494F47 /* LoginViewController.m in Sources */,
+				CE4ABABC195A34A2005D2BA2 /* UIButtonWithData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

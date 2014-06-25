@@ -17,6 +17,7 @@
 #import "AppDelegate.h"
 #import "ComposeCalloutView.h"
 #import "ComposePinAnnotation.h"
+#import "UIButtonWithData.h"
 
 @interface CenterViewController ()
 
@@ -306,7 +307,22 @@
         ComposePinAnnotation *newAnnotation = (ComposePinAnnotation *)annotation;
         return newAnnotation;
     }
+
     
+    if ([annotation isKindOfClass:FriendPinAnnotation.class])
+    {
+        FriendPinAnnotation *newAnnotation = (FriendPinAnnotation *)annotation;
+        MKAnnotationView *annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"loc"];
+        annotationView.canShowCallout = YES;
+        UIButtonWithData *msgButton = [UIButtonWithData buttonWithType:UIButtonTypeDetailDisclosure];
+        msgButton.extraData = newAnnotation.phoneNumber;
+        [msgButton addTarget:self action:@selector(sendMessageToFriend:) forControlEvents:UIControlEventTouchUpInside];
+        msgButton.backgroundColor = [UIColor redColor];
+        annotationView.rightCalloutAccessoryView = msgButton;
+        
+        return annotationView;
+    }
+
     return nil;
 }
 
@@ -322,6 +338,62 @@
 -(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
     
 
+}
+
+
+- (void)sendMessageToFriend:(id)sender
+{
+    UIButtonWithData *msgButton = (UIButtonWithData *)sender;
+
+    NSString *mobileNumber = msgButton.extraData;
+
+    if(![MFMessageComposeViewController canSendText]) {
+        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Your device doesn't support SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [warningAlert show];
+        return;
+    }
+    
+    if ([mobileNumber isEqual:nil]) {
+        UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"This user does not have a number!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [warningAlert show];
+        return;
+    }
+    
+    NSLog(@"%@",mobileNumber);
+    
+    NSArray *recipents = @[mobileNumber];
+    NSString *message = [NSString stringWithFormat:@"I'd love you to use this app called 42, but you're not cool enough. Sorry."];
+    
+    MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
+    messageController.messageComposeDelegate = self;
+    [messageController setRecipients:recipents];
+    [messageController setBody:message];
+    
+    // Present message view controller on screen
+    [self presentViewController:messageController animated:YES completion:nil];
+}
+
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult) result
+{
+    switch (result) {
+        case MessageComposeResultCancelled:
+            break;
+            
+        case MessageComposeResultFailed:
+        {
+            UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Failed to send SMS!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [warningAlert show];
+            break;
+        }
+            
+        case MessageComposeResultSent:
+            break;
+            
+        default:
+            break;
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 

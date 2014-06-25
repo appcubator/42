@@ -538,7 +538,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
             _arrayOfLocationSent = [NSMutableArray arrayWithArray:objects];
             [[NSNotificationCenter defaultCenter] postNotificationName: kLocationSentUpdatedNotification
-                                                                object:nil];
+                                                                    object:nil];
         } else {
             // Log details of the failure
             NSLog(@"Error: %@ %@", error, [error userInfo]);

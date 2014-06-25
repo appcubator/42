@@ -314,10 +314,10 @@
         FriendPinAnnotation *newAnnotation = (FriendPinAnnotation *)annotation;
         MKAnnotationView *annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"loc"];
         annotationView.canShowCallout = YES;
-        UIButtonWithData *msgButton = [UIButtonWithData buttonWithType:UIButtonTypeDetailDisclosure];
+        UIButtonWithData *msgButton = [UIButtonWithData buttonWithType:UIButtonTypeInfoLight];
         msgButton.extraData = newAnnotation.phoneNumber;
+        [msgButton setImage:[UIImage imageNamed:@"text-button"] forState:UIControlStateNormal];
         [msgButton addTarget:self action:@selector(sendMessageToFriend:) forControlEvents:UIControlEventTouchUpInside];
-        msgButton.backgroundColor = [UIColor redColor];
         annotationView.rightCalloutAccessoryView = msgButton;
         
         return annotationView;

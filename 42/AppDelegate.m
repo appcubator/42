@@ -141,9 +141,31 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
 
 - (void)application:(UIApplication *)application
 didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    // Handle the push here
-    [PFPush handlePush:userInfo];
-    [self updateLocationSent];
+    NSLog(@"%@",userInfo);
+    
+    if ( application.applicationState == UIApplicationStateActive ) {
+        // already on the foreground
+    }
+    else {
+        
+        NSString *objectId = [userInfo valueForKey:@"objectId"];
+        
+        if (objectId != nil) {
+            [self updateLocationSentWithBlock: ^() {
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId==%@", objectId];
+                PFObject *locationSent = (PFObject *)[[_arrayOfLocationSent filteredArrayUsingPredicate:predicate] firstObject];
+                
+                if (locationSent) {
+                    [[self getMainViewController].centerViewController showLocationSent:locationSent];
+                }
+            }];
+        }
+        else {
+            [self updateLocationSent];
+        }
+
+    }
+
 }
 
 - (MainViewController *)getMainViewController
@@ -523,6 +545,11 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
 - (void)updateLocationSent
 {
+    [ self updateLocationSentWithBlock:nil];
+}
+
+- (void)updateLocationSentWithBlock:(void (^)(void))callBackBlock
+{
     
     [[NSNotificationCenter defaultCenter] postNotificationName: kLocationSentUpdatingNotification
                                                         object:nil];
@@ -532,13 +559,16 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [query whereKey:@"to" equalTo: [PFUser currentUser]];
     [query orderByDescending:@"date"];
     query.limit = 40;
-
+    
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
-
+            
             _arrayOfLocationSent = [NSMutableArray arrayWithArray:objects];
             [[NSNotificationCenter defaultCenter] postNotificationName: kLocationSentUpdatedNotification
-                                                                    object:nil];
+                                                                object:nil];
+            if (callBackBlock) {
+                callBackBlock();
+            }
         } else {
             // Log details of the failure
             NSLog(@"Error: %@ %@", error, [error userInfo]);

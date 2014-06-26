@@ -78,25 +78,25 @@ Parse.Cloud.afterSave("LocationSent", function(request) {
   // Our "LocationSent" class has a "text" key with the body of the comment itself
   var sendToUser = request.object.get('to');
   var fromUser   = request.object.get('from');
+  console.log(request.object.id);
 
   request.object.get('from').fetch().then(function(fromUser) {
 	var fromUserName = fromUser.get('username');  
 	var pushQuery = new Parse.Query(Parse.Installation);
-  	pushQuery.equalTo('user', sendToUser);
+  pushQuery.equalTo('user', sendToUser);
     
-  	Parse.Push.send({
-   	  where: pushQuery, // Set our Installation query
-    	  data: {
-     	    alert: fromUserName + " shared location with you!"
-    	  }
+  Parse.Push.send({
+   	where: pushQuery, // Set our Installation query
+    	data: {
+     	  alert: fromUserName + " shared location with you!",
+        objectId: request.object.id
+    	}
   	},
-	{
-    	  success: function() {
-    	    console.log(fromUserName + " shared location with you!");
-	  },
-    	  error: function(error) {
-      	    throw "Got an error " + error.code + " : " + error.message;
-    	  }
+	  {
+    	success: function() { },
+    	error: function(error) {
+      	throw "Got an error " + error.code + " : " + error.message;
+    	}
   	});
   });
 });

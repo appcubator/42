@@ -61,8 +61,13 @@
     [mapView.sendToButton addTarget:self action:@selector(btnSendTo:) forControlEvents:UIControlEventTouchUpInside];
     [mapView.cancelButton addTarget:self action:@selector(clearLocation:) forControlEvents:UIControlEventTouchUpInside];
 
+    [mapView.cancelButton addTarget:self action:@selector(clearLocation:) forControlEvents:UIControlEventTouchUpInside];
+
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearLocation:) name:@"locationSent" object:nil];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUpdate:) name:kShowLocationWithId object:nil];
+    
 }
 
 

@@ -15,6 +15,7 @@
 // In the app delegate we create a constant string to be used as an event name
 static NSString* const kLocationSentUpdatedNotification= @"kLocationSentUpdateNotification";
 static NSString* const kLocationSentUpdatingNotification= @"kLocationSentUpdatingNotification";
+static NSString* const kShowLocationWithId= @"kShowLocationWithId";
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

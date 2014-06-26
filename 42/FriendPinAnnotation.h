@@ -14,10 +14,10 @@
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 @property (nonatomic, copy) NSString *title;
 @property (assign) NSString* ID;
+@property (nonatomic, strong) NSString* userId;
 @property (nonatomic, retain) NSDate *when;
 @property (nonatomic, strong) NSString *message;
 @property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSString *phoneNumber;
 
 // add an init method so you can set the coordinate property on startup
 - (id)initWithCoordinate:(CLLocationCoordinate2D)coord name:(NSString *)name u_id:(NSString *)u_id when:(NSDate *)time message:(NSString *)message;

@@ -39,5 +39,6 @@ static NSString* const kShowLocationWithId= @"kShowLocationWithId";
 - (MainViewController *)getMainViewController;
 - (NSArray *)getUnregisteredContacts;
 - (NSArray *)getRegisteredContacts;
+- (NSString *)getUserWithId: (NSString *)objectId;
 
 @end

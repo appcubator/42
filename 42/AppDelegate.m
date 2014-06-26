@@ -255,6 +255,35 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     return array;
 }
 
+- (NSObject *)getUserWithId: (NSString *)objectId {
+    
+    NSLog(@"%@",objectId);
+    
+    NSManagedObjectContext *moc = [self managedObjectContext];
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"ContactModel" inManagedObjectContext:moc];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    // Set example predicate and sort orderings...
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user_id == %@", objectId];
+    [request setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSArray *array = [moc executeFetchRequest:request error:&error];
+    
+    
+    if (array == nil || [array count] == 0)
+    {
+        NSLog(@"Error: %@",error);
+        return nil;
+    }
+    else {
+        return [array firstObject];
+    }
+    
+}
+
 - (NSArray *)getRegisteredContacts {
     
     NSManagedObjectContext *moc = [self managedObjectContext];
@@ -495,7 +524,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
 - (void)updateContactsWithUsers:(NSArray *)array {
     
-    for (NSObject *user in array) {
+    for (PFUser *user in array) {
         NSManagedObjectContext *context = [self managedObjectContext];
         NSEntityDescription *entityDescription = [NSEntityDescription
                                                   entityForName:@"ContactModel" inManagedObjectContext:context];
@@ -511,6 +540,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         NSArray *array = [context executeFetchRequest:request error:&error];
         if ([array count] > 0) {
             NSManagedObject* userObject = [array objectAtIndex:0];
+            [userObject setValue:user.objectId forKey:@"user_id"];
             [userObject setValue:[user valueForKey:@"username"] forKey:@"username"];
             [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"is42user"];
         }

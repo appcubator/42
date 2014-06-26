@@ -61,12 +61,8 @@
     [mapView.sendToButton addTarget:self action:@selector(btnSendTo:) forControlEvents:UIControlEventTouchUpInside];
     [mapView.cancelButton addTarget:self action:@selector(clearLocation:) forControlEvents:UIControlEventTouchUpInside];
 
-    [mapView.cancelButton addTarget:self action:@selector(clearLocation:) forControlEvents:UIControlEventTouchUpInside];
 
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearLocation:) name:@"locationSent" object:nil];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showUpdate:) name:kShowLocationWithId object:nil];
     
 }
 
@@ -270,6 +266,7 @@
             CLLocationCoordinate2D newCoordinate = CLLocationCoordinate2DMake(location.latitude, location.longitude);
         
             FriendPinAnnotation *newPin = [[FriendPinAnnotation alloc] initWithCoordinate:newCoordinate name:user.username u_id:locationSent.objectId when:when message:message];
+            newPin.userId = user.objectId;
         
             [_friendPins insertObject:newPin atIndex:0];
             [_mkMapView addAnnotation:(id)newPin];
@@ -320,7 +317,10 @@
         MKAnnotationView *annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"loc"];
         annotationView.canShowCallout = YES;
         UIButtonWithData *msgButton = [UIButtonWithData buttonWithType:UIButtonTypeInfoLight];
-        msgButton.extraData = newAnnotation.phoneNumber;
+        
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        msgButton.extraData = [[appDelegate getUserWithId:newAnnotation.userId] valueForKey:@"phone"];
+
         [msgButton setImage:[UIImage imageNamed:@"text-button"] forState:UIControlStateNormal];
         [msgButton addTarget:self action:@selector(sendMessageToFriend:) forControlEvents:UIControlEventTouchUpInside];
         annotationView.rightCalloutAccessoryView = msgButton;

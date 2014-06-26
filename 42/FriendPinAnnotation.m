@@ -19,7 +19,6 @@
         _ID = u_id;
         _when = time;
         _message = message;
-        _phoneNumber = @"0404040";
     }
     
     return self;

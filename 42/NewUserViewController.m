@@ -135,24 +135,6 @@
 		return;
 	}
     
-    // BEGIN VALIDATION CLIENT CODE
-    [PFCloud callFunctionInBackground:@"sendValidationSMS"
-             withParameters:@{ phoneNumber:phoneNumber }
-             block:^(NSString *result, NSError *error) {
-         if (!error) {
-             // ask user for verication code
-             // when they press enter in that view, execute the following code
-             // BEGIN BLOCK
-             [PFCloud callFunctionInBackground:@"checkSMSValidationCode"
-                      withParameters:@{ phoneNumber:userNumber }
-                      block:^(NSString *result, NSError *error) {
-                 if (!error) {
-                     // put the rest of the code of the function (below the VALIDATION CLIENT CODE) here instead.
-                 }
-             }];
-             // END BLOCK
-         }
-    }];
     // END VALIDATION CLIENT CODE
     
 	// Everything looks good; try to log in.
@@ -179,7 +161,8 @@
                                  error:&aError];
 
 	[user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-		if (error) {
+		
+        if (error) {
 			UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[error userInfo] objectForKey:@"error"] message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
 			[alertView show];
 			_doneButton.enabled = [self shouldEnableDoneButton];
@@ -190,6 +173,27 @@
 			return;
 		}
         
+        // BEGIN VALIDATION CLIENT CODE
+        [PFCloud callFunctionInBackground:@"sendValidationSMS"
+                           withParameters:@{ phoneNumber:phoneNumber }
+                                    block:^(NSString *result, NSError *error) {
+                                        
+            if (!error) {
+                // ask user for verication code
+                // when they press enter in that view, execute the following code
+                // BEGIN BLOCK
+                //             [PFCloud callFunctionInBackground:@"checkSMSValidationCode"
+                //                      withParameters:@{ phoneNumber:userNumber }
+                //                      block:^(NSString *result, NSError *error) {
+                //                 if (!error) {
+                //                     // put the rest of the code of the function (below the VALIDATION CLIENT CODE) here instead.
+                //                 }
+                //             }];
+                // END BLOCK
+            }
+
+        }];
+    
 		// Success!
 		[activityView.activityIndicator stopAnimating];
 		[activityView removeFromSuperview];

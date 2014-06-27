@@ -18,7 +18,7 @@ XCode has the concept of Workspaces. When developing, you are supposed to work o
 
 * `/42` - has all the iOS files
 * `/42cloud` - has the javascript that ParseCloud runs. [ParseCloudDocs here](https://parse.com/docs/cloud_code_guide)
-* `/Pods` - has the third party iOS modules we are using. (like node_modules) Modules can be added or removed through Podfile
+* `/Pods` - has the third party iOS modules we are using. (like node\_modules) Modules can be added or removed through Podfile
 * `/42Tests` - has all the non-existant tests
 
 
@@ -36,6 +36,9 @@ Let's say there is `User 1` and `User 2`
 - [X] Normalize number when added user
 - [X] Matching and moving friend who are already on 42 to the top of the friend list
 - [X] In app notification handling
+- [ ] Send push notif to user B when user A follows user B and user B not following user A.
+- [ ] Send push notif to user A when user B follows user A and user A follows user B.
+- [ ] Show user alert when user A sends message to user B, and B is not following A
 
 ## To-Do Backend ##
 - [ ] Validating Phone number

@@ -1,10 +1,8 @@
 #42#
 
 42 is a mobile app that makes location-sharing easy, fun and non-creepy.
-
-Users can share their locations with their subscribers and the locations stays valid for 42 minutes or less.
-
-42 also let's them see their friends around and ask privately ask about their locations.
+- Users can share their locations with their subscribers and the locations stays valid for 42 minutes or less.
+- 42 also let's them see their friends around and ask privately ask about their locations.
 
 
 ##Architecture ##

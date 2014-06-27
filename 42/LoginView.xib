@@ -64,6 +64,9 @@
                         <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="btnSignUp:" destination="-1" eventType="touchUpInside" id="Obo-U0-lFb"/>
+                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" red="1" green="0.48474880190000003" blue="0.2689849326" alpha="1" colorSpace="calibratedRGB"/>

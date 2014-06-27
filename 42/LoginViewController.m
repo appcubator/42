@@ -11,6 +11,7 @@
 #import <Parse/Parse.h>
 #import "MainViewController.h"
 #import "AppDelegate.h"
+#import "NewUserViewController.h"
 
 @interface LoginViewController ()
 
@@ -194,6 +195,12 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)btnSignUp:(id)sender {
+//    [self.navigationController popToRootViewControllerAnimated:YES];
+    NewUserViewController *newUserViewController = [[NewUserViewController alloc] initWithNibName:@"NewUserView" bundle:nil];
+	[self.navigationController pushViewController:newUserViewController animated:YES];
 }
 
 @end

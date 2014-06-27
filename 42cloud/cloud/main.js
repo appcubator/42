@@ -44,13 +44,15 @@ Parse.Cloud.define("sendValidationSMS", function(request, response) {
     return;
   }
 
+  console.log(user);
+  console.log('number:' + user.get('phone'));
   // 4 digit long key for now.
   user.validationKey = generateKey(4);
 
   // send via Twilio
   twilio.sendSms({
     from: TWILIO_NUMBER,
-    to: user.phone,
+    to: user.get('phone'),
     body: "Your code is " + user.validationKey
   },  function(err, responseData) {
     if (err) {

@@ -1,6 +1,6 @@
 #42#
 
-42 is a mobile app that makes location-sharing fun and non-creepy.
+42 is a mobile app that makes location-sharing easy, fun and non-creepy.
 
 Users can share their locations with their subscribers and the locations stays valid for 42 minutes or less.
 
@@ -22,20 +22,28 @@ XCode has the concept of Workspaces. When developing, you are supposed to work o
 * `/42Tests` - has all the non-existant tests
 
 
+## User Relations ##
+
+Let's say there is `User 1` and `User 2`
+
+- `User 1` followed `User 2`:  User 1 can send location to User 2, but it doesn't show up until User 2 follows back.
+- `User 2` followed `User 1`: The pending locations should be sent to `User 2` if they did not expire.
+
+`User 2` and `User 1` are "friends". (We need a cloud function for checking this.)
+
 ## To-Do ##
 - [X] Sort the addressbook and add the helper on the right
 - [X] Normalize number when added user
-- [ ] Matching and moving friend who are already on 42 to the top of the friend list
-- [ ] In app notification handling
-- [ ] Showing only the lates location of the user
+- [X] Matching and moving friend who are already on 42 to the top of the friend list
+- [X] In app notification handling
 
 ## To-Do Backend ##
 - [ ] Validating Phone number
 - [ ] Expiration of location after 42 mins
 - [ ] Checking for dupe object
--- User can not follow the other user twice
--- User can not checkin withing 0.2 mi of the previous checkin for 5 mins (to prevent annoyance) 
+- [ ] User can not follow the other user twice
+- [ ] User can not checkin withing 0.2 mi of the previous checkin for 5 mins (to prevent annoyance) 
 
 ## Future Feature List ##
 - [ ] `Ask Friend` Button
-- [ ] `My Story` Feature
+- [X] `My Story` Feature

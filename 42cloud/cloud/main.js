@@ -50,11 +50,18 @@ Parse.Cloud.define("sendValidationSMS", function(request, response) {
   // send via Twilio
   twilio.sendSms({
     from: TWILIO_NUMBER,
-    to: user.phoneNumber,
+    to: user.phone,
     body: "Your code is " + user.validationKey
-  }, {
-    success: function(httpResponse) { response.success(user.validationKey); },
-    error: function(httpResponse) { response.error("Uh oh, something went wrong"); }
+  },  function(err, responseData) {
+    if (err) {
+      console.log(err);
+      response.error("Uh oh, something went wrong"); 
+
+    } else { 
+      console.log(responseData.from); 
+      console.log(responseData.body);
+      response.success("ok"); 
+    }
   });
 
   // theoretical race condition where person tries to validate before the user object is saved
@@ -64,8 +71,6 @@ Parse.Cloud.define("sendValidationSMS", function(request, response) {
   user.validationLastSent = new Date();
   user.validationCount += 1;
   user.save()
-
-  response.success("Hello world!");
 });
 
 Parse.Cloud.define("validateSMSKey", function(request, response) {

@@ -695,6 +695,7 @@
 				GCC_PREFIX_HEADER = "42/42-Prefix.pch";
 				INFOPLIST_FILE = "42/42-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_ENV = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -714,6 +715,7 @@
 				GCC_PREFIX_HEADER = "42/42-Prefix.pch";
 				INFOPLIST_FILE = "42/42-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_ENV = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

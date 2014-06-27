@@ -211,7 +211,9 @@
 	[self processFieldEntries];
 }
 
-
+- (IBAction)btnBack:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 - (void)didReceiveMemoryWarning
 {

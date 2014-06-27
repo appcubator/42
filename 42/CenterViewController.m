@@ -232,7 +232,6 @@
     [_composePin setShowCustomCallout:NO animated:YES];
     [_mkMapView removeAnnotation:_composePin];
 
-
 }
 
 

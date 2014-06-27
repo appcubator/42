@@ -87,7 +87,7 @@
         _sendToPanel.frame = newRect;
     }
     
-    UIImage *sendImage = [UIImage imageNamed:@"send-icon"];
+    UIImage *sendImage = [UIImage imageNamed:@"send-icon-small"];
     UIImageView *sendImageView = [[UIImageView alloc] initWithImage:sendImage];
     sendImageView.contentMode = UIViewContentModeCenter;
     [sendImageView setFrame:CGRectMake(_sendToPanel.frame.size.width - 76, 16, 57, 41)];
@@ -155,20 +155,40 @@
     NSDictionary* keyboardInfo = [inNotification userInfo];
     NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
     CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
+
+    [UIView animateWithDuration:ANIMATION_TIME delay:0 options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         
+                     
+                         _sendToPanel.frame = CGRectMake(0, self.superview.frame.size.height - keyboardFrameBeginRect.size.height - 72, self.superview.frame.size.width, 72);
+
+                     }
+                     completion:^(BOOL finished) { }];
     
-    _sendToPanel.frame = CGRectMake(0, self.superview.frame.size.height - keyboardFrameBeginRect.size.height - 72, self.superview.frame.size.width, 72);
+    MKCoordinateRegion region = _mkMapView.region;
+    region.center.latitude = region.center.latitude - 0.0025;
+    [_mkMapView setRegion:region animated:NO];
+
 }
 
 -(void) noticeHideKeyboard:(NSNotification *)inNotification {
+
+    [UIView animateWithDuration:ANIMATION_TIME delay:0 options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         if (_sendLocationMode) {
+                             CGRect newRect = CGRectMake(0, self.superview.frame.size.height - _sendToPanel.frame.size.height, _sendToPanel.frame.size.width, _sendToPanel.frame.size.height);
+                             _sendToPanel.hidden = false;
+                             _sendToPanel.frame = newRect;
+                         }
+                         else
+                         {
+                             _sendToPanel.backgroundColor = [UIColor colorWithRed:1.0 green:0.49 blue:0.27 alpha:1.00];
+                             _sendToPanel.frame = CGRectMake(0, self.superview.frame.size.height, self.superview.frame.size.width, 72);
+                         }
+                     }
+                     completion:^(BOOL finished) { }];
     
-    _sendToPanel.backgroundColor = [UIColor colorWithRed:1.0 green:0.49 blue:0.27 alpha:1.00];
-    _sendToPanel.frame = CGRectMake(0, self.superview.frame.size.height, self.superview.frame.size.width, 72);
     
-    if (_sendLocationMode) {
-        CGRect newRect = CGRectMake(0, self.superview.frame.size.height - _sendToPanel.frame.size.height, _sendToPanel.frame.size.width, _sendToPanel.frame.size.height);
-        _sendToPanel.hidden = false;
-        _sendToPanel.frame = newRect;
-    }
 }
 
 /*

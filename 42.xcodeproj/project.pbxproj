@@ -15,6 +15,8 @@
 		CE1B92991936FED5001489C8 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1B92981936FED5001489C8 /* AddressBookUI.framework */; };
 		CE4ABAB9194BD5A2005D2BA2 /* FortyTwoMap.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4ABAB8194BD5A2005D2BA2 /* FortyTwoMap.m */; };
 		CE4ABABC195A34A2005D2BA2 /* UIButtonWithData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4ABABB195A34A2005D2BA2 /* UIButtonWithData.m */; };
+		CE4ABAC0195CF26A005D2BA2 /* UserVerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4ABABE195CF26A005D2BA2 /* UserVerificationViewController.m */; };
+		CE4ABAC1195CF26A005D2BA2 /* UserVerificationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE4ABABF195CF26A005D2BA2 /* UserVerificationViewController.xib */; };
 		CE4B293F1941780100FDA0BB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE4B293E1941780100FDA0BB /* MessageUI.framework */; };
 		CE84F0EB1937993900AC6AE3 /* UIButtonForRow.m in Sources */ = {isa = PBXBuildFile; fileRef = CE84F0EA1937993900AC6AE3 /* UIButtonForRow.m */; };
 		CE84F0F0193819E100AC6AE3 /* ContactCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE84F0EF193819E100AC6AE3 /* ContactCellView.xib */; };
@@ -94,6 +96,9 @@
 		CE4ABAB8194BD5A2005D2BA2 /* FortyTwoMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FortyTwoMap.m; sourceTree = "<group>"; };
 		CE4ABABA195A34A2005D2BA2 /* UIButtonWithData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIButtonWithData.h; sourceTree = "<group>"; };
 		CE4ABABB195A34A2005D2BA2 /* UIButtonWithData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIButtonWithData.m; sourceTree = "<group>"; };
+		CE4ABABD195CF26A005D2BA2 /* UserVerificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserVerificationViewController.h; sourceTree = "<group>"; };
+		CE4ABABE195CF26A005D2BA2 /* UserVerificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserVerificationViewController.m; sourceTree = "<group>"; };
+		CE4ABABF195CF26A005D2BA2 /* UserVerificationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserVerificationViewController.xib; sourceTree = "<group>"; };
 		CE4B293E1941780100FDA0BB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		CE84F0E91937993900AC6AE3 /* UIButtonForRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIButtonForRow.h; sourceTree = "<group>"; };
 		CE84F0EA1937993900AC6AE3 /* UIButtonForRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIButtonForRow.m; sourceTree = "<group>"; };
@@ -324,11 +329,11 @@
 			isa = PBXGroup;
 			children = (
 				CEE9745D192DAA3300494F47 /* WelcomeViewController.h */,
+				CEE9745E192DAA3300494F47 /* WelcomeViewController.m */,
 				CEE97498192DE13E00494F47 /* LeftPanelViewController.h */,
 				CEE97499192DE13E00494F47 /* LeftPanelViewController.m */,
 				CEE9749A192DE13E00494F47 /* RightPanelViewController.h */,
 				CEE9749B192DE13E00494F47 /* RightPanelViewController.m */,
-				CEE9745E192DAA3300494F47 /* WelcomeViewController.m */,
 				CEE97463192DAF2A00494F47 /* LoginViewController.h */,
 				CEE97464192DAF2A00494F47 /* LoginViewController.m */,
 				CEE97468192DAF6100494F47 /* NewUserViewController.h */,
@@ -341,6 +346,8 @@
 				CEE974A5193109DD00494F47 /* SendToViewController.m */,
 				CE1B929219359793001489C8 /* SettingsViewController.h */,
 				CE1B929319359793001489C8 /* SettingsViewController.m */,
+				CE4ABABD195CF26A005D2BA2 /* UserVerificationViewController.h */,
+				CE4ABABE195CF26A005D2BA2 /* UserVerificationViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -366,6 +373,7 @@
 				CEA9C9AD19478A6600D0785E /* CalloutView.xib */,
 				CEA9C9AF19478F8C00D0785E /* ComposeCalloutView.h */,
 				CEA9C9B019478F8C00D0785E /* ComposeCalloutView.m */,
+				CE4ABABF195CF26A005D2BA2 /* UserVerificationViewController.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -471,6 +479,7 @@
 				CEA9C9AE19478A6600D0785E /* CalloutView.xib in Resources */,
 				CE84F0F4193916C500AC6AE3 /* SettingsCellView.xib in Resources */,
 				CEE9746C192DAF6100494F47 /* NewUserView.xib in Resources */,
+				CE4ABAC1195CF26A005D2BA2 /* UserVerificationViewController.xib in Resources */,
 				CEE97467192DAF2A00494F47 /* LoginView.xib in Resources */,
 				CEE9749F192DE39400494F47 /* RightPanelView.xib in Resources */,
 				CEE974AE1931660000494F47 /* LocationSentCellView.xib in Resources */,
@@ -554,6 +563,7 @@
 				CEE9748E192DD12500494F47 /* PersonalPinAnnotation.m in Sources */,
 				CE4ABAB9194BD5A2005D2BA2 /* FortyTwoMap.m in Sources */,
 				CEE97466192DAF2A00494F47 /* LoginViewController.m in Sources */,
+				CE4ABAC0195CF26A005D2BA2 /* UserVerificationViewController.m in Sources */,
 				CE4ABABC195A34A2005D2BA2 /* UIButtonWithData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

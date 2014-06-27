@@ -11,6 +11,7 @@
 #import "ActivityView.h"
 #import "NBPhoneNumberUtil.h"
 #import "AppDelegate.h"
+#import "UserVerificationViewController.h"
 
 @interface NewUserViewController ()
 
@@ -33,8 +34,7 @@
     // Do any additional setup after loading the view from its nib.
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:_userNameField];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:_passwordField];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:_passwordAgainField];
-
+    
     _doneButton.enabled = NO;
 
 }
@@ -50,13 +50,6 @@
     if (textField == _userNameField) {
 		[_passwordField becomeFirstResponder];
 	}
-	if (textField == _passwordField) {
-		[_passwordAgainField becomeFirstResponder];
-	}
-	if (textField == _passwordAgainField) {
-		[_passwordAgainField resignFirstResponder];
-		[self processFieldEntries];
-	}
     
 	return YES;
 }
@@ -67,9 +60,7 @@
 	if (_userNameField.text != nil &&
 		_userNameField.text.length > 0 &&
 		_passwordField.text != nil &&
-		_passwordField.text.length > 0 &&
-		_passwordAgainField.text != nil &&
-		_passwordAgainField.text.length > 0) {
+		_passwordField.text.length > 0) {
 		enableDoneButton = YES;
 	}
 	return enableDoneButton;
@@ -96,7 +87,6 @@
     
 	NSString *username = _userNameField.text;
 	NSString *password = _passwordField.text;
-	NSString *passwordAgain = _passwordAgainField.text;
     NSString *phoneNumber = _phoneNumberField.text;
 	NSString *errorText = @"Please ";
 	NSString *usernameBlankText = @"enter a username";
@@ -107,16 +97,13 @@
 	BOOL textError = NO;
     
 	// Messaging nil will return 0, so these checks implicitly check for nil text.
-	if (username.length == 0 || password.length == 0 || passwordAgain.length == 0 || phoneNumber.length == 0) {
+	if (username.length == 0 || password.length == 0 || phoneNumber.length == 0) {
 		textError = YES;
         
 		// Set up the keyboard for the first field missing input:
         if (phoneNumber.length == 0) {
             [_phoneNumberField becomeFirstResponder];
         }
-		if (passwordAgain.length == 0) {
-			[_passwordAgainField becomeFirstResponder];
-		}
 		if (password.length == 0) {
 			[_passwordField becomeFirstResponder];
 		}
@@ -128,7 +115,7 @@
 			errorText = [errorText stringByAppendingString:usernameBlankText];
 		}
         
-		if (password.length == 0 || passwordAgain.length == 0) {
+		if (password.length == 0) {
 			if (username.length == 0) { // We need some joining text in the error:
 				errorText = [errorText stringByAppendingString:joinText];
 			}
@@ -137,12 +124,6 @@
 
 
     
-	} else if ([password compare:passwordAgain] != NSOrderedSame) {
-		// We have non-zero strings.
-		// Check for equal password strings.
-		textError = YES;
-		errorText = [errorText stringByAppendingString:passwordMismatchText];
-		[_passwordField becomeFirstResponder];
 	} else if (![phoneUtil isValidNumber:userNumber]) {
         textError = YES;
         errorText = [errorText stringByAppendingString:@"Invalid phone number."];
@@ -155,9 +136,8 @@
 	}
     
     // BEGIN VALIDATION CLIENT CODE
-    /* todo uncomment
     [PFCloud callFunctionInBackground:@"sendValidationSMS"
-             withParameters:@{ phoneNumber:userNumber }
+             withParameters:@{ phoneNumber:phoneNumber }
              block:^(NSString *result, NSError *error) {
          if (!error) {
              // ask user for verication code
@@ -173,7 +153,6 @@
              // END BLOCK
          }
     }];
-     */
     // END VALIDATION CLIENT CODE
     
 	// Everything looks good; try to log in.
@@ -214,11 +193,10 @@
 		// Success!
 		[activityView.activityIndicator stopAnimating];
 		[activityView removeFromSuperview];
-        
-        [self.navigationController popToRootViewControllerAnimated:YES];
-        // show the welcome view
-        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        [appDelegate presentMainViewController];
+
+        UserVerificationViewController *loginViewController = [[UserVerificationViewController alloc] initWithNibName:nil bundle:nil];
+        [self.navigationController pushViewController:loginViewController animated:YES];
+
 	}];
 }
 
@@ -226,7 +204,6 @@
 - (IBAction)done:(id)sender {
 	[_userNameField resignFirstResponder];
 	[_passwordField resignFirstResponder];
-	[_passwordAgainField resignFirstResponder];
 	[self processFieldEntries];
 }
 

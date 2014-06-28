@@ -270,11 +270,9 @@
         [warningAlert show];
         return;
     }
-    
-    NSLog(@"%@",mobileNumber);
-    
+
     NSArray *recipents = @[mobileNumber];
-    NSString *message = [NSString stringWithFormat:@"I'd love you to use this app called 42, but you're not cool enough. Sorry."];
+    NSString *message = [NSString stringWithFormat:@"I'd love you to use this app called 42, but you're not cool enough. https://itunes.apple.com/us/app/42/id894342485"];
     
     MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
     messageController.messageComposeDelegate = self;

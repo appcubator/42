@@ -166,7 +166,7 @@
                      completion:^(BOOL finished) { }];
     
     MKCoordinateRegion region = _mkMapView.region;
-    region.center.latitude = region.center.latitude - 0.0025;
+    region.center.latitude = region.center.latitude - 0.0015;
     [_mkMapView setRegion:region animated:NO];
 
 }

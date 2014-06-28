@@ -65,7 +65,7 @@
 - (IBAction)nextButtonPressed:(id)sender {
     NSString *validationKey = self.verificationTextField.text;
     [PFCloud callFunctionInBackground:@"validateSMSKey"
-                       withParameters:@{ validationKey:validationKey }
+                       withParameters:@{ @"validationKey":validationKey }
                                 block:^(NSString *result, NSError *error) {
                                     if ([result isEqualToString:@"1"]) {
                                         // validates

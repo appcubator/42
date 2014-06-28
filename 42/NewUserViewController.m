@@ -175,7 +175,7 @@
         
         // BEGIN VALIDATION CLIENT CODE
         [PFCloud callFunctionInBackground:@"sendValidationSMS"
-                           withParameters:@{ phoneNumber:phoneNumber }
+                           withParameters:@{}
                                     block:^(NSString *result, NSError *error) {
                                         
             if (!error) {

@@ -155,8 +155,8 @@
             [appDelegate updateLocationSent];
 
             // show the welcome screen
-  			MainViewController *mapViewController = [appDelegate getMainViewController];
-			[(UINavigationController *)self.presentingViewController pushViewController:mapViewController animated:NO];
+//  			MainViewController *mapViewController = [appDelegate getMainViewController];
+//			[(UINavigationController *)self.presentingViewController pushViewController:mapViewController animated:NO];
             [self.navigationController popToRootViewControllerAnimated:YES];
             [appDelegate presentMainViewController];
 		} else {

@@ -92,7 +92,6 @@
 	NSString *usernameBlankText = @"enter a username";
 	NSString *passwordBlankText = @"enter a password";
 	NSString *joinText = @", and ";
-	NSString *passwordMismatchText = @"enter the same password twice";
     
 	BOOL textError = NO;
     

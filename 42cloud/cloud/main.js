@@ -44,8 +44,6 @@ Parse.Cloud.define("sendValidationSMS", function(request, response) {
     return;
   }
 
-  console.log(user);
-  console.log('number:' + user.get('phone'));
   // 4 digit long key for now.
   user.set('validationKey', generateKey(4));
 

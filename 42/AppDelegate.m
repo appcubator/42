@@ -9,14 +9,15 @@
 static NSString * const defaultsFilterDistanceKey = @"filterDistance";
 static NSString * const defaultsLocationKey = @"currentLocation";
 
+#import <Parse/Parse.h>
+#import <CoreData/CoreData.h>
+#import <AddressBook/AddressBook.h>
+
 #import "AppDelegate.h"
 #import "WelcomeViewController.h"
 #import "MainViewController.h"
 #import "NBPhoneNumberUtil.h"
-
-#import <Parse/Parse.h>
-#import <CoreData/CoreData.h>
-#import <AddressBook/AddressBook.h>
+#import "UserVerificationViewController.h"
 
 @implementation AppDelegate
 
@@ -73,14 +74,30 @@ static NSString * const defaultsLocationKey = @"currentLocation";
      UIRemoteNotificationTypeBadge |
      UIRemoteNotificationTypeAlert |
      UIRemoteNotificationTypeSound];
-    
-	// Grab values from NSUserDefaults:
-	// NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
+
 	if ([PFUser currentUser]) {
-        [self checkForAddressBookPermissions];
-        [self updateLocationSent];
-        [self presentMainViewController];
+        
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        NSString *usrString = [NSString stringWithFormat:@"isVerified-%@", [PFUser currentUser].username];
+        NSString *isVerified = [prefs stringForKey:usrString];
+
+        if ([isVerified isEqualToString:@"YES"]) {
+
+            [self checkForAddressBookPermissions];
+            [self updateLocationSent];
+            [self presentMainViewController];
+
+        }
+        else {
+            UserVerificationViewController *loginViewController = [[UserVerificationViewController alloc] initWithNibName:nil bundle:nil];
+            UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginViewController];
+            navController.navigationBarHidden = YES;
+            
+            self.viewController = navController;
+            self.window.rootViewController = self.viewController;
+        }
+
 	} else {
 		// Go to the welcome screen and have them log in or create an account.
 		[self presentWelcomeViewController];

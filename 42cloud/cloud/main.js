@@ -47,7 +47,7 @@ Parse.Cloud.define("sendValidationSMS", function(request, response) {
   console.log(user);
   console.log('number:' + user.get('phone'));
   // 4 digit long key for now.
-  user.set('validationKey') = generateKey(4);
+  user.set('validationKey', generateKey(4));
 
   // send via Twilio
   twilio.sendSms({
@@ -77,7 +77,7 @@ Parse.Cloud.define("sendValidationSMS", function(request, response) {
 
 Parse.Cloud.define("validateSMSKey", function(request, response) {
     var user = Parse.User.current();
-    var clientkey = request.object.get('validationKey');
+    var clientkey = request.params.validationKey;
     if (clientkey === user.get('validationKey')) {
         user.set('validatedPhone', true);
         user.set('validatedDate', new Date());

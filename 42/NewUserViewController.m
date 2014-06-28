@@ -135,8 +135,6 @@
 		return;
 	}
     
-    [validateNewUserInformation ];
-    
     // END VALIDATION CLIENT CODE
     
 	// Everything looks good; try to log in.
@@ -181,7 +179,6 @@
                                     block:^(NSString *result, NSError *error) {
                                         
             if (!error) {
-                NSLog(@"%@", result);
                 // ask user for verication code
                 // when they press enter in that view, execute the following code
                 // BEGIN BLOCK
@@ -193,8 +190,6 @@
                 //                 }
                 //             }];
                 // END BLOCK
-            } else {
-                NSLog(@"Error: %@", error);
             }
 
         }];

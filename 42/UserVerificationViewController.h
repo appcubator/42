@@ -10,5 +10,6 @@
 
 @interface UserVerificationViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITextField *verificationTextField;
+@property (strong, nonatomic) IBOutlet UILabel *warningLabel;
 
 @end

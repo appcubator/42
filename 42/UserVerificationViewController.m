@@ -73,6 +73,7 @@
                                     } else {
                                         // doesn't validate
                                         NSLog(@"no");
+                                        _warningLabel.text = @"Please try again.";
                                     }
                                 }];
 }

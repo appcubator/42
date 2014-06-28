@@ -70,8 +70,8 @@ Parse.Cloud.define("sendValidationSMS", function(request, response) {
     // but that'll never happen, right?
 
   // Let us remember what just occured
-  user.validationLastSent = new Date();
-  user.validationCount += 1;
+  user.set('validationLastSent', new Date());
+  user.set('validationCount', user.get('validationCount') + 1);
   user.save()
 });
 

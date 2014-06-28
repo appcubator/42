@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface UserVerificationViewController : UIViewController
+@property (weak, nonatomic) IBOutlet UITextField *verificationTextField;
 
 @end

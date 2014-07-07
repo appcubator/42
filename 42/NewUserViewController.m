@@ -13,6 +13,9 @@
 #import "AppDelegate.h"
 #import "UserVerificationViewController.h"
 
+#define ANIMATION_TIME 0.20
+#define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0)
+
 @interface NewUserViewController ()
 
 @end
@@ -34,7 +37,7 @@
     // Do any additional setup after loading the view from its nib.
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:_userNameField];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputChanged:) name:UITextFieldTextDidChangeNotification object:_passwordField];
-    
+
     _doneButton.enabled = NO;
 
 }
@@ -46,14 +49,36 @@
 
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-	
+
     if (textField == _userNameField) {
 		[_passwordField becomeFirstResponder];
 	}
+
+    if (textField == _passwordField) {
+		[_phoneNumberField becomeFirstResponder];
+	}
     
+    if (textField == _phoneNumberField) {
+        [_phoneNumberField resignFirstResponder];
+    }
+
 	return YES;
 }
 
+- (IBAction)textFieldStartedEditing:(id)sender {
+    
+    if (IS_WIDESCREEN) {
+        return;
+    }
+
+    if (_passwordField.isFirstResponder || _phoneNumberField.isFirstResponder) {
+        [self scrollToTop];
+    }
+    else {
+        [self scrollToNormal];
+    }
+    
+}
 
 - (BOOL)shouldEnableDoneButton {
 	BOOL enableDoneButton = NO;
@@ -213,6 +238,30 @@
 - (IBAction)btnBack:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+- (void) scrollToTop {
+
+
+    [UIView animateWithDuration:ANIMATION_TIME delay:0 options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         
+                        _containerView.frame = CGRectMake(_containerView.frame.origin.x, -60, _containerView.frame.size.width, _containerView.frame.size.height);
+                     }
+                     completion:^(BOOL finished) { }];
+    
+}
+
+-(void) scrollToNormal {
+
+    [UIView animateWithDuration:ANIMATION_TIME delay:0 options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         _containerView.frame = CGRectMake(_containerView.frame.origin.x, 0, _containerView.frame.size.width, _containerView.frame.size.height);
+                     }
+                     completion:^(BOOL finished) { }];
+    
+    
+}
+
 
 - (void)didReceiveMemoryWarning
 {

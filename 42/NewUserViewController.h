@@ -14,6 +14,7 @@
 @property (strong, nonatomic) IBOutlet UITextField *userNameField;
 @property (strong, nonatomic) IBOutlet UITextField *passwordField;
 @property (strong, nonatomic) IBOutlet UITextField *phoneNumberField;
+@property (strong, nonatomic) IBOutlet UIView *containerView;
 
 
 

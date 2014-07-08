@@ -25,6 +25,8 @@
 		CEA9C9AC1947891F00D0785E /* ComposePinAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA9C9AB1947891F00D0785E /* ComposePinAnnotation.m */; };
 		CEA9C9AE19478A6600D0785E /* CalloutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEA9C9AD19478A6600D0785E /* CalloutView.xib */; };
 		CEA9C9B119478F8C00D0785E /* ComposeCalloutView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA9C9B019478F8C00D0785E /* ComposeCalloutView.m */; };
+		CEAD292D196B87B6009947FF /* GenericWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEAD292B196B87B6009947FF /* GenericWebViewController.m */; };
+		CEAD292E196B87B6009947FF /* GenericWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEAD292C196B87B6009947FF /* GenericWebViewController.xib */; };
 		CECA15A5193C2D4300EB2343 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CECA15A4193C2D4300EB2343 /* CoreData.framework */; };
 		CECA15A7193F804400EB2343 /* Arial Rounded Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CECA15A6193F804400EB2343 /* Arial Rounded Bold.ttf */; };
 		CEE97426192DA82800494F47 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE97425192DA82800494F47 /* Foundation.framework */; };
@@ -113,6 +115,9 @@
 		CEA9C9AD19478A6600D0785E /* CalloutView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CalloutView.xib; sourceTree = "<group>"; };
 		CEA9C9AF19478F8C00D0785E /* ComposeCalloutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeCalloutView.h; sourceTree = "<group>"; };
 		CEA9C9B019478F8C00D0785E /* ComposeCalloutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeCalloutView.m; sourceTree = "<group>"; };
+		CEAD292A196B87B6009947FF /* GenericWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericWebViewController.h; sourceTree = "<group>"; };
+		CEAD292B196B87B6009947FF /* GenericWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenericWebViewController.m; sourceTree = "<group>"; };
+		CEAD292C196B87B6009947FF /* GenericWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GenericWebViewController.xib; sourceTree = "<group>"; };
 		CECA15A4193C2D4300EB2343 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		CECA15A6193F804400EB2343 /* Arial Rounded Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Arial Rounded Bold.ttf"; sourceTree = "<group>"; };
 		CEE97422192DA82800494F47 /* 42.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 42.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -348,6 +353,8 @@
 				CE1B929319359793001489C8 /* SettingsViewController.m */,
 				CE4ABABD195CF26A005D2BA2 /* UserVerificationViewController.h */,
 				CE4ABABE195CF26A005D2BA2 /* UserVerificationViewController.m */,
+				CEAD292A196B87B6009947FF /* GenericWebViewController.h */,
+				CEAD292B196B87B6009947FF /* GenericWebViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -374,6 +381,7 @@
 				CEA9C9AF19478F8C00D0785E /* ComposeCalloutView.h */,
 				CEA9C9B019478F8C00D0785E /* ComposeCalloutView.m */,
 				CE4ABABF195CF26A005D2BA2 /* UserVerificationViewController.xib */,
+				CEAD292C196B87B6009947FF /* GenericWebViewController.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -479,6 +487,7 @@
 				CEA9C9AE19478A6600D0785E /* CalloutView.xib in Resources */,
 				CE84F0F4193916C500AC6AE3 /* SettingsCellView.xib in Resources */,
 				CEE9746C192DAF6100494F47 /* NewUserView.xib in Resources */,
+				CEAD292E196B87B6009947FF /* GenericWebViewController.xib in Resources */,
 				CE4ABAC1195CF26A005D2BA2 /* UserVerificationViewController.xib in Resources */,
 				CEE97467192DAF2A00494F47 /* LoginView.xib in Resources */,
 				CEE9749F192DE39400494F47 /* RightPanelView.xib in Resources */,
@@ -557,6 +566,7 @@
 				CEE97481192DB56100494F47 /* ActivityView.m in Sources */,
 				CEE9746B192DAF6100494F47 /* NewUserViewController.m in Sources */,
 				CEA9C9AC1947891F00D0785E /* ComposePinAnnotation.m in Sources */,
+				CEAD292D196B87B6009947FF /* GenericWebViewController.m in Sources */,
 				CEE97487192DBEA700494F47 /* MapView.m in Sources */,
 				CEE974B11932834A00494F47 /* FriendPinAnnotation.m in Sources */,
 				CEE974A7193109DD00494F47 /* SendToViewController.m in Sources */,

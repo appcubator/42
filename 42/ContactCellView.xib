@@ -41,7 +41,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="add-icon-img" width="36" height="36"/>
-        <image name="text-add-icon-img" width="36" height="36"/>
+        <image name="add-icon-img" width="32" height="32"/>
+        <image name="text-add-icon-img" width="32" height="32"/>
     </resources>
 </document>

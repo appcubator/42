@@ -9,6 +9,7 @@
 #import "SettingsViewController.h"
 #import <Parse/Parse.h>
 #import "AppDelegate.h"
+#import "GenericWebViewController.h"
 
 @interface SettingsViewController ()
 
@@ -109,6 +110,10 @@
         arrowLabel.hidden = NO;
     }
     
+    if ([rowTitle isEqual:@"Support"] || [rowTitle isEqual:@"Privacy Policy"]) {
+        dataLabel.text = @"";
+    }
+    
     if ([rowTitle isEqual:@"Log Out"]) {
         dataLabel.hidden = YES;
         arrowLabel.hidden = YES;
@@ -130,6 +135,16 @@
     
     if ([rowTitle isEqual:@"Log Out"]) {
         [self logout];
+    }
+    
+    if ([rowTitle isEqual:@"Support"]) {
+        GenericWebViewController *webViewController = [[GenericWebViewController alloc] initWithNibName:@"GenericWebViewController" title:@"Support" url:@"http://fortytwo.parseapp.com/support.html"];
+        [self.navigationController pushViewController:webViewController animated:YES];
+    }
+
+    if ([rowTitle isEqual:@"Privacy Policy"]) {
+        GenericWebViewController *webViewController = [[GenericWebViewController alloc] initWithNibName:@"GenericWebViewController" title:@"Terms of Service" url:@"http://fortytwo.parseapp.com/toc.html"];
+        [self.navigationController pushViewController:webViewController animated:YES];
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

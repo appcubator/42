@@ -65,6 +65,16 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    
+    if ([_arrayOfFollowers count] == 0) {
+        _tableView.hidden = YES;
+        _explanationPanelView.hidden = NO;
+    }
+    else {
+        _tableView.hidden = NO;
+        _explanationPanelView.hidden = YES;
+    }
+    
     return [_arrayOfFollowers count];
 }
 

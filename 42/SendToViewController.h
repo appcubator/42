@@ -15,6 +15,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *sendToButton;
 @property (strong, nonatomic) IBOutlet UILabel *sendToLabel;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *navBackButton;
+@property (strong, nonatomic) IBOutlet UIView *explanationPanelView;
 
 @property (strong, nonatomic) IBOutlet UITableViewCell *cellMain;
 

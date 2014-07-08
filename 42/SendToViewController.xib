@@ -6,7 +6,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SendToViewController">
             <connections>
+                <outlet property="TipTextView" destination="Ue6-k0-MHf" id="upo-ji-IzM"/>
                 <outlet property="bottomBar" destination="0mh-kc-JGG" id="hvM-fJ-SWs"/>
+                <outlet property="explanationPanelView" destination="Ue6-k0-MHf" id="AFA-Qs-H26"/>
                 <outlet property="navBackButton" destination="oWe-1E-Pgb" id="VPa-O8-FPv"/>
                 <outlet property="sendToButton" destination="9dV-ZH-dq4" id="DFq-hK-Va8"/>
                 <outlet property="sendToLabel" destination="Pxs-1X-2HW" id="790-qR-69u"/>
@@ -19,6 +21,33 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ue6-k0-MHf">
+                    <rect key="frame" x="0.0" y="62" width="320" height="506"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="No friends found :( Invite people you know from " textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Ti1-4u-bY6">
+                            <rect key="frame" x="20" y="68" width="280" height="88"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="textColor" red="0.94156568880000002" green="0.4550736755" blue="0.25796191390000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="22"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="right-button" translatesAutoresizingMaskIntoConstraints="NO" id="bU9-if-Vng">
+                            <rect key="frame" x="42" y="157" width="38" height="35"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Contacts Section" translatesAutoresizingMaskIntoConstraints="NO" id="FYs-8T-aXZ">
+                            <rect key="frame" x="88" y="153" width="191" height="43"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="textColor" red="0.94156568880000002" green="0.4550736755" blue="0.25796191390000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="KaJ-GL-HAb">
                     <rect key="frame" x="0.0" y="62" width="320" height="506"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -79,6 +108,7 @@
     </objects>
     <resources>
         <image name="left-arrow" width="17" height="22"/>
+        <image name="right-button" width="41" height="40"/>
         <image name="send-icon-small" width="44" height="31"/>
     </resources>
 </document>

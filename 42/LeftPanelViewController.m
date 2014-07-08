@@ -73,6 +73,14 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    
+    if ([appDelegate.arrayOfLocationSent count] == 0) {
+        _tableView.hidden = YES;
+    }
+    else {
+        _tableView.hidden = NO;
+    }
+
     return [appDelegate.arrayOfLocationSent count];
 }
 

@@ -75,7 +75,9 @@
 	}
 	if (textField == _passwordField) {
 		[_passwordField resignFirstResponder];
-		[self processFieldEntries];
+        if ([self shouldEnableDoneButton]){
+            [self processFieldEntries];
+        }
 	}
     
 	return YES;

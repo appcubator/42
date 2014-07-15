@@ -510,7 +510,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [context save:&error];
     
     if (error != nil) {
-        NSLog(@"yolo1 %@",error);
+        NSLog(@"Error %@",error);
     }
     
     [self queryAllNumbersFor42activity];

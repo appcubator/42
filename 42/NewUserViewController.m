@@ -12,6 +12,7 @@
 #import "NBPhoneNumberUtil.h"
 #import "AppDelegate.h"
 #import "UserVerificationViewController.h"
+#import "GenericWebViewController.h"
 
 #define ANIMATION_TIME 0.20
 #define IS_WIDESCREEN ([[UIScreen mainScreen] bounds].size.height == 568.0)
@@ -27,6 +28,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+
     }
     return self;
 }
@@ -260,6 +262,11 @@
                      completion:^(BOOL finished) { }];
     
     
+}
+
+- (IBAction)showPrivacyPolicy:(id)sender {
+    GenericWebViewController *webViewController = [[GenericWebViewController alloc] initWithNibName:@"GenericWebViewController" title:@"Terms of Service" url:@"http://fortytwo.parseapp.com/privacy.html"];
+    [self.navigationController pushViewController:webViewController animated:YES];
 }
 
 

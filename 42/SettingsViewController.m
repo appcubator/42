@@ -143,7 +143,14 @@
     }
 
     if ([rowTitle isEqual:@"Privacy Policy"]) {
-        GenericWebViewController *webViewController = [[GenericWebViewController alloc] initWithNibName:@"GenericWebViewController" title:@"Terms of Service" url:@"http://fortytwo.parseapp.com/toc.html"];
+        GenericWebViewController *webViewController = [[GenericWebViewController alloc] initWithNibName:@"GenericWebViewController" title:@"Terms of Service" url:@"http://fortytwo.parseapp.com/privacy.html"];
+        [self.navigationController pushViewController:webViewController animated:YES];
+    }
+
+    if ([rowTitle isEqual:@"Username"]) {
+        NSLog(@"%@", [PFACL ACL]);
+        NSString* url = [NSString stringWithFormat:@"http://fortytwo.parseapp.com/changeusername.html?st=%@", [PFACL ACL]];
+        GenericWebViewController *webViewController = [[GenericWebViewController alloc] initWithNibName:@"GenericWebViewController" title:@"Terms of Service" url:url];
         [self.navigationController pushViewController:webViewController animated:YES];
     }
     

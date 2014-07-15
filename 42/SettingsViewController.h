@@ -17,5 +17,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *dataLabel;
 @property (strong, nonatomic) IBOutlet UILabel *arrowLabel;
 
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @end

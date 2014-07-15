@@ -81,8 +81,9 @@ static NSString * const defaultsLocationKey = @"currentLocation";
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         NSString *usrString = [NSString stringWithFormat:@"isVerified-%@", [PFUser currentUser].username];
         NSString *isVerified = [prefs stringForKey:usrString];
-
-        if ([isVerified isEqualToString:@"YES"]) {
+        BOOL boolValue = [[PFUser currentUser][@"validatedPhone"] boolValue];
+        
+        if ([isVerified isEqualToString:@"YES"] || boolValue == YES) {
 
             [self checkForAddressBookPermissions];
             [self updateLocationSent];

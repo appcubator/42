@@ -102,11 +102,11 @@
 
     if ([rowTitle isEqual:@"Mobile Number"]) {
         dataLabel.text = [PFUser currentUser][@"phone"];
-        arrowLabel.hidden = NO;
+        arrowLabel.hidden = YES;
     }
     
     if ([rowTitle isEqual:@"Email"]) {
-        dataLabel.text = [PFUser currentUser].email;
+        dataLabel.text = [PFUser currentUser][@"email"];
         arrowLabel.hidden = NO;
     }
     
@@ -148,13 +148,96 @@
     }
 
     if ([rowTitle isEqual:@"Username"]) {
-        NSLog(@"%@", [PFACL ACL]);
-        NSString* url = [NSString stringWithFormat:@"http://fortytwo.parseapp.com/changeusername.html?st=%@", [PFACL ACL]];
-        GenericWebViewController *webViewController = [[GenericWebViewController alloc] initWithNibName:@"GenericWebViewController" title:@"Terms of Service" url:url];
-        [self.navigationController pushViewController:webViewController animated:YES];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Change Username"
+                                                           message:@"New Username"
+                                                          delegate:self
+                                                 cancelButtonTitle:@"Cancel"
+                                                 otherButtonTitles:@"OK", nil];
+        
+        alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+        
+        [alertView show];
+    }
+    
+    if ([rowTitle isEqual:@"Email"]) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Change Email"
+                                                            message:@"New Email"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Cancel"
+                                                  otherButtonTitles:@"OK", nil];
+        
+        alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+        
+        [alertView show];
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    // no action if it is Cancel button
+    if (buttonIndex == 0) {
+        return;
+    }
+
+    UITextField *textField = [alertView textFieldAtIndex:0];
+    
+    if([alertView.title isEqualToString:@"Change Username"]) {
+
+        [[PFUser currentUser] setUsername:textField.text];
+        [[PFUser currentUser] saveEventually:^(BOOL succeeded, NSError *error) {
+            
+            if (error) {
+
+                [[[UIAlertView alloc] initWithTitle:@"Unsuccessful attempt"
+                                            message:@"Your username could not be changed."
+                                           delegate:nil
+                                  cancelButtonTitle:@"OK"
+                                  otherButtonTitles:nil] show];
+
+                return;
+            }
+            
+            UIAlertView *usernameSuccessAlert = [[UIAlertView alloc] initWithTitle:@"Changed Username"
+                                                                message:@"Your username has been successfully changed."
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+            
+            [[PFUser currentUser] refresh];
+            [_tableView reloadData];
+            [usernameSuccessAlert show];
+        }];
+    }
+    
+    
+    if([alertView.title isEqualToString:@"Change Email"]) {
+        
+        [[PFUser currentUser] setEmail:textField.text];
+        [[PFUser currentUser] saveEventually:^(BOOL succeeded, NSError *error) {
+            
+            if (error) {    
+
+                [[[UIAlertView alloc] initWithTitle:@"Unsuccessful attempt"
+                                      message:@"Your email could not be changed."
+                                      delegate:nil
+                                      cancelButtonTitle:@"OK"
+                                      otherButtonTitles:nil] show];
+                return;
+            }
+            
+            
+            UIAlertView *emailSuccessAlert = [[UIAlertView alloc] initWithTitle:@"Changed Email"
+                                                                message:@"Your email has been successfully changed."
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                    otherButtonTitles:nil];
+            [[PFUser currentUser] refresh];
+            [_tableView reloadData];
+            [emailSuccessAlert show];
+        }];
+    }
 }
 
 

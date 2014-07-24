@@ -15,5 +15,6 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UITableViewCell *cellMain;
+@property (strong, nonatomic) IBOutlet UIView *updatingContactsView;
 
 @end

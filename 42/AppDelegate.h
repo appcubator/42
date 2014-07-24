@@ -11,6 +11,9 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "MainViewController.h"
+#import <dispatch/dispatch.h>
+
+dispatch_queue_t backgroundQueue;
 
 // In the app delegate we create a constant string to be used as an event name
 static NSString* const kLocationSentUpdatedNotification= @"kLocationSentUpdateNotification";

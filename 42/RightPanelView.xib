@@ -7,6 +7,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RightPanelViewController">
             <connections>
                 <outlet property="tableView" destination="A4I-7s-jYd" id="fyh-kG-rTh"/>
+                <outlet property="updatingContactsView" destination="q1E-yn-lBC" id="MYY-be-z7n"/>
                 <outlet property="view" destination="iN0-l3-epB" id="TTG-pR-BXo"/>
             </connections>
         </placeholder>
@@ -69,6 +70,20 @@
                         <outlet property="delegate" destination="-1" id="4FX-r5-DMG"/>
                     </connections>
                 </tableView>
+                <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q1E-yn-lBC">
+                    <rect key="frame" x="0.0" y="511" width="320" height="57"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Please hold on while we're updating your contacts." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AVn-sN-bYh">
+                            <rect key="frame" x="0.0" y="16" width="320" height="27"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="12"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="1" green="0.48474880190000003" blue="0.2689849326" alpha="1" colorSpace="calibratedRGB"/>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="0.48474880190000003" blue="0.2689849326" alpha="1" colorSpace="calibratedRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>

@@ -45,7 +45,8 @@
 {
     [super viewDidLoad];
     _dictOfContacts = [self getContacts];
-
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatingContactsBook) name:kUpdatingContactsBook object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedContactsBook) name:kUpdatedContactsBook object:nil];
 }
 
 - (void)viewDidUnload
@@ -123,6 +124,15 @@
     [contactDict setObject:activeUsersArray forKey:@"Active Users"];
 
     return contactDict;
+}
+
+- (void)updatingContactsBook {
+    _updatingContactsView.hidden = NO;
+}
+
+- (void)updatedContactsBook {
+    _updatingContactsView.hidden = YES;
+    [_tableView reloadData];
 }
 
 #pragma mark -

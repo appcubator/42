@@ -63,6 +63,8 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    backgroundQueue = dispatch_queue_create("com.contacts", NULL);
+
     [self setUpCoreDataStack];
     // Override point for customization after application launch.
 	
@@ -417,118 +419,142 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 - (void)cacheAllContacts
 {
     
-    NSManagedObjectContext *context =
-    [self managedObjectContext];
-    
-    ABAddressBookRef m_addressbook = ABAddressBookCreateWithOptions(NULL, NULL);
-    
-    if (!m_addressbook) {
-        NSLog(@"Problem opening address book");
-    }
     
     [[NSNotificationCenter defaultCenter] postNotificationName: kUpdatingContactsBook
                                                         object:nil];
 
+    NSManagedObjectContext *mainManagedObjectContext = [self managedObjectContext];
+
     
-    CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(m_addressbook);
-    CFIndex nPeople = ABAddressBookGetPersonCount(m_addressbook);
+    dispatch_async(backgroundQueue, ^(void) {
+
+        NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
+        [context setParentContext:mainManagedObjectContext];
+        
+        ABAddressBookRef m_addressbook = ABAddressBookCreateWithOptions(NULL, NULL);
+        
+        if (!m_addressbook) {
+            NSLog(@"Problem opening address book");
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                [[NSNotificationCenter defaultCenter] postNotificationName: kUpdatedContactsBook
+                                                                    object:nil];
+            });
+        }
     
-    for (int i=0;i < nPeople; i++) {
+        CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(m_addressbook);
+        CFIndex nPeople = ABAddressBookGetPersonCount(m_addressbook);
+    
+        for (int i=0;i < nPeople; i++) {
 
-        // get the record from address book
-        ABRecordRef ref = CFArrayGetValueAtIndex(allPeople,i);
-        NSInteger recordID = ABRecordGetRecordID(ref);
-        // create a unique string for identification
-        NSString *recordIDStr = [NSString stringWithFormat:@"%d", recordID];
-        
-        // check if the user already exists
-        if (![self isUserUnique:recordIDStr]) {
-            continue;
-        }
-
-        NSManagedObject *dOfPerson;
-        dOfPerson = [NSEntityDescription
-                     insertNewObjectForEntityForName:@"ContactModel"
-                     inManagedObjectContext:context];
-        
-        //For username and surname
-        ABMultiValueRef phones = ABRecordCopyValue(ref, kABPersonPhoneProperty);
-        CFStringRef firstName, lastName;
-        firstName = ABRecordCopyValue(ref, kABPersonFirstNameProperty);
-        lastName  = ABRecordCopyValue(ref, kABPersonLastNameProperty);
-        NSString *firstNameStr, *lastNameStr;
-        firstNameStr = (__bridge NSString *)firstName;
-        lastNameStr = (__bridge NSString *)lastName;
-        
-        NSString *fullName = [NSString stringWithFormat:@"%@ %@", firstNameStr ?:@"", lastNameStr ?:@""];
-        fullName = [fullName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        
-        if (!fullName || [fullName isEqual:@""]) {
-            fullName = @"Unnamed";
-        }
-        
-        [dOfPerson setValue:fullName forKey:@"name"];
-        [dOfPerson setValue:recordIDStr forKey:@"ab_id"];
-
-        //For Email ids
-        ABMutableMultiValueRef eMail  = ABRecordCopyValue(ref, kABPersonEmailProperty);
-        
-        CFStringRef emailRef = ABMultiValueCopyValueAtIndex(eMail, 0);
-        NSString *email = (NSString *) CFBridgingRelease(emailRef);
-        if (email != nil) {
-            [dOfPerson setValue:email forKey:@"email"];
-        }
-        
-        NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
-        NSError *aError = nil;
-
-        //For Phone number
-        for(CFIndex i = 0; i < ABMultiValueGetCount(phones); i++) {
-            CFStringRef mobileLabelref = ABMultiValueCopyLabelAtIndex(phones, i);
-            CFStringRef mobileNumberref = ABMultiValueCopyValueAtIndex(phones, i);
+            // get the record from address book
+            ABRecordRef ref = CFArrayGetValueAtIndex(allPeople,i);
+            NSInteger recordID = ABRecordGetRecordID(ref);
+            // create a unique string for identification
+            NSString *recordIDStr = [NSString stringWithFormat:@"%d", recordID];
             
-            NSString *mobileLabel = (NSString *) CFBridgingRelease(mobileLabelref);
-            NSString *mobileNumber = (NSString *) CFBridgingRelease(mobileNumberref);
-            NBPhoneNumber *userNumber = [phoneUtil parse:mobileNumber
-                                           defaultRegion:@"US" error:&aError];
-
-            if ([phoneUtil isValidNumber:userNumber]) {
-                mobileNumber = [phoneUtil format:userNumber
-                                numberFormat:NBEPhoneNumberFormatE164
-                                           error:&aError];
+            // check if the user already exists
+            if (![self isUserUnique:recordIDStr]) {
+                continue;
             }
 
-            if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneMobileLabel])
-            {
-                [dOfPerson setValue:mobileNumber forKey:@"phone"];
-                break;
-            }
-            else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneIPhoneLabel])
-            {
-                [dOfPerson setValue:mobileNumber forKey:@"phone"];
-                break;
-            }
-            else {
-                [dOfPerson setValue:mobileNumber forKey:@"phone"];
+            NSManagedObject *dOfPerson;
+            dOfPerson = [NSEntityDescription
+                         insertNewObjectForEntityForName:@"ContactModel"
+                         inManagedObjectContext:context];
+            
+            //For username and surname
+            ABMultiValueRef phones = ABRecordCopyValue(ref, kABPersonPhoneProperty);
+            CFStringRef firstName, lastName;
+            firstName = ABRecordCopyValue(ref, kABPersonFirstNameProperty);
+            lastName  = ABRecordCopyValue(ref, kABPersonLastNameProperty);
+            NSString *firstNameStr, *lastNameStr;
+            firstNameStr = (__bridge NSString *)firstName;
+            lastNameStr = (__bridge NSString *)lastName;
+            
+            NSString *fullName = [NSString stringWithFormat:@"%@ %@", firstNameStr ?:@"", lastNameStr ?:@""];
+            fullName = [fullName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+            if (!fullName || [fullName isEqual:@""]) {
+                fullName = @"Unnamed";
             }
             
+            [dOfPerson setValue:fullName forKey:@"name"];
+            [dOfPerson setValue:recordIDStr forKey:@"ab_id"];
+
+            //For Email ids
+            ABMutableMultiValueRef eMail  = ABRecordCopyValue(ref, kABPersonEmailProperty);
+            
+            CFStringRef emailRef = ABMultiValueCopyValueAtIndex(eMail, 0);
+            NSString *email = (NSString *) CFBridgingRelease(emailRef);
+            if (email != nil) {
+                [dOfPerson setValue:email forKey:@"email"];
+            }
+            
+            NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+            NSError *aError = nil;
+
+            //For Phone number
+            for(CFIndex i = 0; i < ABMultiValueGetCount(phones); i++) {
+                CFStringRef mobileLabelref = ABMultiValueCopyLabelAtIndex(phones, i);
+                CFStringRef mobileNumberref = ABMultiValueCopyValueAtIndex(phones, i);
+                
+                NSString *mobileLabel = (NSString *) CFBridgingRelease(mobileLabelref);
+                NSString *mobileNumber = (NSString *) CFBridgingRelease(mobileNumberref);
+                NBPhoneNumber *userNumber = [phoneUtil parse:mobileNumber
+                                               defaultRegion:@"US" error:&aError];
+
+                if ([phoneUtil isValidNumber:userNumber]) {
+                    mobileNumber = [phoneUtil format:userNumber
+                                    numberFormat:NBEPhoneNumberFormatE164
+                                               error:&aError];
+                }
+
+                if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneMobileLabel])
+                {
+                    [dOfPerson setValue:mobileNumber forKey:@"phone"];
+                    break;
+                }
+                else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneIPhoneLabel])
+                {
+                    [dOfPerson setValue:mobileNumber forKey:@"phone"];
+                    break;
+                }
+                else {
+                    [dOfPerson setValue:mobileNumber forKey:@"phone"];
+                }
+                
+            }
+            
+            CFRelease(ref);
+            if (firstName != nil) { CFRelease(firstName); }
+            if (lastName != nil) { CFRelease(lastName); }
+            
         }
         
-        CFRelease(ref);
-        if (firstName != nil) { CFRelease(firstName); }
-        if (lastName != nil) { CFRelease(lastName); }
-        
-    }
-    
 
-    NSError *error;
-    [context save:&error];
-    
-    if (error != nil) {
-        NSLog(@"Error %@",error);
-    }
-    
-    [self queryAllNumbersFor42activity];
+        NSError *error;
+        [context save:&error];
+        
+        if (error != nil) {
+            NSLog(@"Error %@",error);
+        }
+        
+        [mainManagedObjectContext performBlock:^{
+            NSError *e = nil;
+            if (![mainManagedObjectContext save:&e])
+            {
+                NSLog(@"Error %@",e);
+            }
+        }];
+
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            [[NSNotificationCenter defaultCenter] postNotificationName: kUpdatedContactsBook
+                                                                object:nil];
+            [self queryAllNumbersFor42activity];
+        });
+    });
+
 }
 
 - (void)queryAllNumbersFor42activity
@@ -644,5 +670,6 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [PFUser logOut];
     _arrayOfLocationSent = nil;
 }
+
 
 @end

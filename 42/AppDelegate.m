@@ -13,6 +13,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 #import <CoreData/CoreData.h>
 #import <AddressBook/AddressBook.h>
 
+#import "ImportContactsOperation.h"
 #import "Crittercism.h"
 #import "AppDelegate.h"
 #import "WelcomeViewController.h"
@@ -21,6 +22,14 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 #import "UserVerificationViewController.h"
 
 @implementation AppDelegate
+
+- (id)init
+{
+
+    if (![super init]) return nil;
+    self.operationQueue = [[NSOperationQueue alloc] init];
+    return self;
+}
 
 - (void)sendLocationTo:(NSMutableArray *)receivers withBlock:(void (^)(void))callbackBlock
 {
@@ -65,7 +74,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     backgroundQueue = dispatch_queue_create("com.contacts", NULL);
 
-    [self setUpCoreDataStack];
+    // [self setUpCoreDataStack];
     // Override point for customization after application launch.
 	
 	// ****************************************************************************
@@ -121,38 +130,8 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 
 }
 
--(void)setUpCoreDataStack
-{
-    NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:[NSBundle allBundles]];
-    NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
-    
-    NSURL *url = [[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:@"db_dev.sqlite"];
-    
-    NSDictionary *options = @{NSPersistentStoreFileProtectionKey: NSFileProtectionComplete,
-                              NSMigratePersistentStoresAutomaticallyOption:@YES};
-    NSError *error = nil;
-    NSPersistentStore *store = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:options error:&error];
-    if (!store)
-    {
-        NSLog(@"Error adding persistent store. Error %@",error);
-        
-        NSError *deleteError = nil;
-        if ([[NSFileManager defaultManager] removeItemAtURL:url error:&deleteError])
-        {
-            error = nil;
-            store = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:options error:&error];
-        }
-        
-        if (!store)
-        {
-            // Also inform the user...
-            NSLog(@"Failed to create persistent store. Error %@. Delete error %@",error,deleteError);
-            abort();
-        }
-    }
-    
-    self.managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-    self.managedObjectContext.persistentStoreCoordinator = psc;
+- (NSManagedObjectContext *) managedObjectContext {
+    return self.store.mainManagedObjectContext;
 }
 
 - (void)application:(UIApplication *)application
@@ -258,6 +237,8 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
 - (NSArray *)getUnregisteredContacts {
     
+    return @[];
+    
     NSManagedObjectContext *moc = [self managedObjectContext];
     NSEntityDescription *entityDescription = [NSEntityDescription
                                               entityForName:@"ContactModel" inManagedObjectContext:moc];
@@ -314,6 +295,8 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
 - (NSArray *)getRegisteredContacts {
     
+    return @[];
+
     NSManagedObjectContext *moc = [self managedObjectContext];
     NSEntityDescription *entityDescription = [NSEntityDescription
                                               entityForName:@"ContactModel" inManagedObjectContext:moc];
@@ -370,7 +353,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
 - (void)checkForAddressBookUpdates {
     [self cacheAllContacts];
-    [self checkForFollowing];
+    //[self checkForFollowing];
 }
 
 - (void)checkForFollowing {
@@ -419,141 +402,25 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 - (void)cacheAllContacts
 {
     
+    ImportContactsOperation* operation = [[ImportContactsOperation alloc] initWithStore:self.store];
+    operation.progressCallback = ^(float progress) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^
+         {
+             NSLog(@"%f",progress);
+         }];
+    };
+    [self.operationQueue addOperation:operation];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName: kUpdatingContactsBook
-                                                        object:nil];
-
-    NSManagedObjectContext *mainManagedObjectContext = [self managedObjectContext];
+//    NSLog(@"Queue operations count = %lu",(unsigned long)[self.operationQueue isExecuting]);
+//    NSLog(@"Queue isSuspended = %d",[self.operationQueue isSuspended]);
+//    NSLog(@"Operation isCancelled? = %d",[self.operationQueue isCancelled]);
+//    NSLog(@"Operation isConcurrent? = %d",[self.operationQueue isConcurrent]);
+//    NSLog(@"Operation isFinished? = %d",[self.operationQueue isFinished]);
+//    NSLog(@"Operation isExecuted? = %d",[self.operationQueue isExecuting]);
+//    NSLog(@"Operation isReady? = %d",[self.operationQueue isReady]);
+//    NSLog(@"Operation dependencies? = %d",[[self.operationQueue dependencies] count]);
 
     
-    dispatch_async(backgroundQueue, ^(void) {
-
-        NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSConfinementConcurrencyType];
-        [context setParentContext:mainManagedObjectContext];
-        
-        ABAddressBookRef m_addressbook = ABAddressBookCreateWithOptions(NULL, NULL);
-        
-        if (!m_addressbook) {
-            NSLog(@"Problem opening address book");
-            dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [[NSNotificationCenter defaultCenter] postNotificationName: kUpdatedContactsBook
-                                                                    object:nil];
-            });
-        }
-    
-        CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(m_addressbook);
-        CFIndex nPeople = ABAddressBookGetPersonCount(m_addressbook);
-    
-        for (int i=0;i < nPeople; i++) {
-
-            // get the record from address book
-            ABRecordRef ref = CFArrayGetValueAtIndex(allPeople,i);
-            NSInteger recordID = ABRecordGetRecordID(ref);
-            // create a unique string for identification
-            NSString *recordIDStr = [NSString stringWithFormat:@"%d", recordID];
-            
-            // check if the user already exists
-            if (![self isUserUnique:recordIDStr]) {
-                continue;
-            }
-
-            NSManagedObject *dOfPerson;
-            dOfPerson = [NSEntityDescription
-                         insertNewObjectForEntityForName:@"ContactModel"
-                         inManagedObjectContext:context];
-            
-            //For username and surname
-            ABMultiValueRef phones = ABRecordCopyValue(ref, kABPersonPhoneProperty);
-            CFStringRef firstName, lastName;
-            firstName = ABRecordCopyValue(ref, kABPersonFirstNameProperty);
-            lastName  = ABRecordCopyValue(ref, kABPersonLastNameProperty);
-            NSString *firstNameStr, *lastNameStr;
-            firstNameStr = (__bridge NSString *)firstName;
-            lastNameStr = (__bridge NSString *)lastName;
-            
-            NSString *fullName = [NSString stringWithFormat:@"%@ %@", firstNameStr ?:@"", lastNameStr ?:@""];
-            fullName = [fullName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-            
-            if (!fullName || [fullName isEqual:@""]) {
-                fullName = @"Unnamed";
-            }
-            
-            [dOfPerson setValue:fullName forKey:@"name"];
-            [dOfPerson setValue:recordIDStr forKey:@"ab_id"];
-
-            //For Email ids
-            ABMutableMultiValueRef eMail  = ABRecordCopyValue(ref, kABPersonEmailProperty);
-            
-            CFStringRef emailRef = ABMultiValueCopyValueAtIndex(eMail, 0);
-            NSString *email = (NSString *) CFBridgingRelease(emailRef);
-            if (email != nil) {
-                [dOfPerson setValue:email forKey:@"email"];
-            }
-            
-            NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
-            NSError *aError = nil;
-
-            //For Phone number
-            for(CFIndex i = 0; i < ABMultiValueGetCount(phones); i++) {
-                CFStringRef mobileLabelref = ABMultiValueCopyLabelAtIndex(phones, i);
-                CFStringRef mobileNumberref = ABMultiValueCopyValueAtIndex(phones, i);
-                
-                NSString *mobileLabel = (NSString *) CFBridgingRelease(mobileLabelref);
-                NSString *mobileNumber = (NSString *) CFBridgingRelease(mobileNumberref);
-                NBPhoneNumber *userNumber = [phoneUtil parse:mobileNumber
-                                               defaultRegion:@"US" error:&aError];
-
-                if ([phoneUtil isValidNumber:userNumber]) {
-                    mobileNumber = [phoneUtil format:userNumber
-                                    numberFormat:NBEPhoneNumberFormatE164
-                                               error:&aError];
-                }
-
-                if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneMobileLabel])
-                {
-                    [dOfPerson setValue:mobileNumber forKey:@"phone"];
-                    break;
-                }
-                else if ([mobileLabel isEqualToString:(NSString*)kABPersonPhoneIPhoneLabel])
-                {
-                    [dOfPerson setValue:mobileNumber forKey:@"phone"];
-                    break;
-                }
-                else {
-                    [dOfPerson setValue:mobileNumber forKey:@"phone"];
-                }
-                
-            }
-            
-            CFRelease(ref);
-            if (firstName != nil) { CFRelease(firstName); }
-            if (lastName != nil) { CFRelease(lastName); }
-            
-        }
-        
-
-        NSError *error;
-        [context save:&error];
-        
-        if (error != nil) {
-            NSLog(@"Error %@",error);
-        }
-        
-        [mainManagedObjectContext performBlock:^{
-            NSError *e = nil;
-            if (![mainManagedObjectContext save:&e])
-            {
-                NSLog(@"Error %@",e);
-            }
-        }];
-
-        
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            [[NSNotificationCenter defaultCenter] postNotificationName: kUpdatedContactsBook
-                                                                object:nil];
-            [self queryAllNumbersFor42activity];
-        });
-    });
 
 }
 

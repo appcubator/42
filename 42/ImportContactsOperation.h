@@ -7,7 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Store.h"
 
 @interface ImportContactsOperation : NSOperation
+
+- (id)initWithStore:(Store*)store;
+@property (nonatomic) float progress;
+@property (nonatomic, copy) void (^progressCallback) (float);
 
 @end

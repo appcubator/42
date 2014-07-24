@@ -41,6 +41,7 @@ install_resource()
       ;;
   esac
 }
+install_resource "CrittercismSDK/CrittercismSDK/dsym_upload.sh"
 install_resource "Facebook-iOS-SDK/src/FBUserSettingsViewResources.bundle"
 install_resource "libPhoneNumber-iOS/libPhoneNumber/NBPhoneNumberMetadata.plist"
 

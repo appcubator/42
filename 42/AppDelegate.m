@@ -13,6 +13,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 #import <CoreData/CoreData.h>
 #import <AddressBook/AddressBook.h>
 
+#import "Crittercism.h"
 #import "AppDelegate.h"
 #import "WelcomeViewController.h"
 #import "MainViewController.h"
@@ -68,13 +69,20 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 	// ****************************************************************************
     // Parse initialization
 	[Parse setApplicationId:@"ybAaEabpmAwfz7FlsrQs60VcQroYtSDqBoFMFQlc" clientKey:@"YNDq2AksL9g3XbIN3ELq1G1GDP8BrhvbIQVtXzfk"];
-	// ****************************************************************************
+	
+    // ****************************************************************************
     // Register for push notifications
+    
     [application registerForRemoteNotificationTypes:
      UIRemoteNotificationTypeBadge |
      UIRemoteNotificationTypeAlert |
      UIRemoteNotificationTypeSound];
 
+    // ****************************************************************************
+    // Parse initialization
+    [Crittercism enableWithAppID: @"53cfd85907229a440e000002"];
+    
+    
 	if ([PFUser currentUser]) {
         
         
@@ -418,15 +426,22 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         NSLog(@"Problem opening address book");
     }
     
+    [[NSNotificationCenter defaultCenter] postNotificationName: kUpdatingContactsBook
+                                                        object:nil];
+
+    
     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(m_addressbook);
     CFIndex nPeople = ABAddressBookGetPersonCount(m_addressbook);
     
     for (int i=0;i < nPeople; i++) {
-        
+
+        // get the record from address book
         ABRecordRef ref = CFArrayGetValueAtIndex(allPeople,i);
         NSInteger recordID = ABRecordGetRecordID(ref);
+        // create a unique string for identification
         NSString *recordIDStr = [NSString stringWithFormat:@"%d", recordID];
         
+        // check if the user already exists
         if (![self isUserUnique:recordIDStr]) {
             continue;
         }

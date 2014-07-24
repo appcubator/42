@@ -16,6 +16,8 @@
 static NSString* const kLocationSentUpdatedNotification= @"kLocationSentUpdateNotification";
 static NSString* const kLocationSentUpdatingNotification= @"kLocationSentUpdatingNotification";
 static NSString* const kShowLocationWithId= @"kShowLocationWithId";
+static NSString* const kUpdatingContactsBook=@"kUpdatingContactsBook";
+static NSString* const kUpdatedContactsBook=@"kUpdatedContactsBook";
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

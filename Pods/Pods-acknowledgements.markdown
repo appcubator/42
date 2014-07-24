@@ -27,6 +27,10 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWIS
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+## CrittercismSDK
+
+See http://www.crittercism.com/terms-services/
+
 ## Facebook-iOS-SDK
 
                                  Apache License

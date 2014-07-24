@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		68315DB70198499096C846ED /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 167C126679EC4ED89645E30F /* libPods.a */; };
+		CE1369BD1981742F0089A427 /* ImportContactsOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1369BC1981742F0089A427 /* ImportContactsOperation.m */; };
+		CE1369C0198174C50089A427 /* Store.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1369BF198174C50089A427 /* Store.m */; };
 		CE1B928F19359514001489C8 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1B928E19359514001489C8 /* Accounts.framework */; };
 		CE1B929119359519001489C8 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1B929019359519001489C8 /* Social.framework */; };
 		CE1B929519359793001489C8 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1B929319359793001489C8 /* SettingsViewController.m */; };
@@ -88,6 +90,10 @@
 /* Begin PBXFileReference section */
 		167C126679EC4ED89645E30F /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5911A917935A4312BECFEC43 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		CE1369BB1981742F0089A427 /* ImportContactsOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImportContactsOperation.h; sourceTree = "<group>"; };
+		CE1369BC1981742F0089A427 /* ImportContactsOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImportContactsOperation.m; sourceTree = "<group>"; };
+		CE1369BE198174C50089A427 /* Store.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Store.h; sourceTree = "<group>"; };
+		CE1369BF198174C50089A427 /* Store.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Store.m; sourceTree = "<group>"; };
 		CE1B928E19359514001489C8 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		CE1B929019359519001489C8 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		CE1B929219359793001489C8 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
@@ -401,6 +407,10 @@
 				CE4ABAB8194BD5A2005D2BA2 /* FortyTwoMap.m */,
 				CE4ABABA195A34A2005D2BA2 /* UIButtonWithData.h */,
 				CE4ABABB195A34A2005D2BA2 /* UIButtonWithData.m */,
+				CE1369BB1981742F0089A427 /* ImportContactsOperation.h */,
+				CE1369BC1981742F0089A427 /* ImportContactsOperation.m */,
+				CE1369BE198174C50089A427 /* Store.h */,
+				CE1369BF198174C50089A427 /* Store.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -560,11 +570,13 @@
 				CE84F0F8193AB12100AC6AE3 /* Model.xcdatamodeld in Sources */,
 				CEE97436192DA82800494F47 /* AppDelegate.m in Sources */,
 				CEE97484192DBE9A00494F47 /* CenterViewController.m in Sources */,
+				CE1369BD1981742F0089A427 /* ImportContactsOperation.m in Sources */,
 				CEE97432192DA82800494F47 /* main.m in Sources */,
 				CE84F0EB1937993900AC6AE3 /* UIButtonForRow.m in Sources */,
 				CEE9749C192DE13E00494F47 /* LeftPanelViewController.m in Sources */,
 				CEE97481192DB56100494F47 /* ActivityView.m in Sources */,
 				CEE9746B192DAF6100494F47 /* NewUserViewController.m in Sources */,
+				CE1369C0198174C50089A427 /* Store.m in Sources */,
 				CEA9C9AC1947891F00D0785E /* ComposePinAnnotation.m in Sources */,
 				CEAD292D196B87B6009947FF /* GenericWebViewController.m in Sources */,
 				CEE97487192DBEA700494F47 /* MapView.m in Sources */,

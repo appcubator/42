@@ -11,6 +11,8 @@
 #import <CoreData/CoreData.h>
 #import <AddressBook/AddressBook.h>
 #import "NBPhoneNumberUtil.h"
+#import <Parse/Parse.h>
+
 
 @interface ImportContactsOperation ()
 @property (nonatomic, strong) Store* store;
@@ -59,24 +61,27 @@ static const int ImportBatchSize = 200;
     CFIndex nPeople = ABAddressBookGetPersonCount(m_addressbook);
     NSInteger progressGranularity = nPeople/100;
 
+    NSMutableArray *newContacts = [[NSMutableArray alloc] init];
+
     for (int i=0;i < nPeople; i++) {
         
         // get the record from address book
         ABRecordRef ref = CFArrayGetValueAtIndex(allPeople,i);
         NSInteger recordID = ABRecordGetRecordID(ref);
         // create a unique string for identification
-        NSString *recordIDStr = [NSString stringWithFormat:@"%d", recordID];
+        NSString *recordIDStr = [NSString stringWithFormat:@"%ld", (long)recordID];
         
         // check if the user already exists
-//        if (![self isUserUnique:recordIDStr]) {
-//            continue;
-//        }
+        if (![self isUserUnique:recordIDStr]) {
+            continue;
+        }
         
         NSManagedObject *dOfPerson;
         dOfPerson = [NSEntityDescription
                      insertNewObjectForEntityForName:@"ContactModel"
                      inManagedObjectContext:self.context];
-        
+
+
         //For username and surname
         ABMultiValueRef phones = ABRecordCopyValue(ref, kABPersonPhoneProperty);
         CFStringRef firstName, lastName;
@@ -108,13 +113,14 @@ static const int ImportBatchSize = 200;
         NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
         NSError *aError = nil;
         
+        NSString *mobileNumber;
         //For Phone number
         for(CFIndex i = 0; i < ABMultiValueGetCount(phones); i++) {
             CFStringRef mobileLabelref = ABMultiValueCopyLabelAtIndex(phones, i);
             CFStringRef mobileNumberref = ABMultiValueCopyValueAtIndex(phones, i);
             
             NSString *mobileLabel = (NSString *) CFBridgingRelease(mobileLabelref);
-            NSString *mobileNumber = (NSString *) CFBridgingRelease(mobileNumberref);
+            mobileNumber = (NSString *) CFBridgingRelease(mobileNumberref);
             NBPhoneNumber *userNumber = [phoneUtil parse:mobileNumber
                                            defaultRegion:@"US" error:&aError];
             
@@ -139,6 +145,9 @@ static const int ImportBatchSize = 200;
             }
             
         }
+        if (mobileNumber) {
+            [newContacts addObject:mobileNumber];
+        }
         
         CFRelease(ref);
         if (firstName != nil) { CFRelease(firstName); }
@@ -153,7 +162,6 @@ static const int ImportBatchSize = 200;
         
     }
     
-    
     NSError *error;
     [self.context save:&error];
     
@@ -161,34 +169,45 @@ static const int ImportBatchSize = 200;
         NSLog(@"Error %@",error);
     }
     
+    [self queryNewContactsFor42Activity: newContacts];
+    
     //[self queryAllNumbersFor42activity];
-
     self.progressCallback(1);
-    [self.context save:NULL];
+    
 }
 
-//- (BOOL)isUserUnique:(NSString *)ab_id
-//{
+- (BOOL)isUserUnique:(NSString *)ab_id
+{
 
-//    NSManagedObjectContext *moc = [self managedObjectContext];
-//    NSEntityDescription *entityDescription = [NSEntityDescription
-//                                              entityForName:@"ContactModel" inManagedObjectContext:moc];
-//    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-//    [request setEntity:entityDescription];
-//    
-//    // Set example predicate and sort orderings ...
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:
-//                              @"ab_id = %@",ab_id];
-//    [request setPredicate:predicate];
-//    
-//    NSError *error = nil;
-//    NSArray *array = [moc executeFetchRequest:request error:&error];
-//    
-//    return [array count] < 1;
-//}
+    NSManagedObjectContext *moc = self.context;
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"ContactModel" inManagedObjectContext:moc];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    // Set example predicate and sort orderings ...
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                              @"ab_id = %@",ab_id];
+    [request setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSArray *array = [moc executeFetchRequest:request error:&error];
+    
+    return [array count] < 1;
+}
+
+// newContactNumbers is an array of phone numbers
+- (void)queryNewContactsFor42Activity:(NSMutableArray *)newContactNumbers {
+    PFQuery *query = [PFUser query];
+    [query whereKey:@"phone" containedIn:newContactNumbers];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        [self updateContactsWithUsers: objects];
+    }];
+}
 
 - (void)queryAllNumbersFor42activity
 {
+    /* NEED TO PERIODICALLY DO THIS (once every 2 days?) */
 //    NSManagedObjectContext *moc = [self managedObjectContext];
 //    NSEntityDescription *entityDescription = [NSEntityDescription
 //                                              entityForName:@"ContactModel" inManagedObjectContext:moc];
@@ -209,6 +228,39 @@ static const int ImportBatchSize = 200;
 //    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
 //        [self updateContactsWithUsers: objects];
 //    }];
+}
+
+- (void)updateContactsWithUsers:(NSArray *)array {
+    
+    for (PFUser *user in array) {
+        NSManagedObjectContext *context = self.context;
+        NSEntityDescription *entityDescription = [NSEntityDescription
+                                                  entityForName:@"ContactModel" inManagedObjectContext:context];
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        [request setEntity:entityDescription];
+        
+        // Set example predicate and sort orderings ...
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                                  @"phone = %@",[user valueForKey:@"phone"]];
+        [request setPredicate:predicate];
+        
+        NSError *error = nil;
+        NSArray *array = [context executeFetchRequest:request error:&error];
+        if ([array count] > 0) {
+            NSManagedObject* userObject = [array objectAtIndex:0];
+            [userObject setValue:user.objectId forKey:@"user_id"];
+            [userObject setValue:[user valueForKey:@"username"] forKey:@"username"];
+            [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"is42user"];
+        }
+        
+        [context save:&error];
+        
+        if (error != nil) {
+            NSLog(@"%@",error);
+        }
+    }
+
+    self.progressCallback(2);
 }
 
 @end

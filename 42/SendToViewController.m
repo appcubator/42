@@ -18,19 +18,12 @@
 
 @implementation SendToViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        _arrayOfFollowers = [[NSMutableArray alloc] init];
-        _arrayOfReceivers = [[NSMutableArray alloc] init];
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _arrayOfReceivers = [[NSMutableArray alloc] init];
+
     // Do any additional setup after loading the view from its nib.
     PFQuery *query = [PFQuery queryWithClassName:@"Follow"];
     [query includeKey:@"from"];

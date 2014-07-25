@@ -33,50 +33,12 @@ static NSString * const defaultsLocationKey = @"currentLocation";
     return self;
 }
 
-- (void)sendLocationTo:(NSMutableArray *)receivers withBlock:(void (^)(void))callbackBlock
-{
-
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"locationSent" object:self];
-
-    NSMutableArray *locationSentList = [[NSMutableArray alloc] init];
-    PFUser *currentUser = [PFUser currentUser];
-
-    PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:_currentLocation.coordinate.latitude longitude: _currentLocation.coordinate.longitude];
-    
-    for (id user in receivers)
-    {
-        PFUser *sendTo = (PFUser *)user;
-        PFObject *locationSentObject = [PFObject objectWithClassName:@"LocationSent"];
-        [locationSentObject setObject:currentUser forKey:@"from"];
-        [locationSentObject setObject:sendTo forKey:@"to"];
-        [locationSentObject setObject:[NSDate date] forKey:@"date"];
-        [locationSentObject setObject:currentPoint forKey:@"location"];
-        
-        if (_currentMessage != nil) {
-            [locationSentObject setObject:_currentMessage forKey:@"message"];
-        }
-
-        [locationSentList addObject:locationSentObject];
-    }
-
-    [PFObject saveAllInBackground:[NSArray arrayWithArray:locationSentList] block:^(BOOL succeeded,NSError *error) {
-        if (error) {
-            NSLog(@"Error saving: %@",error);
-        }
-        else {
-            callbackBlock();
-        }
-    }];
-}
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     backgroundQueue = dispatch_queue_create("com.contacts", NULL);
 
-    // [self setUpCoreDataStack];
     // Override point for customization after application launch.
 	
 	// ****************************************************************************
@@ -106,7 +68,6 @@ static NSString * const defaultsLocationKey = @"currentLocation";
         
         if ([isVerified isEqualToString:@"YES"] || boolValue == YES) {
 
-            [self checkForAddressBookPermissions];
             [self updateLocationSent];
             [self presentMainViewController];
 
@@ -176,39 +137,6 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     }
 
 }
-
-- (MainViewController *)getMainViewController
-{
-    if (_mainViewController == nil)
-    {
-        self.mainViewController = [[MainViewController alloc] init];
-    }
-    
-    return _mainViewController;
-}
-
-- (void)presentMainViewController {
-	
-    UINavigationController *navController = nil;
-    navController = [[UINavigationController alloc] initWithRootViewController:[self getMainViewController]];
-    navController.navigationBarHidden = YES;
-
-    self.viewController = navController;
-    self.window.rootViewController = self.viewController;
-}
-
-
-- (void)presentWelcomeViewController {
-	// Go to the welcome screen and have them log in or create an account.
-	WelcomeViewController *welcomeViewController = [[WelcomeViewController alloc] initWithNibName:@"WelcomeView" bundle:nil];
-	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:welcomeViewController];
-	navController.navigationBarHidden = YES;
-    
-	self.viewController = navController;
-	self.window.rootViewController = self.viewController;
-}
-
-
 							
 - (void)applicationWillResignActive:(UIApplication *)application
 {
@@ -235,6 +163,82 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+
+# pragma mark -
+# pragma mark Application Startup Flow
+
+- (void)presentMainViewController {
+	
+    [self checkForAddressBookPermissions];
+
+    UINavigationController *navController = nil;
+    navController = [[UINavigationController alloc] initWithRootViewController:[self getMainViewController]];
+    navController.navigationBarHidden = YES;
+    
+    self.viewController = navController;
+    self.window.rootViewController = self.viewController;
+}
+
+
+- (void)presentWelcomeViewController {
+	// Go to the welcome screen and have them log in or create an account.
+	WelcomeViewController *welcomeViewController = [[WelcomeViewController alloc] initWithNibName:@"WelcomeView" bundle:nil];
+	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:welcomeViewController];
+	navController.navigationBarHidden = YES;
+    
+	self.viewController = navController;
+	self.window.rootViewController = self.viewController;
+}
+
+
+- (MainViewController *)getMainViewController
+{
+    if (_mainViewController == nil)
+    {
+        self.mainViewController = [[MainViewController alloc] init];
+    }
+    
+    return _mainViewController;
+}
+
+
+- (void)sendLocationTo:(NSMutableArray *)receivers withBlock:(void (^)(void))callbackBlock
+{
+    
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"locationSent" object:self];
+    
+    NSMutableArray *locationSentList = [[NSMutableArray alloc] init];
+    PFUser *currentUser = [PFUser currentUser];
+    
+    PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:_currentLocation.coordinate.latitude longitude: _currentLocation.coordinate.longitude];
+    
+    for (id user in receivers)
+    {
+        PFUser *sendTo = (PFUser *)user;
+        PFObject *locationSentObject = [PFObject objectWithClassName:@"LocationSent"];
+        [locationSentObject setObject:currentUser forKey:@"from"];
+        [locationSentObject setObject:sendTo forKey:@"to"];
+        [locationSentObject setObject:[NSDate date] forKey:@"date"];
+        [locationSentObject setObject:currentPoint forKey:@"location"];
+        
+        if (_currentMessage != nil) {
+            [locationSentObject setObject:_currentMessage forKey:@"message"];
+        }
+        
+        [locationSentList addObject:locationSentObject];
+    }
+    
+    [PFObject saveAllInBackground:[NSArray arrayWithArray:locationSentList] block:^(BOOL succeeded,NSError *error) {
+        if (error) {
+            NSLog(@"Error saving: %@",error);
+        }
+        else {
+            callbackBlock();
+        }
+    }];
 }
 
 - (NSArray *)getUnregisteredContacts {
@@ -332,7 +336,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         
         ABAddressBookRequestAccessWithCompletion(addressBookRef, ^(bool granted, CFErrorRef error) {
             if (granted) {
-                [self cacheAllContacts];
+                [self updateCachedContacts];
             } else {
                 // User denied access
                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"App wont werk!" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
@@ -342,7 +346,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     }
     else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
         // The user has previously given access, add the contact
-        [self checkForAddressBookUpdates];
+        [self updateCachedContacts];
     }
     else {
         // The user has previously denied access
@@ -351,10 +355,6 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
 }
 
-- (void)checkForAddressBookUpdates {
-    [self cacheAllContacts];
-    //[self checkForFollowing];
-}
 
 - (void)checkForFollowing {
     PFQuery *query = [PFQuery queryWithClassName:@"Follow"];
@@ -399,104 +399,26 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     }];
 }
 
-- (void)cacheAllContacts
+- (void)updateCachedContacts
 {
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName: kUpdatingContactsBook object:nil];
     
     ImportContactsOperation* operation = [[ImportContactsOperation alloc] initWithStore:self.store];
     operation.progressCallback = ^(float progress) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^
          {
              NSLog(@"%f",progress);
+             if (progress == 1 || progress == 2) {
+                 [[NSNotificationCenter defaultCenter] postNotificationName: kUpdatedContactsBook
+                                                                     object:nil];
+             }
+             
          }];
     };
 
     [self.operationQueue addOperation:operation];
-    NSLog(@"Queue operations count = %@",[self.operationQueue operations]);
-//    NSLog(@"Queue isSuspended = %d",[self.operationQueue isSuspended]);
-//    NSLog(@"Operation isCancelled? = %d",[self.operationQueue isCancelled]);
-//    NSLog(@"Operation isConcurrent? = %d",[self.operationQueue isConcurrent]);
-//    NSLog(@"Operation isFinished? = %d",[self.operationQueue isFinished]);
-//    NSLog(@"Operation isExecuted? = %d",[self.operationQueue isExecuting]);
-//    NSLog(@"Operation isReady? = %d",[self.operationQueue isReady]);
-//    NSLog(@"Operation dependencies? = %d",[[self.operationQueue dependencies] count]);
 
-    
-
-}
-
-- (void)queryAllNumbersFor42activity
-{
-    NSManagedObjectContext *moc = [self managedObjectContext];
-    NSEntityDescription *entityDescription = [NSEntityDescription
-                                              entityForName:@"ContactModel" inManagedObjectContext:moc];
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:entityDescription];
-    
-    NSError *error = nil;
-    NSArray *array = [moc executeFetchRequest:request error:&error];
-    if (array == nil)
-    {
-        NSLog(@"%@",error);
-    }
-    
-    NSMutableArray *contactNumbers = [array valueForKey:@"phone"];
-
-    PFQuery *query = [PFUser query];
-    [query whereKey:@"phone" containedIn:contactNumbers];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        [self updateContactsWithUsers: objects];
-    }];
-}
-
-- (void)updateContactsWithUsers:(NSArray *)array {
-    
-    for (PFUser *user in array) {
-        NSManagedObjectContext *context = [self managedObjectContext];
-        NSEntityDescription *entityDescription = [NSEntityDescription
-                                                  entityForName:@"ContactModel" inManagedObjectContext:context];
-        NSFetchRequest *request = [[NSFetchRequest alloc] init];
-        [request setEntity:entityDescription];
-        
-        // Set example predicate and sort orderings ...
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:
-                                  @"phone = %@",[user valueForKey:@"phone"]];
-        [request setPredicate:predicate];
-        
-        NSError *error = nil;
-        NSArray *array = [context executeFetchRequest:request error:&error];
-        if ([array count] > 0) {
-            NSManagedObject* userObject = [array objectAtIndex:0];
-            [userObject setValue:user.objectId forKey:@"user_id"];
-            [userObject setValue:[user valueForKey:@"username"] forKey:@"username"];
-            [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"is42user"];
-        }
-        
-        [context save:&error];
-        
-        if (error != nil) {
-            NSLog(@"%@",error);
-        }
-    }
-}
-
-- (BOOL)isUserUnique:(NSString *)ab_id
-{
-    
-    NSManagedObjectContext *moc = [self managedObjectContext];
-    NSEntityDescription *entityDescription = [NSEntityDescription
-                                              entityForName:@"ContactModel" inManagedObjectContext:moc];
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:entityDescription];
-    
-    // Set example predicate and sort orderings ...
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:
-                              @"ab_id = %@",ab_id];
-    [request setPredicate:predicate];
-    
-    NSError *error = nil;
-    NSArray *array = [moc executeFetchRequest:request error:&error];
-
-    return [array count] < 1;
 }
 
 - (void)updateLocationSent

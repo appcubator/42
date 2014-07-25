@@ -101,7 +101,7 @@
     
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     NSArray *usersArray = [appDelegate getUnregisteredContacts];
-    NSLog(@"Number of unregistered contacts: %d", [usersArray count]);
+    NSLog(@"Number of unregistered contacts: %lu", (unsigned long)[usersArray count]);
 
     NSMutableDictionary *contactDict= [self createEmptyDictionaryWithSectionKeys];
     NSInteger nPeople = [usersArray count];
@@ -128,11 +128,14 @@
 
 - (void)updatingContactsBook {
     _updatingContactsView.hidden = NO;
+    NSLog(@"Started updating");
 }
 
 - (void)updatedContactsBook {
     _updatingContactsView.hidden = YES;
+    _dictOfContacts = [self getContacts];
     [_tableView reloadData];
+    NSLog(@"Done updating");
 }
 
 #pragma mark -

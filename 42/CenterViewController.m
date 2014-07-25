@@ -34,6 +34,7 @@
     
     if (self) {
         _friendPins = [[NSMutableArray alloc] initWithObjects:nil count:0];
+        _showingComposeAnnotation = NO;
     }
     
     return self;
@@ -49,7 +50,7 @@
     _mkMapView.showsUserLocation=YES;
     _mkMapView.delegate = self;
 
-    _composePin = [[ComposePinAnnotation alloc] init];
+    _composePin = [[ComposePinAnnotation alloc] initWithMapView:_mkMapView];
     
     _locationManager = [[CLLocationManager alloc] init];
     _locationManager.delegate = self;
@@ -59,10 +60,10 @@
     [mapView.leftButton addTarget:self action:@selector(btnMovePanelRight:) forControlEvents:UIControlEventTouchUpInside];
     [mapView.rightButton addTarget:self action:@selector(btnMovePanelLeft:) forControlEvents:UIControlEventTouchUpInside];
     [mapView.sendToButton addTarget:self action:@selector(btnSendTo:) forControlEvents:UIControlEventTouchUpInside];
-    [mapView.cancelButton addTarget:self action:@selector(clearLocation:) forControlEvents:UIControlEventTouchUpInside];
+    [mapView.cancelButton addTarget:self action:@selector(clearLocation) forControlEvents:UIControlEventTouchUpInside];
 
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearLocation:) name:@"locationSent" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clearLocation) name:@"locationSent" object:nil];
     
 }
 
@@ -153,6 +154,7 @@
     [_composePin updateCoordinate:currentCoordinate];
     [_mkMapView addAnnotation:_composePin];
     [_mkMapView selectAnnotation:_composePin animated:YES];
+    _showingComposeAnnotation = YES;
 
 	PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	PFUser *user = [PFUser currentUser];
@@ -214,8 +216,11 @@
 
 }
 
-- (void)clearLocation:(id)sender
+- (void)clearLocation
 {
+    if (_showingComposeAnnotation == NO) return;
+    _showingComposeAnnotation = NO;
+
     MapView *view = (MapView *)self.view;
     
     [view hideSendLocationMode];
@@ -229,8 +234,8 @@
     [appDelegate setCurrentLocation: nil];
 
     [_composePin.calloutView.textField setText:@""];
-    [_composePin setShowCustomCallout:NO animated:YES];
-    [_mkMapView removeAnnotation:_composePin];
+    [_composePin removeSelfFromMap];
+    //[_mkMapView removeAnnotation:_composePin];
 
 }
 
@@ -300,6 +305,11 @@
     [_mkMapView setRegion:region animated:YES];
 }
 
+- (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
+    if(!_showingComposeAnnotation) return;
+    [self clearLocation];
+}
+
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id) annotation
 {
     
@@ -334,7 +344,7 @@
     
     if ([view.annotation isKindOfClass:ComposePinAnnotation.class]) {
         ComposePinAnnotation *annotationView = (ComposePinAnnotation *)view.annotation;
-        [annotationView setShowCustomCallout:YES animated:YES];
+        [annotationView showCustomCalloutAnimated:YES];
     }
     
 }

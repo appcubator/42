@@ -20,8 +20,10 @@
 //@property (nonatomic, strong) MKAnnotationView *view;
 
 - (id)initWithMapView:(FortyTwoMap *)mapView;
-- (void)setShowCustomCallout:(BOOL)showCustomCallout animated:(BOOL)animated;
 - (void)updateLocation:(CLLocation *)loc;
 - (void)updateCoordinate:(CLLocationCoordinate2D)coor;
+- (void)removeSelfFromMap;
+- (void)showCustomCalloutAnimated:(BOOL)animated;
+- (void)hideCustomCalloutAnimated:(BOOL)animated;
 
 @end

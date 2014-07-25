@@ -217,7 +217,8 @@
         }
         
         // Are you more than halfway? If so, show the panel when done dragging by setting this value to YES (1).
-        _movePanel = abs([sender view].center.x - _centerViewController.view.frame.size.width/2) > _centerViewController.view.frame.size.width/2;
+        _movePanel = abs([sender view].center.x - _centerViewController.view.frame.size.width/2) > _centerViewController.view.frame.size.width/4;
+
         _slideRight = [sender view].center.x > _centerViewController.view.frame.size.width/2;
         
         // Allow dragging only in x-coordinates by only updating the x-coordinate with translation position.

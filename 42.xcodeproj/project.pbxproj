@@ -664,6 +664,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = Wauv;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -697,6 +698,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = Wauv;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

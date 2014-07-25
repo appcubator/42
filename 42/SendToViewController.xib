@@ -37,7 +37,7 @@
                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
-                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="315DC576-46EF-4424-9533-E0D14DB16496" translatesAutoresizingMaskIntoConstraints="NO" id="bU9-if-Vng">
+                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="166F1D17-FBEA-4983-A5F0-112E76C5C5C3" translatesAutoresizingMaskIntoConstraints="NO" id="bU9-if-Vng">
                             <rect key="frame" x="141" y="104" width="38" height="35"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
@@ -76,11 +76,11 @@
                     </connections>
                 </tableView>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0mh-kc-JGG">
-                    <rect key="frame" x="0.0" y="568" width="320" height="48"/>
+                    <rect key="frame" x="0.0" y="568" width="320" height="72"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button autoresizesSubviews="NO" opaque="NO" contentMode="top" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="clip" translatesAutoresizingMaskIntoConstraints="NO" id="9dV-ZH-dq4">
-                            <rect key="frame" x="250" y="-2" width="60" height="50"/>
+                            <rect key="frame" x="252" y="11" width="60" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <rect key="contentStretch" x="0.0" y="0.0" width="0.0" height="0.0"/>
                             <state key="normal" image="send-icon-small"/>
@@ -89,7 +89,7 @@
                             </connections>
                         </button>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pxs-1X-2HW">
-                            <rect key="frame" x="8" y="12" width="242" height="21"/>
+                            <rect key="frame" x="12" y="19" width="242" height="27"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -125,7 +125,7 @@
         </view>
     </objects>
     <resources>
-        <image name="315DC576-46EF-4424-9533-E0D14DB16496" width="41" height="40">
+        <image name="166F1D17-FBEA-4983-A5F0-112E76C5C5C3" width="41" height="40">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOzxYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISksLzU4VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA

@@ -22,7 +22,7 @@
         _showCustomCallout = NO;
         CGRect calloutViewFrame = _calloutView.frame;
         
-        calloutViewFrame.origin = CGPointMake(-_calloutView.frame.size.width / 2 - 8, -_calloutView.frame.size.height - 18);
+        calloutViewFrame.origin = CGPointMake(-_calloutView.frame.size.width / 2 - 8, -_calloutView.frame.size.height/2 - 18);
         _calloutView.frame = calloutViewFrame;
         
         MKPinAnnotationView *pinView = [[MKPinAnnotationView alloc] initWithAnnotation:self.annotation reuseIdentifier:@"compose-pin"];
@@ -50,31 +50,59 @@
 */
 - (void)setShowCustomCallout:(BOOL)showCustomCallout
 {
-    [self setShowCustomCallout:showCustomCallout animated:NO];
+    //[self setShowCustomCallout:showCustomCallout animated:YES];
+    
 }
 
-- (void)setShowCustomCallout:(BOOL)showCustomCallout animated:(BOOL)animated
-{
-    if (_showCustomCallout == showCustomCallout) return;
-    
-    _showCustomCallout = showCustomCallout;
+- (void)showCustomCalloutAnimated:(BOOL)animated {
+    if (_showCustomCallout == YES) return;
+    _showCustomCallout = YES;
     
     void (^animationBlock)(void) = nil;
     void (^completionBlock)(BOOL finished) = nil;
     
     if (_showCustomCallout) {
         self.calloutView.alpha = 0.0f;
+        self.calloutView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.001, 0.001);
+        self.calloutView.layer.anchorPoint = CGPointMake(0.5,1);
+        
         
         animationBlock = ^{
             self.calloutView.alpha = 1.0f;
+            self.calloutView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0);
             [self addSubview:self.calloutView];
             [self bringSubviewToFront:self.calloutView];
         };
         
-    } else {
-        animationBlock = ^{ self.calloutView.alpha = 0.0f; };
-        completionBlock = ^(BOOL finished) { [self.calloutView removeFromSuperview]; };
     }
+    
+    if (animated) {
+        [UIView animateWithDuration:0.2f animations:animationBlock completion:completionBlock];
+    } else {
+        animationBlock();
+        completionBlock(YES);
+    }
+
+}
+
+- (void)hideCustomCalloutAnimated:(BOOL)animated {
+
+    if (_showCustomCallout == NO) return;
+    
+    _showCustomCallout = NO;
+    
+    void (^animationBlock)(void) = nil;
+    void (^completionBlock)(BOOL finished) = nil;
+    
+    animationBlock = ^{
+        self.calloutView.alpha = 0.0f;
+        self.calloutView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.001, 0.001);
+    };
+    completionBlock = ^(BOOL finished) {
+        if (finished) {
+            [self.calloutView removeFromSuperview];
+        }
+    };
     
     if (animated) {
         [UIView animateWithDuration:0.2f animations:animationBlock completion:completionBlock];
@@ -83,7 +111,32 @@
         animationBlock();
         completionBlock(YES);
     }
+    
 }
+
+- (void)removeSelfFromMap {
+    if (_showCustomCallout == NO) return;
+    
+    _showCustomCallout = NO;
+    
+    void (^animationBlock)(void) = nil;
+    void (^completionBlock)(BOOL finished) = nil;
+    
+    animationBlock = ^{
+        self.calloutView.alpha = 0.0f;
+        self.calloutView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.001, 0.001);
+    };
+    completionBlock = ^(BOOL finished) {
+        if (finished) {
+            [self.calloutView removeFromSuperview];
+            [_mapView removeAnnotation:self];
+        }
+    };
+    
+    [UIView animateWithDuration:0.2f animations:animationBlock completion:completionBlock];
+
+}
+
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {

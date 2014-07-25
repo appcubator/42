@@ -30,6 +30,8 @@
 @property (nonatomic, weak) UIButton *leftButton;
 @property (nonatomic, weak) UIButton *rightButton;
 @property (strong, nonatomic) FortyTwoMap *mkMapView;
+@property (nonatomic) BOOL showingComposeAnnotation;
+
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) PersonalPinAnnotation *selfPin;
@@ -40,5 +42,5 @@
 
 
 - (void)showLocationSent:(PFObject *)locationSent;
-    
+
 @end

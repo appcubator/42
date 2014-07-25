@@ -12,6 +12,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 #import <Parse/Parse.h>
 #import <CoreData/CoreData.h>
 #import <AddressBook/AddressBook.h>
+#import "Store.h"
 
 #import "ImportContactsOperation.h"
 #import "Crittercism.h"
@@ -28,6 +29,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 
     if (![super init]) return nil;
     self.operationQueue = [[NSOperationQueue alloc] init];
+    self.store = [[Store alloc] init];
     return self;
 }
 
@@ -236,10 +238,9 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 }
 
 - (NSArray *)getUnregisteredContacts {
+
     
-    return @[];
-    
-    NSManagedObjectContext *moc = [self managedObjectContext];
+    NSManagedObjectContext *moc = [self.store mainManagedObjectContext];
     NSEntityDescription *entityDescription = [NSEntityDescription
                                               entityForName:@"ContactModel" inManagedObjectContext:moc];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
@@ -295,9 +296,8 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
 - (NSArray *)getRegisteredContacts {
     
-    return @[];
 
-    NSManagedObjectContext *moc = [self managedObjectContext];
+    NSManagedObjectContext *moc = [self.store mainManagedObjectContext];
     NSEntityDescription *entityDescription = [NSEntityDescription
                                               entityForName:@"ContactModel" inManagedObjectContext:moc];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
@@ -409,9 +409,9 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
              NSLog(@"%f",progress);
          }];
     };
+
     [self.operationQueue addOperation:operation];
-    
-//    NSLog(@"Queue operations count = %lu",(unsigned long)[self.operationQueue isExecuting]);
+    NSLog(@"Queue operations count = %@",[self.operationQueue operations]);
 //    NSLog(@"Queue isSuspended = %d",[self.operationQueue isSuspended]);
 //    NSLog(@"Operation isCancelled? = %d",[self.operationQueue isCancelled]);
 //    NSLog(@"Operation isConcurrent? = %d",[self.operationQueue isConcurrent]);

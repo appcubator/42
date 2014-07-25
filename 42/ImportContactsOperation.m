@@ -42,7 +42,7 @@ static const int ImportBatchSize = 200;
     
     [self.context performBlockAndWait:^
      {
-         [self import];
+        [self import];
      }];
 }
 

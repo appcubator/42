@@ -132,6 +132,13 @@
 
 - (void) centerMap {
     MKCoordinateRegion region = _mkMapView.region;
+    // resize it a bit, so user sees precisely where they're saying they are
+    // TODO make this a method of the view
+    MKCoordinateSpan span = region.span;
+    span.longitudeDelta = 0.00685;
+    span.latitudeDelta = 0.008;
+    region.span = span;
+    region = [_mkMapView regionThatFits:region];
     region.center = _locationManager.location.coordinate;
     [_mkMapView setRegion:region animated:YES];
 }

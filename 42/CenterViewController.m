@@ -35,6 +35,12 @@
     if (self) {
         _friendPins = [[NSMutableArray alloc] initWithObjects:nil count:0];
         _showingComposeAnnotation = NO;
+
+        _locationManager = [[CLLocationManager alloc] init];
+        _locationManager.delegate = self;
+        _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        // Set a movement threshold for new events.
+        _locationManager.distanceFilter = kCLLocationAccuracyNearestTenMeters;
     }
     
     return self;
@@ -52,8 +58,7 @@
 
     _composePin = [[ComposePinAnnotation alloc] initWithMapView:_mkMapView];
     
-    _locationManager = [[CLLocationManager alloc] init];
-    _locationManager.delegate = self;
+
     
 
     [mapView.flagButton addTarget:self action:@selector(btnDropFlag:) forControlEvents:UIControlEventTouchUpInside];
@@ -96,18 +101,10 @@
 #pragma mark - CLLocationManagerDelegate methods and helpers
 
 - (void)startStandardUpdates {
-	if (nil == _locationManager) {
-		_locationManager = [[CLLocationManager alloc] init];
-	}
-    
-	_locationManager.delegate = self;
-	_locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    
-	// Set a movement threshold for new events.
-	_locationManager.distanceFilter = kCLLocationAccuracyNearestTenMeters;
+
 	[_locationManager startUpdatingLocation];
     
-	CLLocation *currentLocation = _locationManager.location;
+	CLLocation *currentLocation = [_locationManager location];
 	if (currentLocation) {
         [self locationDidChange:currentLocation];
 	}
@@ -156,36 +153,45 @@
     [_mkMapView selectAnnotation:_composePin animated:YES];
     _showingComposeAnnotation = YES;
 
-	PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
-	PFUser *user = [PFUser currentUser];
 
-
-    // update the propery on AppDelegat
+    // update the propery on AppDelegate
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [appDelegate setCurrentLocation: _locationManager.location];
     
 	// Stitch together a postObject and send this async to Parse
+	PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
+	PFUser *user = [PFUser currentUser];
 	PFObject *postObject = [PFObject objectWithClassName:@"Checkin"];
 	[postObject setObject:user forKey:@"user"];
 	[postObject setObject:currentPoint forKey:@"location"];
+
 	// Use PFACL to restrict future modifications to this object.
-	
     PFACL *readOnlyACL = [PFACL ACL];
 	[readOnlyACL setPublicReadAccess:YES];
 	[readOnlyACL setPublicWriteAccess:NO];
 	[postObject setACL:readOnlyACL];
 	[postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
 		if (error) {
-			NSLog(@"Couldn't save!");
-			UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[[error userInfo] objectForKey:@"error"] message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
-			[alertView show];
-			return;
+            NSLog(@"Error: %@", [error userInfo][@"error"]);
+            return;
+            // this code works but i'm commenting out b/c the user will likely get the message elsewhere.
+            // and Since this is an async, silent request, let's be silent about the error too.
+            
+            /* Internet connection error handler
+            if ([error code] == kPFErrorConnectionFailed) {
+                NSString *errorMsg = @"Please check your internet connection and try again.";
+                NSLog(errorMsg);
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:errorMsg delegate:self cancelButtonTitle:nil otherButtonTitles:@"Ok", nil];
+                [alertView show];
+            } else if (error) {
+                NSLog(@"Error: %@", [error userInfo][@"error"]);
+            }
+             */
+
 		}
-		if (succeeded) {
-			NSLog(@"Successfully saved!");
-		} else {
-			NSLog(@"Failed to save.");
-		}
+
+        NSLog(@"Successfully saved checkin.");
+        return;
 	}];
 
 }

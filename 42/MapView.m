@@ -39,6 +39,7 @@
         _sendToPanel = [[UIView alloc] init];
         
         _sendLocationMode = NO;
+        [self setKeyboardIsOut:NO];
     }
 
     return self;
@@ -151,6 +152,7 @@
 
 - (void) noticeShowKeyboard:(NSNotification *)inNotification {
     
+    [self setKeyboardIsOut:YES];
     NSDictionary* keyboardInfo = [inNotification userInfo];
     NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
     CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
@@ -164,14 +166,13 @@
                      }
                      completion:^(BOOL finished) { }];
     
-    MKCoordinateRegion region = _mkMapView.region;
+    MKCoordinateRegion region = [_mkMapView region];
     region.center.latitude = region.center.latitude - 0.0015;
     [_mkMapView setRegion:region animated:NO];
-
 }
 
 -(void) noticeHideKeyboard:(NSNotification *)inNotification {
-
+    [self setKeyboardIsOut:NO];
     [UIView animateWithDuration:ANIMATION_TIME delay:0 options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          if (_sendLocationMode) {

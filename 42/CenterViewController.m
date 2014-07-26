@@ -222,10 +222,11 @@
 
 }
 
+
 - (void)clearLocation
 {
-    if (_showingComposeAnnotation == NO) return;
-    _showingComposeAnnotation = NO;
+    if (_showingComposeAnnotation == NO)
+        return;
 
     MapView *view = (MapView *)self.view;
     
@@ -241,7 +242,8 @@
 
     [_composePin.calloutView.textField setText:@""];
     [_composePin removeSelfFromMap];
-    //[_mkMapView removeAnnotation:_composePin];
+
+    _showingComposeAnnotation = NO;
 
 }
 
@@ -312,7 +314,12 @@
 }
 
 - (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
-    if(!_showingComposeAnnotation) return;
+    if(!_showingComposeAnnotation)
+        return;
+    
+    if ([(MapView*)[self view] keyboardIsOut] == YES)
+        return;
+
     [self clearLocation];
 }
 

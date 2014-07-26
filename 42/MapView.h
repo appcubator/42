@@ -22,6 +22,7 @@
 @property (nonatomic, strong) UIButton* sendToButton;
 
 @property (nonatomic) BOOL sendLocationMode;
+@property (nonatomic) BOOL keyboardIsOut;
 
 - (void)showSendPanel;
 - (void)hideSendPanel;

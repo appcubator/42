@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import <CoreData/CoreData.h>
 #import "SettingsViewController.h"
+#import "Store.h"
 
 @implementation RightPanelViewController
 
@@ -247,8 +248,36 @@
         [follow setObject:[NSDate date] forKey:@"date"];
         [follow saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Great" message:@"User is added." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"OK", nil];
+                NSString *msg = [NSString stringWithFormat:@"You are following %@ now", [otherUser username]];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Great" message:msg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"OK", nil];
                 [alert show];
+                
+                NSManagedObjectContext *context = [[Store alloc] init].mainManagedObjectContext;
+                NSEntityDescription *entityDescription = [NSEntityDescription
+                                                          entityForName:@"ContactModel" inManagedObjectContext:context];
+                NSFetchRequest *request = [[NSFetchRequest alloc] init];
+                [request setEntity:entityDescription];
+                
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                                          @"phone = %@",otherUser[@"phone"]];
+                
+                [request setPredicate:predicate];
+                
+                NSError *error = nil;
+                NSArray *array = [context executeFetchRequest:request error:&error];
+                if ([array count] > 0) {
+                    NSManagedObject* userObject = [array objectAtIndex:0];
+                    [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"isFollowed"];
+                }
+                
+                [context save:&error];
+                
+                if (error != nil) {
+                    NSLog(@"%@",error);
+                }
+                
+                [_tableView reloadData];
+                
             }
             else {
                 

@@ -80,7 +80,7 @@
         [UIView animateWithDuration:0.2f animations:animationBlock completion:completionBlock];
     } else {
         animationBlock();
-        completionBlock(YES);
+        //completionBlock(YES);
     }
 
 }

@@ -29,18 +29,17 @@
 		[center addObserver:self selector:@selector(noticeShowKeyboard:) name:UIKeyboardDidShowNotification object:nil];
 		[center addObserver:self selector:@selector(noticeHideKeyboard:) name:UIKeyboardDidHideNotification object:nil];
 
+        _leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _flagButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        _mkMapView = [[FortyTwoMap alloc] init];
+        
+        _sendToButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        _sendToPanel = [[UIView alloc] init];
+        
+        _sendLocationMode = NO;
     }
-    
-    _leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _flagButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    _mkMapView = [[FortyTwoMap alloc] init];
-    
-    _sendToButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    _sendToPanel = [[UIView alloc] init];
-    
-    _sendLocationMode = NO;
 
     return self;
 }

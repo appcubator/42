@@ -170,8 +170,10 @@ static const int ImportBatchSize = 200;
     }
     
     [self queryNewContactsFor42Activity: newContacts];
-    
-    //[self queryAllNumbersFor42activity];
+    [self queryAllNumbersFor42activity];
+    [self queryUsersForFollowing];
+    //queryusersforfollowed
+
     self.progressCallback(1);
     
 }
@@ -208,26 +210,97 @@ static const int ImportBatchSize = 200;
 - (void)queryAllNumbersFor42activity
 {
     /* NEED TO PERIODICALLY DO THIS (once every 2 days?) */
-//    NSManagedObjectContext *moc = [self managedObjectContext];
-//    NSEntityDescription *entityDescription = [NSEntityDescription
-//                                              entityForName:@"ContactModel" inManagedObjectContext:moc];
-//    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-//    [request setEntity:entityDescription];
-//    
-//    NSError *error = nil;
-//    NSArray *array = [moc executeFetchRequest:request error:&error];
-//    if (array == nil)
-//    {
-//        NSLog(@"%@",error);
-//    }
-//    
-//    NSMutableArray *contactNumbers = [array valueForKey:@"phone"];
-//    
-//    PFQuery *query = [PFUser query];
-//    [query whereKey:@"phone" containedIn:contactNumbers];
-//    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-//        [self updateContactsWithUsers: objects];
-//    }];
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSDate *currentDate = [NSDate date];
+    NSDate *previousCheck = [prefs objectForKey:@"previousQueryAllNumbersFor42activity"];
+    
+    NSTimeInterval interval = [currentDate timeIntervalSinceDate:previousCheck];
+    int second = 1;
+    int minute = second*60;
+    int hour = minute*60;
+    int day = hour*24;
+    // interval can be before (negative) or after (positive)
+    int num = abs(interval);
+    num /= day;
+    
+    if (previousCheck == nil || num >= 2) {
+
+        NSManagedObjectContext *moc = self.context;
+        NSEntityDescription *entityDescription = [NSEntityDescription
+                                                  entityForName:@"ContactModel" inManagedObjectContext:moc];
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        [request setEntity:entityDescription];
+        
+        NSError *error = nil;
+        NSArray *array = [moc executeFetchRequest:request error:&error];
+        if (array == nil) { NSLog(@"%@",error); }
+        
+        NSMutableArray *contactNumbers = [array valueForKey:@"phone"];
+        
+        PFQuery *query = [PFUser query];
+        [query whereKey:@"phone" containedIn:contactNumbers];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            [self updateContactsWithUsers: objects];
+        }];
+        
+        [prefs setObject:currentDate forKey:@"previousQueryAllNumbersFor42activity"];
+        [prefs synchronize];
+
+    }
+    
+}
+
+- (void)queryUsersForFollowing {
+    
+    // Do any additional setup after loading the view from its nib.
+    PFQuery *query = [PFQuery queryWithClassName:@"Follow"];
+    [query includeKey:@"to"];
+    [query whereKey:@"from" equalTo: [PFUser currentUser]];
+    query.cachePolicy = kPFCachePolicyNetworkElseCache;
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            [self updateContactsWithIsFollowed:objects];
+        } else {
+            // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    }];
+
+}
+
+- (void)updateContactsWithIsFollowed:(NSArray *)array {
+    
+    for (PFObject *obj in array) {
+        PFUser *user = obj[@"to"];
+        NSManagedObjectContext *context = self.context;
+        NSEntityDescription *entityDescription = [NSEntityDescription
+                                                  entityForName:@"ContactModel" inManagedObjectContext:context];
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        [request setEntity:entityDescription];
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                                  @"phone = %@",user[@"phone"]];
+
+        [request setPredicate:predicate];
+        
+        NSError *error = nil;
+        NSArray *array = [context executeFetchRequest:request error:&error];
+        if ([array count] > 0) {
+            NSManagedObject* userObject = [array objectAtIndex:0];
+            [userObject setValue:user.objectId forKey:@"user_id"];
+            [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"isFollowed"];
+            [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"is42user"];
+        }
+        
+        [context save:&error];
+        
+        if (error != nil) {
+            NSLog(@"%@",error);
+        }
+    }
+
+    self.progressCallback(3);
 }
 
 - (void)updateContactsWithUsers:(NSArray *)array {
@@ -239,7 +312,6 @@ static const int ImportBatchSize = 200;
         NSFetchRequest *request = [[NSFetchRequest alloc] init];
         [request setEntity:entityDescription];
         
-        // Set example predicate and sort orderings ...
         NSPredicate *predicate = [NSPredicate predicateWithFormat:
                                   @"phone = %@",[user valueForKey:@"phone"]];
         [request setPredicate:predicate];

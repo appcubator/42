@@ -27,9 +27,11 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 - (id)init
 {
 
-    if (![super init]) return nil;
-    self.operationQueue = [[NSOperationQueue alloc] init];
-    self.store = [[Store alloc] init];
+    self = [super init];
+    if (self) {
+        self.operationQueue = [[NSOperationQueue alloc] init];
+        self.store = [[Store alloc] init];
+    }
     return self;
 }
 
@@ -355,50 +357,6 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
 }
 
-
-- (void)checkForFollowing {
-    PFQuery *query = [PFQuery queryWithClassName:@"Follow"];
-    [query includeKey:@"to"];
-    [query whereKey:@"from" equalTo: [PFUser currentUser]];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *arr, NSError *error) {
-        if (!error) {
-            // The find succeeded.
-            for (PFObject *obj in arr) {
-                PFUser *user = obj[@"to"];
-                
-                NSManagedObjectContext *context = [self managedObjectContext];
-                NSEntityDescription *entityDescription = [NSEntityDescription
-                                                          entityForName:@"ContactModel" inManagedObjectContext:context];
-                NSFetchRequest *request = [[NSFetchRequest alloc] init];
-                [request setEntity:entityDescription];
-                
-                // Set example predicate and sort orderings ...
-                NSPredicate *predicate = [NSPredicate predicateWithFormat:
-                                          @"username = %@",[user username]];
-                [request setPredicate:predicate];
-                
-                NSError *error = nil;
-                NSArray *array = [context executeFetchRequest:request error:&error];
-                if ([array count] > 0) {
-                    NSManagedObject* userObject = [array objectAtIndex:0];
-                    [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"isFollowed"];
-                    [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"is42user"];
-                }
-                
-                [context save:&error];
-                
-                if (error != nil) {
-                    NSLog(@"%@",error);
-                }
-            }
-
-        } else {
-            // Log details of the failure
-            NSLog(@"Error: %@ %@", error, [error userInfo]);
-        }
-    }];
-}
-
 - (void)updateCachedContacts
 {
     
@@ -409,7 +367,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^
          {
              NSLog(@"%f",progress);
-             if (progress == 1 || progress == 2) {
+             if (progress == 1 || progress == 2 || progress == 3) {
                  [[NSNotificationCenter defaultCenter] postNotificationName: kUpdatedContactsBook
                                                                      object:nil];
              }

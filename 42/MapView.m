@@ -24,10 +24,10 @@
                                            [[UIScreen mainScreen] applicationFrame].size.height)];
     if (self) {
         // Initialization code
-        
+            
         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-		[center addObserver:self selector:@selector(noticeShowKeyboard:) name:UIKeyboardDidShowNotification object:nil];
-		[center addObserver:self selector:@selector(noticeHideKeyboard:) name:UIKeyboardDidHideNotification object:nil];
+		[center addObserver:self selector:@selector(noticeShowKeyboard:) name:UIKeyboardWillShowNotification object:nil];
+		[center addObserver:self selector:@selector(noticeHideKeyboard:) name:UIKeyboardWillHideNotification object:nil];
 
         _leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -157,7 +157,9 @@
     NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
     CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
 
-    [UIView animateWithDuration:ANIMATION_TIME delay:0 options:UIViewAnimationOptionBeginFromCurrentState
+    [UIView animateWithDuration:.32
+                          delay:0
+                        options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          
                      
@@ -173,7 +175,9 @@
 
 -(void) noticeHideKeyboard:(NSNotification *)inNotification {
     [self setKeyboardIsOut:NO];
-    [UIView animateWithDuration:ANIMATION_TIME delay:0 options:UIViewAnimationOptionBeginFromCurrentState
+    [UIView animateWithDuration:.32
+                          delay:0
+                        options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          if (_sendLocationMode) {
                              CGRect newRect = CGRectMake(0, self.superview.frame.size.height - _sendToPanel.frame.size.height, _sendToPanel.frame.size.width, _sendToPanel.frame.size.height);

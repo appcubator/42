@@ -54,7 +54,7 @@
 }
 
 - (IBAction)btnBack:(id)sender {
-    [self.navigationController popToRootViewControllerAnimated:NO];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark -

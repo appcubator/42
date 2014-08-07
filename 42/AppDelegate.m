@@ -208,10 +208,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
 - (void)sendLocationTo:(NSMutableArray *)receivers withBlock:(void (^)(void))callbackBlock
 {
-    
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"locationSent" object:self];
-    
+
     NSMutableArray *locationSentList = [[NSMutableArray alloc] init];
     PFUser *currentUser = [PFUser currentUser];
     
@@ -241,6 +238,8 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
             callbackBlock();
         }
     }];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"locationSent" object:self];
 }
 
 - (NSArray *)getUnregisteredContacts {

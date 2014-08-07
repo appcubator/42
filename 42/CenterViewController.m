@@ -97,7 +97,6 @@
     [_mkMapView setShowsUserLocation:YES];
 }
 
-
 #pragma mark - CLLocationManagerDelegate methods and helpers
 
 - (void)startStandardUpdates {

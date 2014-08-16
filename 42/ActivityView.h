@@ -13,4 +13,7 @@
 @property (nonatomic, strong) UILabel *label;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
+- (void)disappearInSeconds: (double)seconds;
+- (void)setText:(NSString *)text;
+
 @end

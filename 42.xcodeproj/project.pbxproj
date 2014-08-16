@@ -15,6 +15,7 @@
 		CE1B929519359793001489C8 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1B929319359793001489C8 /* SettingsViewController.m */; };
 		CE1B929619359793001489C8 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE1B929419359793001489C8 /* SettingsViewController.xib */; };
 		CE1B92991936FED5001489C8 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1B92981936FED5001489C8 /* AddressBookUI.framework */; };
+		CE2036551994778B009F46BA /* SearchCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE2036541994778B009F46BA /* SearchCellView.xib */; };
 		CE4ABAB9194BD5A2005D2BA2 /* FortyTwoMap.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4ABAB8194BD5A2005D2BA2 /* FortyTwoMap.m */; };
 		CE4ABABC195A34A2005D2BA2 /* UIButtonWithData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4ABABB195A34A2005D2BA2 /* UIButtonWithData.m */; };
 		CE4ABAC0195CF26A005D2BA2 /* UserVerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4ABABE195CF26A005D2BA2 /* UserVerificationViewController.m */; };
@@ -100,6 +101,7 @@
 		CE1B929319359793001489C8 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		CE1B929419359793001489C8 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
 		CE1B92981936FED5001489C8 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		CE2036541994778B009F46BA /* SearchCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchCellView.xib; sourceTree = "<group>"; };
 		CE4ABAB7194BD5A2005D2BA2 /* FortyTwoMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FortyTwoMap.h; sourceTree = "<group>"; };
 		CE4ABAB8194BD5A2005D2BA2 /* FortyTwoMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FortyTwoMap.m; sourceTree = "<group>"; };
 		CE4ABABA195A34A2005D2BA2 /* UIButtonWithData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIButtonWithData.h; sourceTree = "<group>"; };
@@ -388,6 +390,7 @@
 				CEA9C9B019478F8C00D0785E /* ComposeCalloutView.m */,
 				CE4ABABF195CF26A005D2BA2 /* UserVerificationViewController.xib */,
 				CEAD292C196B87B6009947FF /* GenericWebViewController.xib */,
+				CE2036541994778B009F46BA /* SearchCellView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -464,6 +467,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = Appcubator;
 				TargetAttributes = {
+					CEE97421192DA82800494F47 = {
+						DevelopmentTeam = H84TYMYF4U;
+					};
 					CEE97442192DA82800494F47 = {
 						TestTargetID = CEE97421192DA82800494F47;
 					};
@@ -507,6 +513,7 @@
 				CE84F0F0193819E100AC6AE3 /* ContactCellView.xib in Resources */,
 				CEE9743E192DA82800494F47 /* Images.xcassets in Resources */,
 				CEE97430192DA82800494F47 /* InfoPlist.strings in Resources */,
+				CE2036551994778B009F46BA /* SearchCellView.xib in Resources */,
 				CECA15A7193F804400EB2343 /* Arial Rounded Bold.ttf in Resources */,
 				CEE974AA19310C0C00494F47 /* SendToCellView.xib in Resources */,
 				CEE97462192DACED00494F47 /* WelcomeView.xib in Resources */,
@@ -644,8 +651,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Ilteris Kaan Canberk (XCQK96ATSZ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ilteris Kaan Canberk (XCQK96ATSZ)";
+				CODE_SIGN_IDENTITY = "Apple Production IOS Push Services: com.appcubator.42";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Production IOS Push Services: com.appcubator.42";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -685,8 +692,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Ilteris Canberk (H84TYMYF4U)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Ilteris Canberk (H84TYMYF4U)";
+				CODE_SIGN_IDENTITY = "Apple Production IOS Push Services: com.appcubator.42";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Production IOS Push Services: com.appcubator.42";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -711,6 +718,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -720,6 +728,7 @@
 				INFOPLIST_FILE = "42/42-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_ENV = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -731,7 +740,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Ilteris Canberk (H84TYMYF4U)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -741,7 +751,7 @@
 				INFOPLIST_FILE = "42/42-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0712573D-ECDE-438F-B71B-89B53A5212DD";
+				PROVISIONING_PROFILE = "";
 				TEST_ENV = 1;
 				WRAPPER_EXTENSION = app;
 			};

@@ -137,9 +137,7 @@
 	_loginButton.enabled = NO;
     
 	ActivityView *activityView = [[ActivityView alloc] initWithFrame:CGRectMake(0.f, 0.f, self.view.frame.size.width, self.view.frame.size.height)];
-	UILabel *label = activityView.label;
-	label.text = @"Logging in";
-	label.font = [UIFont boldSystemFontOfSize:20.f];
+	[activityView setText: @"Logging in"];
 	[activityView.activityIndicator startAnimating];
 	[activityView layoutSubviews];
     

@@ -10,7 +10,7 @@
 
 @implementation FriendPinAnnotation
 
-- (id)initWithCoordinate:(CLLocationCoordinate2D)coord name:(NSString *)name u_id:(NSString *)u_id when:(NSDate *)time message:(NSString *)message
+- (id)initWithCoordinate:(CLLocationCoordinate2D)coord name:(NSString *)name o_id:(NSString *)u_id when:(NSDate *)time message:(NSString *)message
 {
     self = [super init];
     if(self) {
@@ -36,7 +36,7 @@
 }
 
 - (id)init {
-    return [self initWithCoordinate:CLLocationCoordinate2DMake(0, 0) name:@"Unknown" u_id:0 when:[NSDate date] message:@""];
+    return [self initWithCoordinate:CLLocationCoordinate2DMake(0, 0) name:@"Unknown" o_id:0 when:[NSDate date] message:@""];
 }
 
 - (void)updateLocation:(CLLocation *)loc {

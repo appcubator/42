@@ -86,32 +86,50 @@ Parse.Cloud.define("validateSMSKey", function(request, response) {
     }
 });
 
+Parse.Cloud.define("searchUsers", function(request, response) {
+  
+  var searchQ = request.params.searchQuery;
+
+  var query = new Parse.Query(Parse.User);
+  query.startsWith("username", searchQ); // find users that match
+  query.find({
+      success: function (users) {
+          response.success(users);
+      },
+      error: function (error) {
+          //Show if no user was found to match
+          console.log("Search error:" + error);
+      }
+  });
+
+});
+
 Parse.Cloud.afterSave("LocationSent", function(request) {
 
   // Our "LocationSent" class has a "text" key with the body of the comment itself
   var sendToUser = request.object.get('to');
+  console.log("Sending to: " + sendToUser);
   var fromUser   = request.object.get('from');
   console.log(request.object.id);
 
   request.object.get('from').fetch().then(function(fromUser) {
-	var fromUserName = fromUser.get('username');  
-	var pushQuery = new Parse.Query(Parse.Installation);
-  pushQuery.equalTo('user', sendToUser);
-    
-  Parse.Push.send({
-   	where: pushQuery, // Set our Installation query
-    	data: {
-     	  alert: fromUserName + " shared location with you!",
-        objectId: request.object.id
-    	}
-  	},
-	  {
-    	success: function() { },
-    	error: function(error) {
-      	throw "Got an error " + error.code + " : " + error.message;
-    	}
-  	});
+    var fromUserName = fromUser.get('username');  
+    var pushQuery = new Parse.Query(Parse.Installation);
+    pushQuery.equalTo('user', sendToUser);
+      
+    Parse.Push.send({
+      where: pushQuery, // Set our Installation query
+        data: {
+          alert: fromUserName + " shared location with you!",
+          objectId: request.object.id
+        }
+      },
+      {
+        success: function() { console.log("Push notification sent.")},
+        error: function(error) {
+          throw "Got an error " + error.code + " : " + error.message;
+        }
+      }
+    );
   });
 });
-
-

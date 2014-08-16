@@ -283,7 +283,7 @@
         if (rawMinutes < 42) {
             CLLocationCoordinate2D newCoordinate = CLLocationCoordinate2DMake(location.latitude, location.longitude);
         
-            FriendPinAnnotation *newPin = [[FriendPinAnnotation alloc] initWithCoordinate:newCoordinate name:user.username u_id:locationSent.objectId when:when message:message];
+            FriendPinAnnotation *newPin = [[FriendPinAnnotation alloc] initWithCoordinate:newCoordinate name:user.username o_id:locationSent.objectId when:when message:message];
             newPin.userId = user.objectId;
         
             [_friendPins insertObject:newPin atIndex:0];
@@ -347,6 +347,7 @@
         UIButtonWithData *msgButton = [UIButtonWithData buttonWithType:UIButtonTypeInfoLight];
         
         AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        
         msgButton.extraData = [[appDelegate getUserWithId:newAnnotation.userId] valueForKey:@"phone"];
 
         [msgButton setImage:[UIImage imageNamed:@"text-button"] forState:UIControlStateNormal];
@@ -386,7 +387,7 @@
         return;
     }
     
-    if ([mobileNumber isEqual:nil]) {
+    if (mobileNumber == nil) {
         UIAlertView *warningAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"This user does not have a number!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [warningAlert show];
         return;

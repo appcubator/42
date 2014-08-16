@@ -102,12 +102,19 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 - (void)application:(UIApplication *)application
 didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
     // Store the deviceToken in the current installation and save it to Parse.
-    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-    [currentInstallation setDeviceTokenFromData:newDeviceToken];
     if ([PFUser currentUser]) {
-        [currentInstallation setObject:[PFUser currentUser] forKey:@"user"];
+        
+        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+        [currentInstallation setDeviceTokenFromData:newDeviceToken];
+        if ([PFUser currentUser]) {
+            [currentInstallation setObject:[PFUser currentUser] forKey:@"user"];
+        }
+        [currentInstallation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (error) {
+                NSLog(@"%@",error);
+            }
+        }];
     }
-    [currentInstallation saveInBackground];
 
 }
 
@@ -115,11 +122,11 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
 didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSLog(@"%@",userInfo);
     
-    if ( application.applicationState == UIApplicationStateActive ) {
-        // already on the foreground
-    }
-    else {
-        
+//    if ( application.applicationState == UIApplicationStateActive ) {
+//        // already on the foreground
+//    }
+//    else {
+    
         NSString *objectId = [userInfo valueForKey:@"objectId"];
         
         if (objectId != nil) {
@@ -135,8 +142,8 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         else {
             [self updateLocationSent];
         }
-
-    }
+//
+//    }
 
 }
 							
@@ -181,6 +188,15 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
     self.viewController = navController;
     self.window.rootViewController = self.viewController;
+    
+    // ****************************************************************************
+    // Register for push notifications
+    
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+     UIRemoteNotificationTypeBadge |
+     UIRemoteNotificationTypeAlert |
+     UIRemoteNotificationTypeSound];
+
 }
 
 
@@ -270,7 +286,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     return array;
 }
 
-- (NSObject *)getUserWithId: (NSString *)objectId {
+- (NSManagedObject *)getUserWithId: (NSString *)objectId {
     
     NSLog(@"%@",objectId);
     

@@ -9,7 +9,9 @@ static CGFloat const kPAWActivityViewActivityIndicatorPadding = 10.f;
 
 #import "ActivityView.h"
 
-@implementation ActivityView
+@implementation ActivityView {
+    NSTimer *timer;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -29,10 +31,8 @@ static CGFloat const kPAWActivityViewActivityIndicatorPadding = 10.f;
     return self;
 }
 
-
-- (void)setLabel:(UILabel *)aLabel {
-	[_label removeFromSuperview];
-	[self addSubview:aLabel];
+- (void)setText:(NSString *)text {
+    _label.text = text;
 }
 
 - (void)layoutSubviews {
@@ -42,6 +42,23 @@ static CGFloat const kPAWActivityViewActivityIndicatorPadding = 10.f;
 	self.label.frame = CGRectIntegral(self.label.frame);
     
 	self.activityIndicator.center = CGPointMake(self.label.frame.origin.x - (self.activityIndicator.frame.size.width / 2) - kPAWActivityViewActivityIndicatorPadding, self.label.frame.origin.y + (self.label.frame.size.height / 2));
+}
+
+- (void)disappearInSeconds: (double)seconds {
+    
+    NSTimeInterval interval = seconds;
+    timer=[NSTimer scheduledTimerWithTimeInterval:interval
+                                           target:self
+                                         selector:@selector(timerFired)
+                                         userInfo:nil
+                                          repeats:NO];
+
+}
+
+-(void)timerFired
+{
+    [self removeFromSuperview];
+    [timer invalidate];
 }
 
 @end

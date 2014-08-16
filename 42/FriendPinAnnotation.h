@@ -20,7 +20,7 @@
 @property (nonatomic, strong) NSString *name;
 
 // add an init method so you can set the coordinate property on startup
-- (id)initWithCoordinate:(CLLocationCoordinate2D)coord name:(NSString *)name u_id:(NSString *)u_id when:(NSDate *)time message:(NSString *)message;
+- (id)initWithCoordinate:(CLLocationCoordinate2D)coord name:(NSString *)name o_id:(NSString *)u_id when:(NSDate *)time message:(NSString *)message;
 - (id)initWithLocation:(CLLocation *)location;
 - (void)updateLocation:(CLLocation *)loc;
 - (void)updateTime:(NSDate *)time;

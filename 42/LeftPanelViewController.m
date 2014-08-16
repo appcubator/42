@@ -13,6 +13,8 @@
 
 @implementation LeftPanelViewController
 
+BOOL updatingAnimRunning = NO;
+
 #pragma mark -
 #pragma mark View Did Load/Unload
 
@@ -160,18 +162,34 @@
     return _cellMain;
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGPoint offset = scrollView.contentOffset;
+    float y = offset.y;
+    
+    if (!updatingAnimRunning && y < 1) {
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        [appDelegate updateLocationSent];
+    }
+
+}
+
+- (void)animationDidStart:(CAAnimation *)anim {
+    updatingAnimRunning = YES;
+}
+
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    updatingAnimRunning = NO;
+}
+
+
 - (void)updatingLocationSent
 {
-
-    // _refreshButton.transform = CGAffineTransformMakeRotation(M_PI / -4);
-   // [_refreshButton setTransform:CGAffineTransformMakeRotation(M_PI / -2)];
-    
-    
     _refreshAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
     _refreshAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
     _refreshAnimation.toValue = [NSNumber numberWithFloat: 2*M_PI];
     _refreshAnimation.duration = 1.0f;
     _refreshAnimation.removedOnCompletion = NO;
+    _refreshAnimation.delegate = self;
     [_refreshButton.layer addAnimation:_refreshAnimation forKey:@"MyAnimation"];
     
 }

@@ -41,6 +41,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [self becomeFirstResponder];
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
@@ -50,11 +51,16 @@
 	[super viewDidAppear:animated];
 }
 
+-(BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
 #pragma mark -
 #pragma mark View Will/Did Disappear
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [self resignFirstResponder];
 	[super viewWillDisappear:animated];
 }
 
@@ -62,6 +68,7 @@
 {
 	[super viewDidDisappear:animated];
 }
+
 
 #pragma mark -
 #pragma mark Setup View
@@ -298,6 +305,31 @@
                      }];
     
     _centerPanelPosition = 0;
+}
+
+#pragma mark -
+#pragma mark Shake Handler
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
+{
+
+    if (motion == UIEventSubtypeMotionShake )
+    {
+        NSData *data = [@"{\"objectId\":\"YcYCSbMOrL\", \"alert\":\"icanb sent you notif.\"}" dataUsingEncoding:NSUTF8StringEncoding];
+
+        NSError *e;
+        NSDictionary *testNotification = [NSJSONSerialization
+                                          JSONObjectWithData:data
+                                          options:NSJSONReadingMutableContainers
+                                          error:&e];
+        NSLog(@"%@",e);
+        [[[UIApplication sharedApplication] delegate]
+         application:[UIApplication sharedApplication]
+         didReceiveRemoteNotification:testNotification];
+        
+        // User was shaking the device. Post a notification named "shake".
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"shake" object:self];
+    }
 }
 
 #pragma mark -

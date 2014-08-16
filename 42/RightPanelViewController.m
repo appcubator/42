@@ -2,21 +2,29 @@
 //  RightPanelViewController.m
 //  SlideoutNavigation
 //
-//  Created by Tammy Coron on 1/10/13.
-//  Copyright (c) 2013 Tammy L Coron. All rights reserved.
 //
 
 #import "RightPanelViewController.h"
+
 #import <Parse/Parse.h>
 #import <MessageUI/MessageUI.h>
+#import <CoreData/CoreData.h>
+
 #import "MainViewController.h"
 #import "UIButtonForRow.h"
+#import "ActivityView.h"
 #import "AppDelegate.h"
-#import <CoreData/CoreData.h>
 #import "SettingsViewController.h"
 #import "Store.h"
 
 @implementation RightPanelViewController
+
+static int ROW_HEIGHT = 52;
+static int ROW_HEIGHT_SEARCH = 44;
+BOOL isShowingSearchTable = NO;
+BOOL tempScrollLock = NO;
+NSString *searchString = @"";
+NSArray *searchResults = nil;
 
 - (NSArray *)getLettersArray
 {
@@ -27,16 +35,50 @@
 
 - (NSArray *)getSectionsArray
 {
-    NSArray *sectionsArray = @[@"Active Users"];
+    NSArray *sectionsArray = @[@"Search", @"Active Users"];
     sectionsArray = [sectionsArray arrayByAddingObjectsFromArray:[NSArray arrayWithArray:[self getLettersArray]]];
+    
+    if (searchResults != nil) {
+        sectionsArray = [sectionsArray arrayByAddingObject:@"Search Results"];
+    }
+
     return sectionsArray;
 }
 
 - (NSArray *)getSectionTitlesArray
 {
-    NSArray *sectionsArray = @[@"*"];
+    NSArray *sectionsArray = @[@"+",@"*"];
     sectionsArray = [sectionsArray arrayByAddingObjectsFromArray:[NSArray arrayWithArray:[self getLettersArray]]];
+    
+    if (searchResults != nil) {
+        sectionsArray = [sectionsArray arrayByAddingObject:@"*"];
+    }
+
     return sectionsArray;
+}
+
+- (NSMutableDictionary *)getContactsDict {
+//    _dictOfContacts = [self getContacts];
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    
+    if (isShowingSearchTable) {
+        
+        for(id key in [_dictOfContacts allKeys]) {
+            
+            NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"name contains[c] %@", searchString];
+            NSArray *filteredResults = [(NSArray *)[_dictOfContacts objectForKey:key] filteredArrayUsingPredicate:resultPredicate];
+            
+            [dictionary setObject:filteredResults forKey:key];
+        }
+
+        [dictionary setObject:[NSArray arrayWithArray:searchResults] forKey:@"Search Results"];
+        
+    }
+    else {
+        dictionary = _dictOfContacts;
+    }
+
+    return dictionary;
 }
 
 #pragma mark -
@@ -46,8 +88,14 @@
 {
     [super viewDidLoad];
     _dictOfContacts = [self getContacts];
+    _filteredDictOfContacts = [self getContacts];
+
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatingContactsBook) name:kUpdatingContactsBook object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatedContactsBook) name:kUpdatedContactsBook object:nil];
+    
+    _tableView.sectionIndexBackgroundColor = [UIColor clearColor];
+    
+    searchResults = [[NSArray alloc] initWithObjects: nil];
 }
 
 - (void)viewDidUnload
@@ -61,6 +109,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    _tableView.contentOffset = CGPointMake(0, ROW_HEIGHT_SEARCH);
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -129,14 +178,12 @@
 
 - (void)updatingContactsBook {
     _updatingContactsView.hidden = NO;
-    NSLog(@"Started updating");
 }
 
 - (void)updatedContactsBook {
     _updatingContactsView.hidden = YES;
     _dictOfContacts = [self getContacts];
     [_tableView reloadData];
-    NSLog(@"Done updating");
 }
 
 #pragma mark -
@@ -149,18 +196,64 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSString *key = [[self getSectionsArray] objectAtIndex:section];
-    NSMutableArray *arr = [_dictOfContacts objectForKey:key];
+    NSString *title = [[self getSectionsArray] objectAtIndex:section];
+    
+    if ([title isEqualToString:@"Search"]) {
+        return 1;
+    }
+
+    if ([title isEqualToString:@"Search Results"]) {
+        if (searchResults == nil) {
+            return 1;
+        }
+        else {
+            return 1;//[searchResults count];
+        }
+    }
+    
+    NSMutableArray *arr = [[self getContactsDict] objectForKey:title];
     return [arr count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 52;
+    if (indexPath.section == 0) {
+        return ROW_HEIGHT_SEARCH;
+    }
+    return ROW_HEIGHT;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    
+    if (isShowingSearchTable) {
+        NSString *key = [[self getSectionsArray] objectAtIndex:section];
+        NSMutableArray *arr = [[self getContactsDict] objectForKey:key];
+        if ([arr count] == 0) {
+            return 0;
+        }
+    }
+
+    return UITableViewAutomaticDimension;
+}
+
+- (NSString *)sectionTitleForIndexPath:(NSIndexPath *)indexPath
+{
+    return [[self getSectionsArray] objectAtIndex:indexPath.section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+
+    if ([[self sectionTitleForIndexPath:indexPath] isEqualToString:@"Search"]) {
+        if (_cellSearch == nil) {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"SearchCellView" owner:self options:nil];
+            _cellSearch = (UITableViewCell *)[nib objectAtIndex:0];
+        }
+        return _cellSearch;
+    }
+    
+
     static NSString *cellMainNibID = @"cellMain";
     
     _cellMain = [tableView dequeueReusableCellWithIdentifier:cellMainNibID];
@@ -168,23 +261,32 @@
         [[NSBundle mainBundle] loadNibNamed:@"ContactCellView" owner:self options:nil];
     }
     
+    if ([[self sectionTitleForIndexPath:indexPath] isEqualToString:@"Search Results"] && [searchResults count] == 0) {
+        UILabel *contactName = (UILabel *)[_cellMain viewWithTag:1];
+        contactName.text = @"No users found";
+        return _cellMain;
+    }
+
+    
     UILabel *contactName = (UILabel *)[_cellMain viewWithTag:1];
     UIButtonForRow *addButton = (UIButtonForRow *)[_cellMain viewWithTag:2];
     UIButtonForRow *textAddButton = (UIButtonForRow *)[_cellMain viewWithTag:3];
 
-
-    NSString *sectionTitle = [[self getSectionsArray] objectAtIndex:indexPath.section];
-    NSMutableArray *sectionForKey = [_dictOfContacts objectForKey:sectionTitle];
+    NSString *sectionTitle = [self sectionTitleForIndexPath:indexPath];
+    NSMutableArray *sectionForKey = [[self getContactsDict] objectForKey:sectionTitle];
     NSMutableDictionary *currentContact = [sectionForKey objectAtIndex:indexPath.row];
     contactName.text = [currentContact valueForKey:@"name"];
-    
+    if (![currentContact valueForKey:@"name"]) {
+        contactName.text = [currentContact valueForKey:@"username"];
+    }
+
     if ([currentContact valueForKey:@"isFollowed"])
     {
         addButton.hidden = YES;
         textAddButton.hidden = YES;
     }
     else {
-        if (indexPath.section == 0) {
+        if (indexPath.section == 1 || [[self sectionTitleForIndexPath:indexPath] isEqualToString:@"Search Results"]) {
             // registered user
             [addButton setIndexPath:indexPath];
             [addButton addTarget:self action:@selector(btnAdd:) forControlEvents:UIControlEventTouchUpInside];
@@ -210,12 +312,104 @@
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
+    
     return [self getSectionTitlesArray];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
+    if (section == 0) {
+        return nil;
+    }
+
     return [[self getSectionsArray] objectAtIndex:section];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGPoint offset = scrollView.contentOffset;
+    float y = offset.y;
+    if (y < 1 ) {
+        [_searchBarView becomeFirstResponder];
+    }
+
+    if (y > ROW_HEIGHT_SEARCH-5) {
+        if ([_searchBarView isFirstResponder] &&
+            ([searchString isEqualToString:@""] || searchString == nil)) {
+            [self cancelSearch];
+        }
+    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    
+    CGPoint offset = scrollView.contentOffset;
+    float y = offset.y;
+    
+    if (y > 5 && y < ROW_HEIGHT_SEARCH) {
+        CGPoint pt = scrollView.contentOffset;
+        pt.y = ROW_HEIGHT_SEARCH;
+        [scrollView setContentOffset:pt animated:YES];
+    }
+    else if (y <= 5) {
+        CGPoint pt = scrollView.contentOffset;
+        pt.y = 0;
+        [scrollView setContentOffset:pt animated:YES];
+    }
+
+}
+
+#pragma mark -
+#pragma mark UISearchDisplayController Datasource/Delegate
+
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    isShowingSearchTable = YES;
+    searchString = searchText;
+//    [_tableView reloadData];
+
+    [PFCloud callFunctionInBackground:@"searchUsers"
+                       withParameters:@{@"searchQuery": searchString}
+                                block:^(NSArray *results, NSError *error) {
+                                    if (!error) {
+                                        // this is where you handle the results and change the UI.
+                                        searchResults = results;
+                                        NSIndexSet *section = [NSIndexSet indexSetWithIndex:[[self getSectionsArray] count]-1];
+                                        [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationNone];
+                                    }
+                                }];
+    
+    
+    NSRange range = NSMakeRange(1, [[self getSectionsArray] count]-1);
+    NSIndexSet *section = [NSIndexSet indexSetWithIndexesInRange:range];
+    [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationNone];
+    
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [self cancelSearch];
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    [self cancelSearch];
+}
+
+- (void)cancelSearch {
+    isShowingSearchTable = NO;
+    searchString = nil;
+    [_searchBarView resignFirstResponder];
+    [_searchBarView setText:@""];
+    [_tableView reloadData];
+}
+
+- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar
+{
+    return YES;
 }
 
 
@@ -229,7 +423,7 @@
     NSIndexPath *indexPath = btn.indexPath;
     
     NSString *sectionTitle = [[self getSectionsArray] objectAtIndex:indexPath.section];
-    NSMutableArray *sectionForKey = [_dictOfContacts objectForKey:sectionTitle];
+    NSMutableArray *sectionForKey = [[self getContactsDict] objectForKey:sectionTitle];
     NSManagedObject *currentContact = [sectionForKey objectAtIndex:indexPath.row];
     NSString *mobileNumber = [currentContact valueForKey:@"phone"];
     
@@ -249,8 +443,12 @@
         [follow saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 NSString *msg = [NSString stringWithFormat:@"You are following %@ now", [otherUser username]];
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Great" message:msg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"OK", nil];
-                [alert show];
+                ActivityView *activityView = [[ActivityView alloc] initWithFrame:CGRectMake(0.f, 0.f, self.view.frame.size.width, self.view.frame.size.height)];
+                [activityView setText:msg];
+                [activityView layoutSubviews];
+                [activityView.activityIndicator startAnimating];
+                [self.view addSubview:activityView];
+                [activityView disappearInSeconds:1];
                 
                 NSManagedObjectContext *context = [[Store alloc] init].mainManagedObjectContext;
                 NSEntityDescription *entityDescription = [NSEntityDescription
@@ -297,7 +495,7 @@
     NSIndexPath *indexPath = btn.indexPath;
     
     NSString *sectionTitle = [[self getSectionsArray] objectAtIndex:indexPath.section];
-    NSMutableArray *sectionForKey = [_dictOfContacts objectForKey:sectionTitle];
+    NSMutableArray *sectionForKey = [[self getContactsDict] objectForKey:sectionTitle];
     NSManagedObject *currentContact = [sectionForKey objectAtIndex:indexPath.row];
     NSString *mobileNumber = [currentContact valueForKey:@"phone"];
 

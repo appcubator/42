@@ -45,7 +45,14 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 	
 	// ****************************************************************************
     // Parse initialization
-	[Parse setApplicationId:@"ybAaEabpmAwfz7FlsrQs60VcQroYtSDqBoFMFQlc" clientKey:@"YNDq2AksL9g3XbIN3ELq1G1GDP8BrhvbIQVtXzfk"];
+    
+    #ifdef DEBUG
+    // Development App
+    [Parse setApplicationId:@"Kk5rpiC6gCU1Wn0pgTvG6JjCzhCuH9wpjw7H5W04" clientKey:@"xYH9fJ8DDbVEBf6jTcyn1VDwlofAuFLgiYaJmQjX"];
+    #else
+    // Production App
+    [Parse setApplicationId:@"ybAaEabpmAwfz7FlsrQs60VcQroYtSDqBoFMFQlc" clientKey:@"YNDq2AksL9g3XbIN3ELq1G1GDP8BrhvbIQVtXzfk"];
+    #endif
 	
     // ****************************************************************************
     // Register for push notifications

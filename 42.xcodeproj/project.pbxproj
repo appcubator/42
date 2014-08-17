@@ -128,7 +128,7 @@
 		CEAD292C196B87B6009947FF /* GenericWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GenericWebViewController.xib; sourceTree = "<group>"; };
 		CECA15A4193C2D4300EB2343 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		CECA15A6193F804400EB2343 /* Arial Rounded Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Arial Rounded Bold.ttf"; sourceTree = "<group>"; };
-		CEE97422192DA82800494F47 /* 42.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 42.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEE97422192DA82800494F47 /* Wave Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Wave Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEE97425192DA82800494F47 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CEE97427192DA82800494F47 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		CEE97429192DA82800494F47 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -256,7 +256,7 @@
 		CEE97423192DA82800494F47 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CEE97422192DA82800494F47 /* 42.app */,
+				CEE97422192DA82800494F47 /* Wave Dev.app */,
 				CEE97443192DA82800494F47 /* 42Tests.xctest */,
 			);
 			name = Products;
@@ -437,7 +437,7 @@
 			);
 			name = 42;
 			productName = 42;
-			productReference = CEE97422192DA82800494F47 /* 42.app */;
+			productReference = CEE97422192DA82800494F47 /* Wave Dev.app */;
 			productType = "com.apple.product-type.application";
 		};
 		CEE97442192DA82800494F47 /* 42Tests */ = {
@@ -671,7 +671,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = Wauv;
+				PRODUCT_NAME = "Wave Dev";
+				PROVISIONING_PROFILE = "f1f354b4-0eb8-475e-bced-b7217add6165";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -692,7 +693,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "Apple Production IOS Push Services: com.appcubator.42";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Production IOS Push Services: com.appcubator.42";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -705,7 +706,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = Wauv;
+				PRODUCT_NAME = "Wave \\(ツ)/";
+				PROVISIONING_PROFILE = "a3b2ac08-39ff-4eec-9096-0392add930a0";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -727,7 +729,7 @@
 				GCC_PREFIX_HEADER = "42/42-Prefix.pch";
 				INFOPLIST_FILE = "42/42-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Wave Dev";
 				PROVISIONING_PROFILE = "";
 				TEST_ENV = 1;
 				WRAPPER_EXTENSION = app;
@@ -750,7 +752,7 @@
 				GCC_PREFIX_HEADER = "42/42-Prefix.pch";
 				INFOPLIST_FILE = "42/42-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Wave \\(ツ)/";
 				PROVISIONING_PROFILE = "";
 				TEST_ENV = 1;
 				WRAPPER_EXTENSION = app;

@@ -14,13 +14,69 @@ var generateKey = function(n) {
 };
 
 /* User defaults and validation */
-Parse.Cloud.beforeSave("User", function(request, response) {
+Parse.Cloud.beforeSave(Parse.User, function(request, response) {
+    
     request.object.set('validationKey', null);
     request.object.set('validationLastSent', new Date());
     request.object.set('validatedPhone', false);
     request.object.set('validationCount', 0);
-    response.success();
+
+    var phoneNumber = request.object.get('phone');
+
+    if (!phoneNumber || phoneNumber == null || phoneNumber =='') { 
+      response.error("User must have a phone number.");
+      return;
+    }
+
+    var query = new Parse.Query(Parse.User);
+    query.equalTo("phone", phoneNumber); // find users that match
+    query.find({
+      success: function (users) {
+        if(users.length > 0) {
+          response.error("User with phone number exists.");
+        }
+        else {
+          response.success();
+        }
+      },
+      error: function (error) {
+
+      }
+    });
+
 });
+
+/* User defaults and validation */
+Parse.Cloud.beforeSave("Follow", function(request, response) {
+
+    var fromUser = request.object.get('from');
+    var toUser   = request.object.get('to');
+
+    if (fromUser == null || toUser == null) {
+      response.error("Following or follower cannot be blank.");
+    }
+
+    var query = new Parse.Query("Follow");
+    query.equalTo("to", toUser); // find users that match
+    query.equalTo("from", fromUser); // find users that match
+
+    query.find({
+      success: function (follows) {
+        if(follows.length > 0) {
+          response.error("Already following.");
+        }
+        else {
+          response.success();
+        }
+      },
+      error: function (error) {
+
+      }
+    });
+
+});
+
+
 
 Parse.Cloud.define("sendValidationSMS", function(request, response) {
   /* 

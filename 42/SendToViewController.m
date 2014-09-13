@@ -145,24 +145,35 @@
 }
 
 - (void)hideBottomBar {
-    
+
+    CGRect tempTableFrame = _tableView.frame;
+    tempTableFrame.size.height = tempTableFrame.size.height + _bottomBar.frame.size.height;
+
+    CGRect tempBottombarFrame = _bottomBar.frame;
+    tempBottombarFrame.origin.y = self.view.frame.size.height;
+
     [UIView animateWithDuration:ANIMATION_TIME delay:0 options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          // hide the bottom bar
-                         CGRect frame = _bottomBar.frame;
-                         frame.origin.y = self.view.frame.size.height;
-                         _bottomBar.frame = frame;
+                         _bottomBar.frame = tempBottombarFrame;
+                         _tableView.frame = tempTableFrame;
                      }
                      completion:^(BOOL finished) { }];
 }
 
 - (void)displayBottomBar {
+    
+    CGRect tempTableFrame = _tableView.frame;
+    tempTableFrame.size.height = tempTableFrame.size.height - _bottomBar.frame.size.height;
+
+    CGRect tempBottombarFrame = _bottomBar.frame;
+    tempBottombarFrame.origin.y = self.view.frame.size.height - tempBottombarFrame.size.height;
+
     [UIView animateWithDuration:ANIMATION_TIME delay:0 options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
                          // display the bottom bar
-                         CGRect frame = _bottomBar.frame;
-                         frame.origin.y = self.view.frame.size.height - frame.size.height;
-                         _bottomBar.frame = frame;
+                         _bottomBar.frame = tempBottombarFrame;
+                         _tableView.frame = tempTableFrame;
                      }
                      completion:^(BOOL finished) { }];
 }

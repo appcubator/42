@@ -6,11 +6,13 @@
 //  Copyright (c) 2013 Tammy L Coron. All rights reserved.
 //
 
+#import <MessageUI/MessageUI.h>
 #import "MainViewController.h"
 #import "CenterViewController.h"
 #import "LeftPanelViewController.h"
 #import "RightPanelViewController.h"
 #import "AppDelegate.h"
+#import "SettingsViewController.h"
 
 #define CENTER_TAG 1
 #define LEFT_PANEL_TAG 2
@@ -315,22 +317,30 @@
 
     if (motion == UIEventSubtypeMotionShake )
     {
-        NSData *data = [@"{\"objectId\":\"YcYCSbMOrL\", \"alert\":\"icanb sent you notif.\"}" dataUsingEncoding:NSUTF8StringEncoding];
+        
+        // From within your active view controller
+        if([MFMailComposeViewController canSendMail]) {
+            MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
+            mailCont.mailComposeDelegate = self;
+            
+            [mailCont setSubject:@"Yo! Here is some feedback!"];
+            [mailCont setToRecipients:[NSArray arrayWithObject:@"iltercanberk@gmail.com"]];
+            [mailCont setMessageBody:@"" isHTML:NO];
 
-        NSError *e;
-        NSDictionary *testNotification = [NSJSONSerialization
-                                          JSONObjectWithData:data
-                                          options:NSJSONReadingMutableContainers
-                                          error:&e];
-        NSLog(@"%@",e);
-        [[[UIApplication sharedApplication] delegate]
-         application:[UIApplication sharedApplication]
-         didReceiveRemoteNotification:testNotification];
+            [self presentViewController:mailCont animated:YES completion:NULL];
+        }
         
         // User was shaking the device. Post a notification named "shake".
         [[NSNotificationCenter defaultCenter] postNotificationName:@"shake" object:self];
     }
 }
+
+// Then implement the delegate method
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error{
+    [self dismissViewControllerAnimated:YES completion:NULL];
+
+}
+
 
 #pragma mark -
 #pragma mark Default System Code

@@ -260,17 +260,18 @@ NSArray *searchResults = nil;
     if (_cellMain == nil) {
         [[NSBundle mainBundle] loadNibNamed:@"ContactCellView" owner:self options:nil];
     }
-    
-    if ([[self sectionTitleForIndexPath:indexPath] isEqualToString:@"Search Results"] && [searchResults count] == 0) {
-        UILabel *contactName = (UILabel *)[_cellMain viewWithTag:1];
-        contactName.text = @"No users found";
-        return _cellMain;
-    }
 
     
     UILabel *contactName = (UILabel *)[_cellMain viewWithTag:1];
     UIButtonForRow *addButton = (UIButtonForRow *)[_cellMain viewWithTag:2];
     UIButtonForRow *textAddButton = (UIButtonForRow *)[_cellMain viewWithTag:3];
+
+    if ([[self sectionTitleForIndexPath:indexPath] isEqualToString:@"Search Results"] && [searchResults count] == 0) {
+        contactName.text = @"No users found";
+        textAddButton.hidden = YES;
+        addButton.hidden = YES;
+        return _cellMain;
+    }
 
     NSString *sectionTitle = [self sectionTitleForIndexPath:indexPath];
     NSMutableArray *sectionForKey = [[self getContactsDict] objectForKey:sectionTitle];
@@ -427,66 +428,73 @@ NSArray *searchResults = nil;
     NSManagedObject *currentContact = [sectionForKey objectAtIndex:indexPath.row];
     NSString *mobileNumber = [currentContact valueForKey:@"phone"];
     
+    if (!mobileNumber) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Wait" message:@"User could not be added." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"OK", nil];
+        [alert show];
+        return;
+    }
+
     PFQuery *query = [PFUser query];
     [query whereKey:@"phone" equalTo:mobileNumber];
-    NSArray *users = [query findObjects];
-    
-    // See if the user with phone number is there
-    if (users.count > 0) {
-        PFUser *otherUser = [users objectAtIndex:0];
-    
-        // create an entry in the Follow table
-        PFObject *follow = [PFObject objectWithClassName:@"Follow"];
-        [follow setObject:[PFUser currentUser]  forKey:@"from"];
-        [follow setObject:otherUser forKey:@"to"];
-        [follow setObject:[NSDate date] forKey:@"date"];
-        [follow saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (succeeded) {
-                NSString *msg = [NSString stringWithFormat:@"You are following %@ now", [otherUser username]];
-                ActivityView *activityView = [[ActivityView alloc] initWithFrame:CGRectMake(0.f, 0.f, self.view.frame.size.width, self.view.frame.size.height)];
-                [activityView setText:msg];
-                [activityView layoutSubviews];
-                [activityView.activityIndicator startAnimating];
-                [self.view addSubview:activityView];
-                [activityView disappearInSeconds:1];
-                
-                NSManagedObjectContext *context = [[Store alloc] init].mainManagedObjectContext;
-                NSEntityDescription *entityDescription = [NSEntityDescription
-                                                          entityForName:@"ContactModel" inManagedObjectContext:context];
-                NSFetchRequest *request = [[NSFetchRequest alloc] init];
-                [request setEntity:entityDescription];
-                
-                NSPredicate *predicate = [NSPredicate predicateWithFormat:
-                                          @"phone = %@",otherUser[@"phone"]];
-                
-                [request setPredicate:predicate];
-                
-                NSError *error = nil;
-                NSArray *array = [context executeFetchRequest:request error:&error];
-                if ([array count] > 0) {
-                    NSManagedObject* userObject = [array objectAtIndex:0];
-                    [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"isFollowed"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error) {
+        // See if the user with phone number is there
+        if (users.count > 0) {
+            PFUser *otherUser = [users objectAtIndex:0];
+            
+            // create an entry in the Follow table
+            PFObject *follow = [PFObject objectWithClassName:@"Follow"];
+            [follow setObject:[PFUser currentUser]  forKey:@"from"];
+            [follow setObject:otherUser forKey:@"to"];
+            [follow setObject:[NSDate date] forKey:@"date"];
+            [follow saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    NSString *msg = [NSString stringWithFormat:@"You are following %@ now", [otherUser username]];
+                    ActivityView *activityView = [[ActivityView alloc] initWithFrame:CGRectMake(0.f, 0.f, self.view.frame.size.width, self.view.frame.size.height)];
+                    [activityView setText:msg];
+                    [activityView layoutSubviews];
+                    [activityView.activityIndicator startAnimating];
+                    [self.view addSubview:activityView];
+                    [activityView disappearInSeconds:1];
+                    
+                    NSManagedObjectContext *context = [[Store alloc] init].mainManagedObjectContext;
+                    NSEntityDescription *entityDescription = [NSEntityDescription
+                                                              entityForName:@"ContactModel" inManagedObjectContext:context];
+                    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+                    [request setEntity:entityDescription];
+                    
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                                              @"phone = %@",otherUser[@"phone"]];
+                    
+                    [request setPredicate:predicate];
+                    
+                    NSError *error = nil;
+                    NSArray *array = [context executeFetchRequest:request error:&error];
+                    if ([array count] > 0) {
+                        NSManagedObject* userObject = [array objectAtIndex:0];
+                        [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"isFollowed"];
+                    }
+                    
+                    [context save:&error];
+                    
+                    if (error != nil) {
+                        NSLog(@"%@",error);
+                    }
+                    
+                    [_tableView reloadData];
+                    
                 }
-                
-                [context save:&error];
-                
-                if (error != nil) {
-                    NSLog(@"%@",error);
+                else {
+                    
                 }
-                
-                [_tableView reloadData];
-                
-            }
-            else {
-                
-            }
-        }];
-
-    }
-    else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Wait" message:@"User is not yet on 42." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"OK", nil];
-        [alert show];
-    }
+            }];
+            
+        }
+        else {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Wait" message:@"User is not yet on 42." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"OK", nil];
+            [alert show];
+        }
+    }];
+    
 }
 
 -(void)btnMessage:(id)sender
@@ -557,6 +565,8 @@ NSArray *searchResults = nil;
 - (IBAction)btnSettings:(id)sender {
     SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController" bundle:nil];
 	[self.navigationController pushViewController:settingsViewController animated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
+
 }
 
 #pragma mark -

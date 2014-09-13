@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
+
 #import "CenterViewController.h"
 
-@interface MainViewController : UIViewController <UIGestureRecognizerDelegate, CenterViewControllerDelegate>
+@interface MainViewController : UIViewController <UIGestureRecognizerDelegate, CenterViewControllerDelegate, MFMailComposeViewControllerDelegate>
 
+@property (nonatomic, strong) UINavigationController *navController;
 @property (nonatomic, strong) CenterViewController *centerViewController;
 @property (nonatomic, strong) LeftPanelViewController *leftPanelViewController;
 @property (nonatomic, strong) RightPanelViewController *rightPanelViewController;

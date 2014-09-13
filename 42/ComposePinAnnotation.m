@@ -15,6 +15,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         
+
         // Initialization code
         _title = @"H";
         
@@ -22,14 +23,14 @@
         _showCustomCallout = NO;
         CGRect calloutViewFrame = _calloutView.frame;
         
-        calloutViewFrame.origin = CGPointMake(-_calloutView.frame.size.width / 2 - 8, -_calloutView.frame.size.height/2 - 18);
+        float calloutCenter = _calloutView.frame.size.width / 2;
+
+        calloutViewFrame.origin = CGPointMake(-calloutCenter + 8, -_calloutView.frame.size.height/2);
         _calloutView.frame = calloutViewFrame;
         
-        MKPinAnnotationView *pinView = [[MKPinAnnotationView alloc] initWithAnnotation:self.annotation reuseIdentifier:@"compose-pin"];
-
-        [self addSubview:pinView];
         self.canShowCallout = NO;
-
+        self.animatesDrop = YES;
+ 
     }
     return self;
 }

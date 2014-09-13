@@ -106,8 +106,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
     return self.store.mainManagedObjectContext;
 }
 
-- (void)application:(UIApplication *)application
-didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
     // Store the deviceToken in the current installation and save it to Parse.
     if ([PFUser currentUser]) {
         
@@ -127,17 +126,17 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
 
 - (void)application:(UIApplication *)application
 didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    NSLog(@"%@",userInfo);
-    
-//    if ( application.applicationState == UIApplicationStateActive ) {
-//        // already on the foreground
-//    }
-//    else {
+
+    if ( application.applicationState == UIApplicationStateActive ) {
+        // already on the foreground
+    }
+    else {
     
         NSString *objectId = [userInfo valueForKey:@"objectId"];
         
         if (objectId != nil) {
             [self updateLocationSentWithBlock: ^() {
+                [[self getMainViewController] movePanelToOriginalPosition];
                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId==%@", objectId];
                 PFObject *locationSent = (PFObject *)[[_arrayOfLocationSent filteredArrayUsingPredicate:predicate] firstObject];
                 
@@ -149,8 +148,8 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         else {
             [self updateLocationSent];
         }
-//
-//    }
+
+    }
 
 }
 							
@@ -190,6 +189,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [self checkForAddressBookPermissions];
 
     UINavigationController *navController = nil;
+    [self getMainViewController].navController = navController;
     navController = [[UINavigationController alloc] initWithRootViewController:[self getMainViewController]];
     navController.navigationBarHidden = YES;
     

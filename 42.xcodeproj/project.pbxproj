@@ -671,7 +671,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "Wave Dev";
+				PRODUCT_NAME = Wave;
 				PROVISIONING_PROFILE = "f1f354b4-0eb8-475e-bced-b7217add6165";
 				SDKROOT = iphoneos;
 			};
@@ -706,7 +706,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "Wave \\(ツ)/";
+				PRODUCT_NAME = Wave;
 				PROVISIONING_PROFILE = "a3b2ac08-39ff-4eec-9096-0392add930a0";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -752,7 +752,7 @@
 				GCC_PREFIX_HEADER = "42/42-Prefix.pch";
 				INFOPLIST_FILE = "42/42-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = "Wave \\(ツ)/";
+				PRODUCT_NAME = "Wave  ツ";
 				PROVISIONING_PROFILE = "";
 				TEST_ENV = 1;
 				WRAPPER_EXTENSION = app;

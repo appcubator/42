@@ -117,8 +117,11 @@ BOOL updatingAnimRunning = NO;
     if ([arrayOfLocationSent count] > 0)
     {
         PFObject *currentLocationSent = [arrayOfLocationSent objectAtIndex:indexPath.row];
+        NSLog(@"%@",currentLocationSent);
+
         PFUser* sender = currentLocationSent[@"from"];
-        usernameLabel.text = sender.username;
+        NSLog(@"%@",sender);
+        usernameLabel.text = sender[@"username"];
         NSDate *when = currentLocationSent[@"date"];
         NSDate *now = [NSDate date];
         NSTimeInterval interval = [now timeIntervalSinceDate:when];

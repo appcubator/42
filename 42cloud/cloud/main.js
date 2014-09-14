@@ -1,3 +1,5 @@
+var _ = require('underscore');
+
 var TWILIO_SID = "AC9e34bf667ca57755d3a054861b982498";
 var TWILIO_TOKEN = "0ac6451898241394d46014ff276e34ba";
 var TWILIO_NUMBER = "+15162521824";
@@ -67,6 +69,47 @@ Parse.Cloud.beforeSave("Follow", function(request, response) {
         }
         else {
           response.success();
+        }
+      },
+      error: function (error) {
+
+      }
+    });
+
+});
+
+/* User defaults and validation */
+Parse.Cloud.afterSave("Follow", function(request, response) {
+
+    var fromUser = request.object.get('from');
+    var toUser   = request.object.get('to');
+
+    if (fromUser == null || toUser == null) {
+      response.error("Following or follower cannot be blank.");
+    }
+
+    var query = new Parse.Query("Follow");
+    query.equalTo("to", fromUser); // find users that match
+    query.equalTo("from", toUser); // find users that match
+
+    fromUser.fetch().then(function(fromUserDetails) {
+      var fromUserName = fromUserDetails.get('username');  
+      var obj = {
+            alert: fromUserName + " added you back!",
+            objectId: request.object.id
+      }
+
+      sendPushNotification(toUser, obj);
+
+    });
+
+
+    query.find({
+      success: function (follows) {
+        if(follows.length > 0) {
+          sendPushNotification(toUser, {
+            alert: +' added you back!'
+          })
         }
       },
       error: function (error) {
@@ -168,24 +211,98 @@ Parse.Cloud.afterSave("LocationSent", function(request) {
   var fromUser   = request.object.get('from');
   console.log(request.object.id);
 
-  request.object.get('from').fetch().then(function(fromUser) {
-    var fromUserName = fromUser.get('username');  
-    var pushQuery = new Parse.Query(Parse.Installation);
-    pushQuery.equalTo('user', sendToUser);
-      
-    Parse.Push.send({
-      where: pushQuery, // Set our Installation query
-        data: {
+  // check if the receiver is following the sender
+  var query = new Parse.Query("Follow");
+  query.equalTo("from", sendToUser); // find users that match
+  query.equalTo("to", fromUser); // find users that match
+
+  query.find({
+      success: function (follows) {
+          if (follows.length > 0) {
+            
+            request.object.get('from').fetch().then(function(fromUser) {
+              var fromUserName = fromUser.get('username');  
+              var obj = {
+                    alert: fromUserName + " shared location with you!",
+                    objectId: request.object.id
+              }
+
+              sendPushNotification(sendToUser, obj);
+
+            });
+
+          }
+      },
+      error: function (error) {
+          //Show if no user was found to match
+          console.log("Search error:" + error);
+      }
+  });
+
+
+});
+
+
+/* Object Sample 
+
+{
           alert: fromUserName + " shared location with you!",
           objectId: request.object.id
         }
-      },
-      {
+
+*/
+function sendPushNotification(toUser, object) {
+  
+  var pushQuery = new Parse.Query(Parse.Installation);
+  pushQuery.equalTo('user', toUser);
+      
+  Parse.Push.send({
+        where: pushQuery, // Set our Installation query
+        data: object
+    },
+    {
         success: function() { console.log("Push notification sent.")},
         error: function(error) {
           throw "Got an error " + error.code + " : " + error.message;
         }
+    });
+}
+
+
+
+Parse.Cloud.define("getLocationReceived", function(request, response) {
+
+  var queryFollowing =  new Parse.Query("Follow");
+  queryFollowing.equalTo('from', Parse.User.current());
+  queryFollowing.find({
+      success: function (follows) {
+        
+        var users = _.map(follows,function(follow) {
+          return follow.get('to');
+        });
+        
+        console.log(users);
+
+        var query = new Parse.Query("LocationSent");
+        query.equalTo('to', Parse.User.current());
+        query.containedIn('from', users);
+        query.include('from');
+        query.limit = 40;
+        query.find({
+            success: function (locations) {
+                response.success(locations);
+            },
+            error: function (error) {
+                //Show if no user was found to match
+                console.log("Getting locations error:" + error);
+            }
+        });
+
+      },
+      error: function (error) {
+          //Show if no user was found to match
+          console.log("Getting followers error:" + error);
       }
-    );
   });
+
 });

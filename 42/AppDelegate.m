@@ -26,7 +26,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 
 - (id)init
 {
-
+    
     self = [super init];
     if (self) {
         self.operationQueue = [[NSOperationQueue alloc] init];
@@ -40,19 +40,20 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     backgroundQueue = dispatch_queue_create("com.contacts", NULL);
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
 
     // Override point for customization after application launch.
 	
 	// ****************************************************************************
     // Parse initialization
     
-    #ifdef DEBUG
+#ifdef DEBUG
     // Development App
     [Parse setApplicationId:@"Kk5rpiC6gCU1Wn0pgTvG6JjCzhCuH9wpjw7H5W04" clientKey:@"xYH9fJ8DDbVEBf6jTcyn1VDwlofAuFLgiYaJmQjX"];
-    #else
+#else
     // Production App
     [Parse setApplicationId:@"ybAaEabpmAwfz7FlsrQs60VcQroYtSDqBoFMFQlc" clientKey:@"YNDq2AksL9g3XbIN3ELq1G1GDP8BrhvbIQVtXzfk"];
-    #endif
+#endif
 	
     // ****************************************************************************
     // Register for push notifications
@@ -61,7 +62,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
      UIRemoteNotificationTypeBadge |
      UIRemoteNotificationTypeAlert |
      UIRemoteNotificationTypeSound];
-
+    
     // ****************************************************************************
     // Parse initialization
     [Crittercism enableWithAppID: @"53cfd85907229a440e000002"];
@@ -76,10 +77,10 @@ static NSString * const defaultsLocationKey = @"currentLocation";
         BOOL boolValue = [[PFUser currentUser][@"validatedPhone"] boolValue];
         
         if ([isVerified isEqualToString:@"YES"] || boolValue == YES) {
-
+            
             [self updateLocationSent];
             [self presentMainViewController];
-
+            
         }
         else {
             UserVerificationViewController *loginViewController = [[UserVerificationViewController alloc] initWithNibName:nil bundle:nil];
@@ -89,7 +90,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
             self.viewController = navController;
             self.window.rootViewController = self.viewController;
         }
-
+        
 	} else {
 		// Go to the welcome screen and have them log in or create an account.
 		[self presentWelcomeViewController];
@@ -99,7 +100,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 	
     [self.window makeKeyAndVisible];
     return YES;
-
+    
 }
 
 - (NSManagedObjectContext *) managedObjectContext {
@@ -121,17 +122,17 @@ static NSString * const defaultsLocationKey = @"currentLocation";
             }
         }];
     }
-
+    
 }
 
 - (void)application:(UIApplication *)application
 didReceiveRemoteNotification:(NSDictionary *)userInfo {
-
+    
     if ( application.applicationState == UIApplicationStateActive ) {
         // already on the foreground
     }
     else {
-    
+        
         NSString *objectId = [userInfo valueForKey:@"objectId"];
         
         if (objectId != nil) {
@@ -148,11 +149,11 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         else {
             [self updateLocationSent];
         }
-
+        
     }
-
+    
 }
-							
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -161,13 +162,14 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
+    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -187,7 +189,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 - (void)presentMainViewController {
 	
     [self checkForAddressBookPermissions];
-
+    
     UINavigationController *navController = nil;
     [self getMainViewController].navController = navController;
     navController = [[UINavigationController alloc] initWithRootViewController:[self getMainViewController]];
@@ -203,7 +205,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
      UIRemoteNotificationTypeBadge |
      UIRemoteNotificationTypeAlert |
      UIRemoteNotificationTypeSound];
-
+    
 }
 
 
@@ -231,7 +233,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
 - (void)sendLocationTo:(NSMutableArray *)receivers withBlock:(void (^)(void))callbackBlock
 {
-
+    
     NSMutableArray *locationSentList = [[NSMutableArray alloc] init];
     PFUser *currentUser = [PFUser currentUser];
     
@@ -266,7 +268,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 }
 
 - (NSArray *)getUnregisteredContacts {
-
+    
     
     NSManagedObjectContext *moc = [self.store mainManagedObjectContext];
     NSEntityDescription *entityDescription = [NSEntityDescription
@@ -282,7 +284,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
                                         initWithKey:@"name" ascending:YES];
     [request setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-
+    
     NSError *error = nil;
     NSArray *array = [moc executeFetchRequest:request error:&error];
     if (array == nil)
@@ -324,7 +326,7 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
 - (NSArray *)getRegisteredContacts {
     
-
+    
     NSManagedObjectContext *moc = [self.store mainManagedObjectContext];
     NSEntityDescription *entityDescription = [NSEntityDescription
                                               entityForName:@"ContactModel" inManagedObjectContext:moc];
@@ -396,9 +398,9 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
              
          }];
     };
-
+    
     [self.operationQueue addOperation:operation];
-
+    
 }
 
 - (void)updateLocationSent
@@ -412,26 +414,24 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     [[NSNotificationCenter defaultCenter] postNotificationName: kLocationSentUpdatingNotification
                                                         object:nil];
     
-    PFQuery *query = [PFQuery queryWithClassName:@"LocationSent"];
-    [query includeKey:@"from"];
-    [query whereKey:@"to" equalTo: [PFUser currentUser]];
-    [query orderByDescending:@"date"];
-    query.limit = 40;
+    [PFCloud callFunctionInBackground:@"getLocationReceived"
+                       withParameters:@{}
+                                block:^(NSArray *objects, NSError *error) {
+                                    if (!error) {
+                                        // this is where you handle the results and change the UI.
+                                        _arrayOfLocationSent = [NSMutableArray arrayWithArray:objects];
+                                        [[NSNotificationCenter defaultCenter] postNotificationName: kLocationSentUpdatedNotification
+                                                                                            object:nil];
+                                        if (callBackBlock) {
+                                            callBackBlock();
+                                        }
+                                        
+                                    }
+                                    else {
+                                        NSLog(@"Error: %@ %@", error, [error userInfo]);
+                                    }
+                                }];
     
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            
-            _arrayOfLocationSent = [NSMutableArray arrayWithArray:objects];
-            [[NSNotificationCenter defaultCenter] postNotificationName: kLocationSentUpdatedNotification
-                                                                object:nil];
-            if (callBackBlock) {
-                callBackBlock();
-            }
-        } else {
-            // Log details of the failure
-            NSLog(@"Error: %@ %@", error, [error userInfo]);
-        }
-    }];
 }
 
 - (void)logout

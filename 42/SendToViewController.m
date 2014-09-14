@@ -26,8 +26,8 @@
 
     // Do any additional setup after loading the view from its nib.
     PFQuery *query = [PFQuery queryWithClassName:@"Follow"];
-    [query includeKey:@"from"];
-    [query whereKey:@"to" equalTo: [PFUser currentUser]];
+    [query includeKey:@"to"];
+    [query whereKey:@"from" equalTo: [PFUser currentUser]];
     query.cachePolicy = kPFCachePolicyNetworkElseCache;
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
@@ -90,7 +90,7 @@
     if ([_arrayOfFollowers count] > 0)
     {
         PFObject *currentFollow = [_arrayOfFollowers objectAtIndex:indexPath.row];
-        PFUser* follower = currentFollow[@"from"];
+        PFUser* follower = currentFollow[@"to"];
         contactName.text = follower.username;
     }
     
@@ -171,7 +171,6 @@
 
     [UIView animateWithDuration:ANIMATION_TIME delay:0 options:UIViewAnimationOptionBeginFromCurrentState
                      animations:^{
-                         // display the bottom bar
                          _bottomBar.frame = tempBottombarFrame;
                          _tableView.frame = tempTableFrame;
                      }

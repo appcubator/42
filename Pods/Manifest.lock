@@ -1,19 +1,22 @@
 PODS:
-  - Bolts (1.1.0)
+  - Bolts (1.1.2)
   - CrittercismSDK (4.3.4)
   - Facebook-iOS-SDK (3.14.1):
     - Bolts
   - libPhoneNumber-iOS (0.7.2)
+  - pop (1.0.6)
 
 DEPENDENCIES:
   - CrittercismSDK
   - Facebook-iOS-SDK (~> 3.14)
   - libPhoneNumber-iOS (~> 0.7)
+  - pop (~> 1.0)
 
 SPEC CHECKSUMS:
-  Bolts: 91c2af8eae1d44e1dd75946a5b0ae04a43ea43e4
+  Bolts: 2635e8698a630774689441047f3465d78c48d485
   CrittercismSDK: d32f9f730158e3e646c445b752d7851710a1fed2
   Facebook-iOS-SDK: e9b3d5ac54ee3e5e693f4eef470b97911b3d076d
   libPhoneNumber-iOS: 207db9b19395d5ba8898398626620568282fa2bc
+  pop: e518794da38942c05255eb64b36d894e70cb4f00
 
 COCOAPODS: 0.33.1

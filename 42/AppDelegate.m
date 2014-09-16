@@ -253,8 +253,11 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
         }
         
         [locationSentList addObject:locationSentObject];
+        
     }
     
+    [self updateRanksForUsers:receivers];
+
     [PFObject saveAllInBackground:[NSArray arrayWithArray:locationSentList] block:^(BOOL succeeded,NSError *error) {
         if (error) {
             NSLog(@"Error saving: %@",error);
@@ -265,6 +268,42 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     }];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"locationSent" object:self];
+}
+
+- (void)updateRanksForUsers:(NSMutableArray *)receivers {
+
+    NSManagedObjectContext *moc = [self.store mainManagedObjectContext];
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"ContactModel" inManagedObjectContext:moc];
+    
+    for (id user in receivers)
+    {
+        PFUser *userObj = (PFUser *)user;
+        
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        [request setEntity:entityDescription];
+        
+        // Set example predicate and sort orderings...
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                                  @"username = %@", userObj.username];
+        [request setPredicate:predicate];
+        NSError *error = nil;
+        NSArray *array = [moc executeFetchRequest:request error:&error];
+        
+        if ([array count] > 0)
+        {
+            NSManagedObject *userRecord = [array objectAtIndex:0];
+            int count = [[userRecord valueForKey:@"rank"] intValue];
+            if (!count) { count = 0; }
+            count = count + 1;
+            [userRecord setValue:[NSNumber numberWithInt:count] forKey:@"rank"];
+
+        }
+    }
+    
+    NSError *error = nil;
+    [moc save:&error];
+
 }
 
 - (NSArray *)getUnregisteredContacts {

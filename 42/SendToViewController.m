@@ -9,6 +9,7 @@
 #import "SendToViewController.h"
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
+#import <CoreData/CoreData.h>
 
 #define ANIMATION_TIME 0.25
 
@@ -24,21 +25,31 @@
     [super viewDidLoad];
     _arrayOfReceivers = [[NSMutableArray alloc] init];
 
-    // Do any additional setup after loading the view from its nib.
-    PFQuery *query = [PFQuery queryWithClassName:@"Follow"];
-    [query includeKey:@"to"];
-    [query whereKey:@"from" equalTo: [PFUser currentUser]];
-    query.cachePolicy = kPFCachePolicyNetworkElseCache;
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            // The find succeeded.
-            _arrayOfFollowers = [NSMutableArray arrayWithArray:objects];
-            [_tableView reloadData];
-        } else {
-            // Log details of the failure
-            NSLog(@"Error: %@ %@", error, [error userInfo]);
-        }
-    }];
+    NSManagedObjectContext *context = [[Store alloc] init].mainManagedObjectContext;
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:@"ContactModel" inManagedObjectContext:context];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:
+                              @"isFollowed = %@",[NSNumber numberWithBool: YES]];
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
+                                        initWithKey:@"rank" ascending:YES];
+    
+
+    [request setPredicate:predicate];
+    [request setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+
+    
+    NSError *error = nil;
+    NSArray *array = [context executeFetchRequest:request error:&error];
+    if (array != nil)
+    {
+        _arrayOfFollowers = [NSMutableArray arrayWithArray:array];
+    }
+
+    
 
 }
 
@@ -89,9 +100,8 @@
 
     if ([_arrayOfFollowers count] > 0)
     {
-        PFObject *currentFollow = [_arrayOfFollowers objectAtIndex:indexPath.row];
-        PFUser* follower = currentFollow[@"to"];
-        contactName.text = follower.username;
+        NSManagedObject *follower = [_arrayOfFollowers objectAtIndex:indexPath.row];
+        contactName.text = [follower valueForKey:@"username"];
     }
     
     return _cellMain;
@@ -108,6 +118,7 @@
 
     }
     else {
+        // new user selected
         [_arrayOfReceivers addObject:@(indexPath.row)];
         cell.contentView.backgroundColor = [UIColor greenColor];
         [tableView cellForRowAtIndexPath:indexPath].accessoryType = UITableViewCellAccessoryCheckmark;
@@ -126,9 +137,8 @@
         int nmr = 0;
         for (id ind in _arrayOfReceivers) {
             NSInteger followerInd = [ind integerValue];
-            PFObject *currentFollow = [_arrayOfFollowers objectAtIndex:followerInd];
-            PFUser* follower = currentFollow[@"from"];
-            [labelStr appendString:follower.username];
+            NSManagedObject *currentFolloweer = [_arrayOfFollowers objectAtIndex:followerInd];
+            [labelStr appendString:[currentFolloweer valueForKey:@"username"]];
             nmr++;
 
             if (nmr < [_arrayOfReceivers count]) {
@@ -185,7 +195,7 @@
     for (id ind in _arrayOfReceivers) {
         NSInteger followerInd = [ind integerValue];
         PFObject *currentFollow = [_arrayOfFollowers objectAtIndex:followerInd];
-        PFUser* follower = currentFollow[@"from"];
+        PFUser* follower = currentFollow[@"to"];
         [listOfReceivers addObject:follower];
     }
     

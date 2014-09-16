@@ -265,6 +265,8 @@ NSArray *searchResults = nil;
     UILabel *contactName = (UILabel *)[_cellMain viewWithTag:1];
     UIButtonForRow *addButton = (UIButtonForRow *)[_cellMain viewWithTag:2];
     UIButtonForRow *textAddButton = (UIButtonForRow *)[_cellMain viewWithTag:3];
+    UIButtonForRow *askButton = (UIButtonForRow *)[_cellMain viewWithTag:4];
+    askButton.hidden = YES;
 
     if ([[self sectionTitleForIndexPath:indexPath] isEqualToString:@"Search Results"] && [searchResults count] == 0) {
         contactName.text = @"No users found";
@@ -285,6 +287,10 @@ NSArray *searchResults = nil;
     {
         addButton.hidden = YES;
         textAddButton.hidden = YES;
+        askButton.hidden = NO;
+        [askButton setIndexPath:indexPath];
+        [askButton addTarget:self action:@selector(btnAskLocation:) forControlEvents:UIControlEventTouchUpInside];
+
     }
     else {
         if (indexPath.section == 1 || [[self sectionTitleForIndexPath:indexPath] isEqualToString:@"Search Results"]) {
@@ -494,6 +500,40 @@ NSArray *searchResults = nil;
             [alert show];
         }
     }];
+    
+}
+
+-(void)btnAskLocation:(id)sender
+{
+    UIButtonForRow *btn = (UIButtonForRow *)sender;
+    NSIndexPath *indexPath = btn.indexPath;
+    
+    NSString *sectionTitle = [[self getSectionsArray] objectAtIndex:indexPath.section];
+    NSMutableArray *sectionForKey = [[self getContactsDict] objectForKey:sectionTitle];
+    NSManagedObject *currentContact = [sectionForKey objectAtIndex:indexPath.row];
+    NSString *userName = [currentContact valueForKey:@"username"];
+    
+    if (! userName) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Wait" message:@"User does not have a username. That's weird." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"OK", nil];
+        [alert show];
+        return;
+    }
+    
+    [PFCloud callFunctionInBackground:@"askLocationFromUsername"
+                       withParameters:@{@"from": [PFUser currentUser].objectId, @"to": userName}
+                                block:^(NSArray *results, NSError *error) {
+                                    if (!error) {
+                                            NSString *msg = [NSString stringWithFormat:@"You asked follow %@ for their location.", userName];
+                                            ActivityView *activityView = [[ActivityView alloc] initWithFrame:CGRectMake(0.f, 0.f, self.view.frame.size.width, self.view.frame.size.height)];
+                                            [activityView setText:msg];
+                                            [activityView layoutSubviews];
+                                            [activityView.activityIndicator startAnimating];
+                                            [self.view addSubview:activityView];
+                                            [activityView disappearInSeconds:1];
+                                    }
+                                }];
+    
+    
     
 }
 

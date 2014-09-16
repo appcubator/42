@@ -279,20 +279,31 @@ static const int ImportBatchSize = 200;
         NSFetchRequest *request = [[NSFetchRequest alloc] init];
         [request setEntity:entityDescription];
         
+        
+
         NSPredicate *predicate = [NSPredicate predicateWithFormat:
-                                  @"phone = %@",user[@"phone"]];
+                                  @"phone = %@ OR username = %@",user[@"phone"], user[@"username"]];
+
+        NSLog(@"%@",user);
 
         [request setPredicate:predicate];
         
         NSError *error = nil;
         NSArray *array = [context executeFetchRequest:request error:&error];
+        NSManagedObject* userObject = nil;
+
         if ([array count] > 0) {
-            NSManagedObject* userObject = [array objectAtIndex:0];
-            [userObject setValue:user.objectId forKey:@"user_id"];
-            [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"isFollowed"];
-            [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"is42user"];
+            userObject = [array objectAtIndex:0];
         }
+        else {
+            userObject = [self createNewContactWithUsername:user[@"username"]];
+        }
+
         
+        [userObject setValue:user.objectId forKey:@"user_id"];
+        [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"isFollowed"];
+        [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"is42user"];
+
         [context save:&error];
         
         if (error != nil) {
@@ -318,11 +329,16 @@ static const int ImportBatchSize = 200;
         
         NSError *error = nil;
         NSArray *array = [context executeFetchRequest:request error:&error];
+        NSManagedObject* userObject = nil;
+
         if ([array count] > 0) {
-            NSManagedObject* userObject = [array objectAtIndex:0];
+            userObject = [array objectAtIndex:0];
             [userObject setValue:user.objectId forKey:@"user_id"];
             [userObject setValue:[user valueForKey:@"username"] forKey:@"username"];
             [userObject setValue:[NSNumber numberWithBool:YES] forKey:@"is42user"];
+        }
+        else {
+            userObject = [self createNewContactWithUsername:user[@"username"]];
         }
         
         [context save:&error];
@@ -333,6 +349,21 @@ static const int ImportBatchSize = 200;
     }
 
     self.progressCallback(2);
+}
+
+- (NSManagedObject *)createNewContactWithUsername: (NSString *)username
+{
+    
+    NSManagedObject *dOfPerson;
+    dOfPerson = [NSEntityDescription
+                 insertNewObjectForEntityForName:@"ContactModel"
+                 inManagedObjectContext:self.context];
+    
+    
+    [dOfPerson setValue:username forKey:@"username"];
+    [dOfPerson setValue:[NSNumber numberWithBool:YES] forKey:@"is42user"];
+    
+    return dOfPerson;
 }
 
 @end

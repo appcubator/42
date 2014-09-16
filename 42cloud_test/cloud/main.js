@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var moment = require('moment');
 
 var TWILIO_SID = "AC9e34bf667ca57755d3a054861b982498";
 var TWILIO_TOKEN = "0ac6451898241394d46014ff276e34ba";
@@ -120,6 +121,103 @@ Parse.Cloud.afterSave("Follow", function(request, response) {
 });
 
 
+Parse.Cloud.beforeSave("AskLocation", function(request, response) {
+  
+  var sendToUser = request.object.get('to');
+  var fromUser   = request.object.get('from');
+
+  // check if the receiver is following the sender
+  var query = new Parse.Query("Follow");
+  query.equalTo("from", sendToUser); // find users that match
+  query.equalTo("to", fromUser); // find users that match
+
+  // Check if following
+  query.find().then(function(follows){
+    
+    if (follows.length > 0) {
+      return request.object.get('from').fetch();
+    }
+    else {
+      response.error("Not following");
+    }
+
+  }).then(function(fromUser) {
+    // check for timing           
+    var fromUserName = fromUser.get('username');  
+      
+    var query = new Parse.Query("AskLocation");
+    query.equalTo("from", fromUser); // find users that match
+    query.equalTo("to", sendToUser); // find users that match
+    query.descending("createdAt");
+
+    query.find({
+        success: function (askLocations) {
+
+            if (askLocations.length == 0) {
+              response.success();
+              return;
+            }
+
+            var askLocationLatest = askLocations[0];
+            var currentTime = moment();
+
+            if (moment(askLocationLatest.createdAt).diff(currentTime, 'minutes') < -5) {
+              response.success();
+            }
+            else {
+              response.error("You cannot ask for location within 5 minutes.");
+            }
+        },
+        error: function (error) {
+            //Show if no user was found to match
+            console.log("Search error:" + error);
+            response.error("Error with time check.")
+        }
+    });
+
+  })
+
+});
+
+
+Parse.Cloud.afterSave("AskLocation", function(request, response) {
+
+// Our "LocationSent" class has a "text" key with the body of the comment itself
+  var sendToUser = request.object.get('to');
+  console.log("Sending to: " + sendToUser);
+  var fromUser   = request.object.get('from');
+  console.log(request.object.id);
+
+  // check if the receiver is following the sender
+  var query = new Parse.Query("Follow");
+  query.equalTo("from", sendToUser); // find users that match
+  query.equalTo("to", fromUser); // find users that match
+
+  query.find({
+      success: function (follows) {
+          if (follows.length > 0) {
+            
+            request.object.get('from').fetch().then(function(fromUser) {
+              var fromUserName = fromUser.get('username');  
+              var obj = {
+              alert: fromUserName + " wants to know where you are.",
+              type: 'AskLocation',
+                  objectId: request.object.id
+              }
+
+              sendPushNotification(sendToUser, obj);
+            });
+
+          }
+      },
+      error: function (error) {
+          //Show if no user was found to match
+          console.log("Search error:" + error);
+      }
+  });
+
+});
+
 
 Parse.Cloud.define("sendValidationSMS", function(request, response) {
   /* 
@@ -202,6 +300,51 @@ Parse.Cloud.define("searchUsers", function(request, response) {
   });
 
 });
+
+
+Parse.Cloud.define("askLocationFromUsername", function(request, response) {
+
+  // Our "LocationSent" class has a "text" key with the body of the comment itself
+  var sendToUserName = request.params.to;
+  var fromUserId   = request.params.from;
+
+  var fromUser = new Parse.User();
+  fromUser.id = fromUserId;
+
+  // check if the receiver is following the sender
+  var query = new Parse.Query(Parse.User);
+  query.equalTo("username", sendToUserName); // find users that match
+
+  query.find({
+    success: function (users) {
+      if (users.length > 0) {
+            sendToUser = users[0];
+            var AskLocation = Parse.Object.extend("AskLocation");
+            var askLocationObj = new AskLocation();
+            askLocationObj.set("from", fromUser);
+            askLocationObj.set("to", sendToUser);
+            askLocationObj.save(null,{
+              success:function() { 
+                response.success(true);
+              },
+              error:function() {
+                response.error(false);
+              }
+            });
+      }
+      else {
+        response.error("sendToUser could not be found.");
+      }
+
+    },
+    error: function (error) {
+      //Show if no user was found to match
+      response.error("Error with finding sendToUser:"+error);
+    }
+  });
+
+});
+
 
 Parse.Cloud.afterSave("LocationSent", function(request) {
 

@@ -231,42 +231,69 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 }
 
 
+// receivers is an NSString array of usernames
+
 - (void)sendLocationTo:(NSMutableArray *)receivers withBlock:(void (^)(void))callbackBlock
 {
-    
-    NSMutableArray *locationSentList = [[NSMutableArray alloc] init];
-    PFUser *currentUser = [PFUser currentUser];
-    
+
     PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:_currentLocation.coordinate.latitude longitude: _currentLocation.coordinate.longitude];
     
-    for (id user in receivers)
-    {
-        PFUser *sendTo = (PFUser *)user;
-        PFObject *locationSentObject = [PFObject objectWithClassName:@"LocationSent"];
-        [locationSentObject setObject:currentUser forKey:@"from"];
-        [locationSentObject setObject:sendTo forKey:@"to"];
-        [locationSentObject setObject:[NSDate date] forKey:@"date"];
-        [locationSentObject setObject:currentPoint forKey:@"location"];
-        
-        if (_currentMessage != nil) {
-            [locationSentObject setObject:_currentMessage forKey:@"message"];
-        }
-        
-        [locationSentList addObject:locationSentObject];
-        
+    NSLog(@"%@",receivers);
+    
+    if (!_currentMessage) {
+        _currentMessage = [NSNull null];
     }
+
+    [PFCloud callFunctionInBackground:@"sendLocationToUsers"
+                       withParameters:@{@"receivers":receivers,
+                                        @"location": currentPoint,
+                                        @"message": _currentMessage}
+                                block:^(NSArray *objects, NSError *error) {
+                                    
+                                    if (!error) {
+                                        [[NSNotificationCenter defaultCenter] postNotificationName: kLocationSentUpdatedNotification
+                                                                                            object:nil];
+                                        
+                                        if(callbackBlock) {
+                                            callbackBlock();
+                                        }
+                                    }
+                                    else {
+                                        NSLog(@"Error: %@ %@", error, [error userInfo]);
+                                    }
+                                }];
     
     [self updateRanksForUsers:receivers];
 
-    [PFObject saveAllInBackground:[NSArray arrayWithArray:locationSentList] block:^(BOOL succeeded,NSError *error) {
-        if (error) {
-            NSLog(@"Error saving: %@",error);
-        }
-        else {
-            callbackBlock();
-        }
-    }];
     
+//    for (id user in receivers)
+//    {
+//        PFUser *sendTo = (PFUser *)user;
+//        PFObject *locationSentObject = [PFObject objectWithClassName:@"LocationSent"];
+//        [locationSentObject setObject:currentUser forKey:@"from"];
+//        [locationSentObject setObject:sendTo forKey:@"to"];
+//        [locationSentObject setObject:[NSDate date] forKey:@"date"];
+//        [locationSentObject setObject:currentPoint forKey:@"location"];
+//        
+//        if (_currentMessage != nil) {
+//            [locationSentObject setObject:_currentMessage forKey:@"message"];
+//        }
+//        
+//        [locationSentList addObject:locationSentObject];
+//        
+//    }
+    
+//
+//    [PFObject saveAllInBackground:[NSArray arrayWithArray:locationSentList] block:^(BOOL succeeded,NSError *error) {
+//        if (error) {
+//            NSLog(@"Error saving: %@",error);
+//        }
+//        else {
+//            callbackBlock();
+//        }
+//    }];
+//    
+   
     [[NSNotificationCenter defaultCenter] postNotificationName:@"locationSent" object:self];
 }
 
@@ -276,16 +303,15 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     NSEntityDescription *entityDescription = [NSEntityDescription
                                               entityForName:@"ContactModel" inManagedObjectContext:moc];
     
-    for (id user in receivers)
+    for (NSString *username in receivers)
     {
-        PFUser *userObj = (PFUser *)user;
         
         NSFetchRequest *request = [[NSFetchRequest alloc] init];
         [request setEntity:entityDescription];
         
         // Set example predicate and sort orderings...
         NSPredicate *predicate = [NSPredicate predicateWithFormat:
-                                  @"username = %@", userObj.username];
+                                  @"username = %@", username];
         [request setPredicate:predicate];
         NSError *error = nil;
         NSArray *array = [moc executeFetchRequest:request error:&error];

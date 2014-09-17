@@ -450,3 +450,41 @@ Parse.Cloud.define("getLocationReceived", function(request, response) {
 
 });
 
+
+Parse.Cloud.define("sendLocationToUsers", function(request, response) {
+
+  var currentUser = Parse.User.current();
+  var point = new Parse.GeoPoint(request.params.location);
+  var receivers = request.params.receivers;
+
+  var query = new Parse.Query(Parse.User);
+  query.containedIn("username", receivers); // find users that match
+  return query.find({
+      success: function (users) {
+        var locationsToBeSent = _.map(users, function(user) {
+              var sendToUser = user;
+              var LocationSent = Parse.Object.extend("LocationSent");
+              var locationToBeSent = new LocationSent();
+              locationToBeSent.set("from", currentUser);
+              locationToBeSent.set("to", sendToUser);
+              locationToBeSent.set("location", point);
+              return locationToBeSent;
+        });
+
+        Parse.Object.saveAll(locationsToBeSent,{
+          success:function() {  response.success(true); },
+          error:function() { response.error("Locations could not be saved."); }
+        });
+
+      },
+      error: function (error) {
+        //Show if no user was found to match
+        response.error("Error with finding sendToUser:"+error);
+      }
+  });
+
+
+
+});
+
+

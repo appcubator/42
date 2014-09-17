@@ -35,7 +35,7 @@
                               @"isFollowed = %@",[NSNumber numberWithBool: YES]];
     
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]
-                                        initWithKey:@"rank" ascending:YES];
+                                        initWithKey:@"rank" ascending:NO];
     
 
     [request setPredicate:predicate];
@@ -194,9 +194,9 @@
     
     for (id ind in _arrayOfReceivers) {
         NSInteger followerInd = [ind integerValue];
-        PFObject *currentFollow = [_arrayOfFollowers objectAtIndex:followerInd];
-        PFUser* follower = currentFollow[@"to"];
-        [listOfReceivers addObject:follower];
+        NSManagedObject *follower = [_arrayOfFollowers objectAtIndex:followerInd];
+        NSString *followerUsername = [follower valueForKey:@"username"];
+        [listOfReceivers addObject:followerUsername];
     }
     
     [appDelegate sendLocationTo:listOfReceivers withBlock:^(void) {
@@ -213,7 +213,7 @@
 
 - (void)resetData
 {
-    
+    _arrayOfReceivers = [[NSMutableArray alloc] init];
 }
 
 

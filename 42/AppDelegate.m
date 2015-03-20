@@ -15,7 +15,7 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 #import "Store.h"
 
 #import "ImportContactsOperation.h"
-#import "Crittercism.h"
+//#import "Crittercism.h"
 #import "AppDelegate.h"
 #import "WelcomeViewController.h"
 #import "MainViewController.h"
@@ -57,15 +57,15 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 	
     // ****************************************************************************
     // Register for push notifications
-    
-    [application registerForRemoteNotificationTypes:
-     UIRemoteNotificationTypeBadge |
-     UIRemoteNotificationTypeAlert |
-     UIRemoteNotificationTypeSound];
+//    
+//    [application registerForRemoteNotificationTypes:
+//     UIRemoteNotificationTypeBadge |
+//     UIRemoteNotificationTypeAlert |
+//     UIRemoteNotificationTypeSound];
     
     // ****************************************************************************
     // Parse initialization
-    [Crittercism enableWithAppID: @"53cfd85907229a440e000002"];
+//    [Crittercism enableWithAppID: @"53cfd85907229a440e000002"];
     
     
 	if ([PFUser currentUser]) {
@@ -201,10 +201,10 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
     // ****************************************************************************
     // Register for push notifications
     
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-     UIRemoteNotificationTypeBadge |
-     UIRemoteNotificationTypeAlert |
-     UIRemoteNotificationTypeSound];
+//    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+//     UIRemoteNotificationTypeBadge |
+//     UIRemoteNotificationTypeAlert |
+//     UIRemoteNotificationTypeSound];
     
 }
 

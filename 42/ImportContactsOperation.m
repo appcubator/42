@@ -60,6 +60,7 @@ static const int ImportBatchSize = 200;
     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(m_addressbook);
     CFIndex nPeople = ABAddressBookGetPersonCount(m_addressbook);
     NSInteger progressGranularity = nPeople/100;
+    if (progressGranularity == 0) progressGranularity = 1;
 
     NSMutableArray *newContacts = [[NSMutableArray alloc] init];
 

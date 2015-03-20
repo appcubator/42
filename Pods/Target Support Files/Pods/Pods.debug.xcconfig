@@ -1,0 +1,9 @@
+CLANG_CXX_LANGUAGE_STANDARD = c++11
+CLANG_CXX_LIBRARY = libc++
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/Bolts" "${PODS_ROOT}/Headers/Public/CrittercismSDK" "${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK" "${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK/FacebookSDK" "${PODS_ROOT}/Headers/Public/libPhoneNumber-iOS" "${PODS_ROOT}/Headers/Public/pop"
+LIBRARY_SEARCH_PATHS = "$(PODS_ROOT)/CrittercismSDK/CrittercismSDK"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/Bolts" -isystem "${PODS_ROOT}/Headers/Public/CrittercismSDK" -isystem "${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK" -isystem "${PODS_ROOT}/Headers/Public/Facebook-iOS-SDK/FacebookSDK" -isystem "${PODS_ROOT}/Headers/Public/libPhoneNumber-iOS" -isystem "${PODS_ROOT}/Headers/Public/pop"
+OTHER_LDFLAGS = $(inherited) -ObjC -l"Crittercism_v4_3_4" -l"Pods-Bolts" -l"Pods-CrittercismSDK" -l"Pods-Facebook-iOS-SDK" -l"Pods-libPhoneNumber-iOS" -l"Pods-pop" -l"c++" -framework "CoreLocation" -framework "CoreTelephony" -framework "SystemConfiguration" -weak_framework "Accounts" -weak_framework "Security" -weak_framework "Social"
+OTHER_LIBTOOLFLAGS = $(OTHER_LDFLAGS)
+PODS_ROOT = ${SRCROOT}/Pods

@@ -23,7 +23,7 @@ For more information, see the [Bolts iOS API Reference](http://boltsframework.gi
 # Tasks
 
 To build a truly responsive iOS application, you must keep long-running operations off of the UI thread, and be careful to avoid blocking anything the UI thread might be waiting on. This means you will need to execute various operations in the background. To make this easier, we've added a class called `BFTask`. A task represents the result of an asynchronous operation. Typically, a `BFTask` is returned from an asynchronous function and gives the ability to continue processing the result of the task. When a task is returned from a function, it's already begun doing its job. A task is not tied to a particular threading model: it represents the work being done, not where it is executing. Tasks have many advantages over other methods of asynchronous programming, such as callbacks. `BFTask` is not a replacement for `NSOperation` or GCD. In fact, they play well together. But tasks do fill in some gaps that those technologies don't address.
-* `BFTask` tasks care of managing dependencies for you. Unlike using `NSOperation` for dependency management, you don't have to declare all dependencies before starting a `BFTask`. For example, imagine you need to save a set of objects and each one may or may not require saving child objects. With an `NSOperation`, you would normally have to create operations for each of the child saves ahead of time. But you don't always know before you start the work whether that's going to be necessary. That can make managing dependencies with `NSOperation` very painful. Even in the best case, you have to create your dependencies before the operations that depend on them, which results in code that appears in a different order than it executes. With `BFTask`, you can decide during your operation's work whether there will be subtasks and return the other task in just those cases.
+* `BFTask` takes care of managing dependencies for you. Unlike using `NSOperation` for dependency management, you don't have to declare all dependencies before starting a `BFTask`. For example, imagine you need to save a set of objects and each one may or may not require saving child objects. With an `NSOperation`, you would normally have to create operations for each of the child saves ahead of time. But you don't always know before you start the work whether that's going to be necessary. That can make managing dependencies with `NSOperation` very painful. Even in the best case, you have to create your dependencies before the operations that depend on them, which results in code that appears in a different order than it executes. With `BFTask`, you can decide during your operation's work whether there will be subtasks and return the other task in just those cases.
 * `BFTasks` release their dependencies. `NSOperation` strongly retains its dependencies, so if you have a queue of ordered operations and sequence them using dependencies, you have a leak, because every operation gets retained forever. `BFTasks` release their callbacks as soon as they are run, so everything cleans up after itself. This can reduce memory use, and simplify memory management.
 * `BFTasks` keep track of the state of finished tasks: It tracks whether there was a returned value, the task was cancelled, or if an error occurred. It also has convenience methods for propagating errors. With `NSOperation`, you have to build all of this stuff yourself.
 * `BFTasks` don't depend on any particular threading model. So it's easy to have some tasks perform their work with an operation queue, while others perform work using blocks with GCD. These tasks can depend on each other seamlessly.
@@ -81,7 +81,7 @@ BFTasks use Objective-C blocks, so the syntax should be pretty straightforward. 
     // and provides an NSString as output.
 
     NSNumber *number = task.result;
-    return [NSString stringWithFormat:"%@", number];
+    return [NSString stringWithFormat:@"%@", number];
   )];
 }
 ```
@@ -333,7 +333,7 @@ func fetchAsync(object: PFObject) -> BFTask {
   var task = BFTaskCompletionSource()
   object.fetchInBackgroundWithBlock {
     (object: PFObject!, error: NSError!) -> Void in
-    if !error {
+    if error == nil {
       task.setResult(object)
     } else {
       task.setError(error)
@@ -515,7 +515,7 @@ For example, you can use the `BFURL` utility class to parse an incoming URL in y
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation {
-    BFURL *parsedUrl = [BFURL URLWithURL:url];
+    BFURL *parsedUrl = [BFURL URLWithInboundURL:url sourceApplication:sourceApplication];
     
     // Use the target URL from the App Link to locate content.
     if ([parsedUrl.targetURL.pathComponents[1] isEqualToString:@"profiles"]) {
@@ -598,7 +598,7 @@ Alternatively, a you can swap out the default resolver to be used by the built-i
 
 ## App Link Return-to-Referer View
 
-When an application is opened via an App Link, a banner allowing the user to "Touch to return to <calling app>" should be displayed. The `BFAppLinkReturnToRefererView` provides this functionality. It will take an incoming App Link and parse the referer information to display the appropriate calling app name. You may initialize the view either by loading it from a NIB or programmatically:
+When an application is opened via an App Link, a banner allowing the user to "Touch to return to <calling app>" should be displayed. The `BFAppLinkReturnToRefererView` provides this functionality. It will take an incoming App Link and parse the referer information to display the appropriate calling app name.
 
 ```objective-c
 - (void)viewDidLoad {
@@ -606,26 +606,71 @@ When an application is opened via an App Link, a banner allowing the user to "To
 
   // Perform other view initialization.
 
-  self.returnToRefererView = [[BFAppLinkReturnToRefererView alloc] initWithFrame:CGRectZero];
-  self.returnToRefererController = [[BFAppLinkReturnToRefererController] alloc] init];
+  self.returnToRefererController = [[BFAppLinkReturnToRefererController alloc] init];
 
-  // We could also have left .view unassigned and the controller will automatically
-  //  create a BFAppLinkReturnToRefererView when it needs one.
+  // self.returnToRefererView is a BFAppLinkReturnToRefererView.
+  // You may initialize the view either by loading it from a NIB or programmatically.
   self.returnToRefererController.view = self.returnToRefererView;
+  
+  // If you have a UINavigationController in the view, then the bar must be shown above it.
+  [self.returnToRefererController]
 }
 ```
 
-Note that we initialize the view with a zero size, because we will determine whether or not to display a banner based on the referer data in the incoming App Link using the associated `BFAppLinkReturnToRefererController`, typically in a view controller's `viewWillAppear` or similar method, depending on a particular app's view hierarchy, etc. The following code assumes that the view controller has an `openedAppLinkURL` `NSURL` property that has already been populated with the URL used to open the app:
+The following code assumes that the view controller has an `openedAppLinkURL` `NSURL` property that has already been populated with the URL used to open the app. You can then do something like this to show the view:
 
 ```objective-c
 - (void)viewWillAppear {
   [super viewWillAppear];
 
+  // Show only if you have a back AppLink.
   [self.returnToRefererController showViewForRefererURL:self.openedAppLinkURL];
 }
 ```
 
 In a navigaton-controller view hierarchy, the banner should be displayed above the navigation bar, and `BFAppLinkReturnToRefererController` provides an `initForDisplayAboveNavController` method to assist with this.
+
+## Analytics
+
+Bolts introduces Measurement Event. App Links posts three different Measurement Event notifications to the application, which can be caught and integrated with existing analytics components in your application.
+
+*  `al_nav_out` — Raised when your app switches out to an App Links URL.
+*  `al_nav_in` — Raised when your app opens an incoming App Links URL.
+*  `al_ref_back_out` — Raised when your app returns back the referrer app using the built-in top navigation back bar view.
+
+### Listen for App Links Measurement Events
+
+There are other analytics tools that are integrated with Bolts' App Links events, but you can also listen for these events yourself:
+
+```objective-c
+[[NSNotificationCenter defaultCenter] addObserverForName:BFMeasurementEventNotificationName object:nil queue:nil usingBlock:^(NSNotification *note) {
+    NSDictionary *event = note.userInfo;
+    NSDictionary *eventData = event[BFMeasurementEventArgsKey];
+    // Integrate to your logging/analytics component.
+}];
+```
+
+### App Links Event Fields
+
+App Links Measurement Events sends additional information from App Links Intents in flattened string key value pairs. Here are some of the useful fields for the three events.
+
+* `al_nav_in`
+  * `inputURL`: the URL that opens the app.
+  * `inputURLScheme`: the scheme of `inputURL`.
+  * `refererURL`: the URL that the referrer app added into `al_applink_data`: `referer_app_link`.
+  * `refererAppName`: the app name that the referrer app added to `al_applink_data`: `referer_app_link`.
+  * `sourceApplication`: the bundle of referrer application.
+  * `targetURL`: the `target_url` field in `al_applink_data`.
+  * `version`: App Links API  version.
+
+* `al_nav_out` / `al_ref_back_out`
+  * `outputURL`: the URL used to open the other app (or browser). If there is an eligible app to open, this will be the custom scheme url/intent in `al_applink_data`.
+  * `outputURLScheme`: the scheme of `outputURL`.
+  * `sourceURL`: the URL of the page hosting App Links meta tags.
+  * `sourceURLHost`: the hostname of `sourceURL`.
+  * `success`: `“1”` to indicate success in opening the App Link in another app or browser; `“0”` to indicate failure to open the App Link.
+  * `type`: `“app”` for open in app, `“web”` for open in browser; `“fail”` when the success field is `“0”`.
+  * `version`: App Links API version.
 
 # Installation
 

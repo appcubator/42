@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		68315DB70198499096C846ED /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 167C126679EC4ED89645E30F /* libPods.a */; };
+		CE02786A1ABC572D00EA1044 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE0278691ABC572D00EA1044 /* Launch Screen.xib */; };
 		CE1369BD1981742F0089A427 /* ImportContactsOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1369BC1981742F0089A427 /* ImportContactsOperation.m */; };
 		CE1369C0198174C50089A427 /* Store.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1369BF198174C50089A427 /* Store.m */; };
 		CE1B928F19359514001489C8 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1B928E19359514001489C8 /* Accounts.framework */; };
@@ -90,7 +91,9 @@
 
 /* Begin PBXFileReference section */
 		167C126679EC4ED89645E30F /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		5911A917935A4312BECFEC43 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		98F755EA16E9856C45B27EDE /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		C28F843FA1F01DB94CA2B2C0 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		CE0278691ABC572D00EA1044 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		CE1369BB1981742F0089A427 /* ImportContactsOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImportContactsOperation.h; sourceTree = "<group>"; };
 		CE1369BC1981742F0089A427 /* ImportContactsOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImportContactsOperation.m; sourceTree = "<group>"; };
 		CE1369BE198174C50089A427 /* Store.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Store.h; sourceTree = "<group>"; };
@@ -232,6 +235,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2EE83C14D1E884032CA3278B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C28F843FA1F01DB94CA2B2C0 /* Pods.debug.xcconfig */,
+				98F755EA16E9856C45B27EDE /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		CE84F0F5193AB11100AC6AE3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -249,7 +261,7 @@
 				CEE9742B192DA82800494F47 /* 42 */,
 				CEE97424192DA82800494F47 /* Frameworks */,
 				CEE97423192DA82800494F47 /* Products */,
-				5911A917935A4312BECFEC43 /* Pods.xcconfig */,
+				2EE83C14D1E884032CA3278B /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -374,6 +386,7 @@
 				CEE97461192DACED00494F47 /* WelcomeView.xib */,
 				CEE9746A192DAF6100494F47 /* NewUserView.xib */,
 				CEE97465192DAF2A00494F47 /* LoginView.xib */,
+				CE0278691ABC572D00EA1044 /* Launch Screen.xib */,
 				CEE974A6193109DD00494F47 /* SendToViewController.xib */,
 				CEE9747F192DB56100494F47 /* ActivityView.h */,
 				CEE97480192DB56100494F47 /* ActivityView.m */,
@@ -508,6 +521,7 @@
 				CEE97467192DAF2A00494F47 /* LoginView.xib in Resources */,
 				CEE9749F192DE39400494F47 /* RightPanelView.xib in Resources */,
 				CEE974AE1931660000494F47 /* LocationSentCellView.xib in Resources */,
+				CE02786A1ABC572D00EA1044 /* Launch Screen.xib in Resources */,
 				CEE974A8193109DD00494F47 /* SendToViewController.xib in Resources */,
 				CEE974AC193164B700494F47 /* LeftPanelView.xib in Resources */,
 				CE84F0F0193819E100AC6AE3 /* ContactCellView.xib in Resources */,
@@ -558,7 +572,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -715,7 +729,7 @@
 		};
 		CEE97455192DA82800494F47 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5911A917935A4312BECFEC43 /* Pods.xcconfig */;
+			baseConfigurationReference = C28F843FA1F01DB94CA2B2C0 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
@@ -738,7 +752,7 @@
 		};
 		CEE97456192DA82800494F47 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5911A917935A4312BECFEC43 /* Pods.xcconfig */;
+			baseConfigurationReference = 98F755EA16E9856C45B27EDE /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";

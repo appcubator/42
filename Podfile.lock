@@ -1,5 +1,5 @@
 PODS:
-  - Bolts (1.1.2)
+  - Bolts (1.1.4)
   - CrittercismSDK (4.3.4)
   - Facebook-iOS-SDK (3.14.1):
     - Bolts
@@ -13,10 +13,10 @@ DEPENDENCIES:
   - pop (~> 1.0)
 
 SPEC CHECKSUMS:
-  Bolts: 2635e8698a630774689441047f3465d78c48d485
+  Bolts: dd9fb8433d67f5acc3b6b4d1379bbc5513d716c1
   CrittercismSDK: d32f9f730158e3e646c445b752d7851710a1fed2
   Facebook-iOS-SDK: e9b3d5ac54ee3e5e693f4eef470b97911b3d076d
   libPhoneNumber-iOS: 207db9b19395d5ba8898398626620568282fa2bc
   pop: e518794da38942c05255eb64b36d894e70cb4f00
 
-COCOAPODS: 0.33.1
+COCOAPODS: 0.36.0

@@ -57,15 +57,18 @@ static NSString * const defaultsLocationKey = @"currentLocation";
 	
     // ****************************************************************************
     // Register for push notifications
-//    
-//    [application registerForRemoteNotificationTypes:
-//     UIRemoteNotificationTypeBadge |
-//     UIRemoteNotificationTypeAlert |
-//     UIRemoteNotificationTypeSound];
+    // 1
+    
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert |
+        UIUserNotificationTypeBadge |
+        UIUserNotificationTypeSound categories:nil];
+    [application registerUserNotificationSettings:settings];
     
     // ****************************************************************************
     // Parse initialization
 //    [Crittercism enableWithAppID: @"53cfd85907229a440e000002"];
+    
+
     
     
 	if ([PFUser currentUser]) {
@@ -102,6 +105,15 @@ static NSString * const defaultsLocationKey = @"currentLocation";
     return YES;
     
 }
+
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
+    // 3
+    if (notificationSettings.types != UIUserNotificationTypeNone) {
+        // 4
+        [application registerForRemoteNotifications];
+    }
+}
+
 
 - (NSManagedObjectContext *) managedObjectContext {
     return self.store.mainManagedObjectContext;

@@ -101,6 +101,10 @@
 
 - (void)startStandardUpdates {
 
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined) {
+        [self.locationManager requestWhenInUseAuthorization];
+    }
+
 	[_locationManager startUpdatingLocation];
     
 	CLLocation *currentLocation = [_locationManager location];

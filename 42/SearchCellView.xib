@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RightPanelViewController">
@@ -18,7 +20,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <searchBar contentMode="redraw" fixedFrame="YES" placeholder="Search for users" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jnT-Aq-29a">
+                    <searchBar contentMode="redraw" ambiguous="YES" placeholder="Search for users" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jnT-Aq-29a">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <textInputTraits key="textInputTraits"/>
                         <connections>
@@ -26,6 +28,10 @@
                         </connections>
                     </searchBar>
                 </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailingMargin" secondItem="jnT-Aq-29a" secondAttribute="trailing" constant="-8" id="2el-QF-sbu"/>
+                    <constraint firstItem="jnT-Aq-29a" firstAttribute="leading" secondItem="bNh-QD-wXt" secondAttribute="leadingMargin" constant="-8" id="c23-9b-EUK"/>
+                </constraints>
             </tableViewCellContentView>
         </tableViewCell>
     </objects>

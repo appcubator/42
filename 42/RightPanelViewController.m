@@ -87,6 +87,7 @@ NSArray *searchResults = nil;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     _dictOfContacts = [self getContacts];
     _filteredDictOfContacts = [self getContacts];
 

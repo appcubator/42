@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LeftPanelViewController">
@@ -16,9 +17,8 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <navigationBar contentMode="scaleToFill" fixedFrame="YES" translucent="NO" backIndicatorImage="A51339BA-70AE-4753-9B57-2867F6185F86" translatesAutoresizingMaskIntoConstraints="NO" id="vpA-Nw-jBg">
+                <navigationBar contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translucent="NO" backIndicatorImage="131FFC64-2A9E-4098-8052-B02EBE6EF545" translatesAutoresizingMaskIntoConstraints="NO" id="vpA-Nw-jBg">
                     <rect key="frame" x="0.0" y="18" width="320" height="44"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="0.37696896560737425" blue="0.69769430709930913" alpha="1" colorSpace="calibratedRGB"/>
                     <color key="tintColor" red="0.94800996349811073" green="0.97811418924579385" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <color key="barTintColor" red="1" green="0.48474880191328817" blue="0.26898493263554768" alpha="1" colorSpace="calibratedRGB"/>
@@ -56,13 +56,11 @@
                         </navigationItem>
                     </items>
                 </navigationBar>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jkR-q3-Fks">
+                <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jkR-q3-Fks">
                     <rect key="frame" x="0.0" y="62" width="320" height="506"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="42 does not locally save any of the location data." textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="zTO-nx-y1d">
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" text="42 does not locally save any of the location data." textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="zTO-nx-y1d">
                             <rect key="frame" x="20" y="68" width="280" height="185"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <color key="textColor" red="0.94156568880000002" green="0.4550736755" blue="0.25796191390000001" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="22"/>
@@ -70,10 +68,12 @@
                         </textView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="centerX" secondItem="zTO-nx-y1d" secondAttribute="centerX" id="C17-fF-0iZ"/>
+                    </constraints>
                 </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="wza-D4-I7q">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="wza-D4-I7q">
                     <rect key="frame" x="0.0" y="62" width="320" height="511"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="Lcy-b2-S26"/>
@@ -82,12 +82,21 @@
                 </tableView>
             </subviews>
             <color key="backgroundColor" red="1" green="0.48474880190000003" blue="0.2689849326" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="vpA-Nw-jBg" secondAttribute="trailing" id="3Kk-2M-im8"/>
+                <constraint firstItem="jkR-q3-Fks" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Cjg-Mj-1v2"/>
+                <constraint firstItem="vpA-Nw-jBg" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Flt-4T-9wr"/>
+                <constraint firstAttribute="trailing" secondItem="jkR-q3-Fks" secondAttribute="trailing" id="S7d-XO-A20"/>
+                <constraint firstAttribute="trailing" secondItem="wza-D4-I7q" secondAttribute="trailing" id="U4b-sD-MQe"/>
+                <constraint firstAttribute="bottom" secondItem="jkR-q3-Fks" secondAttribute="bottom" id="oUi-qs-LfV"/>
+                <constraint firstItem="wza-D4-I7q" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="tFn-Pg-pRP"/>
+                <constraint firstAttribute="bottom" secondItem="wza-D4-I7q" secondAttribute="bottom" constant="-5" id="yUY-AJ-gk4"/>
+            </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
     <resources>
-        <image name="A51339BA-70AE-4753-9B57-2867F6185F86" width="193" height="44">
+        <image name="131FFC64-2A9E-4098-8052-B02EBE6EF545" width="193" height="44">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOzxYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISksLzU4VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA
@@ -726,4 +735,9 @@ k2OTaAAAAAAAAAIBAAAAAAAAAD8AAAAAAAAAAAAAAAAAAJNqA
         <image name="refresh-icon" width="22" height="26"/>
         <image name="right-arrow" width="17" height="22"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

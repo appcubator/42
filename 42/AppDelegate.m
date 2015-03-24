@@ -461,22 +461,22 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 - (void)updateCachedContacts
 {
     
-    [[NSNotificationCenter defaultCenter] postNotificationName: kUpdatingContactsBook object:nil];
-    
-    ImportContactsOperation* operation = [[ImportContactsOperation alloc] initWithStore:self.store];
-    operation.progressCallback = ^(float progress) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^
-         {
-             NSLog(@"%f",progress);
-             if (progress == 1 || progress == 2 || progress == 3) {
-                 [[NSNotificationCenter defaultCenter] postNotificationName: kUpdatedContactsBook
-                                                                     object:nil];
-             }
-             
-         }];
-    };
-    
-    [self.operationQueue addOperation:operation];
+//    [[NSNotificationCenter defaultCenter] postNotificationName: kUpdatingContactsBook object:nil];
+//    
+//    ImportContactsOperation* operation = [[ImportContactsOperation alloc] initWithStore:self.store];
+//    operation.progressCallback = ^(float progress) {
+//        [[NSOperationQueue mainQueue] addOperationWithBlock:^
+//         {
+//             NSLog(@"%f",progress);
+//             if (progress == 1 || progress == 2 || progress == 3) {
+//                 [[NSNotificationCenter defaultCenter] postNotificationName: kUpdatedContactsBook
+//                                                                     object:nil];
+//             }
+//             
+//         }];
+//    };
+//    
+//    [self.operationQueue addOperation:operation];
     
 }
 

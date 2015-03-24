@@ -33,7 +33,7 @@ static NSString* const kUpdatedContactsBook=@"kUpdatedContactsBook";
 @property (nonatomic, strong) NSString *currentMessage;
 @property (nonatomic, strong) NSMutableArray *arrayOfLocationSent;
 
-@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+//@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 
 @property (nonatomic, strong) NSOperationQueue* operationQueue;

@@ -14,5 +14,6 @@
 
 - (void)saveContext;
 - (NSManagedObjectContext*)newPrivateContext;
+- (NSManagedObjectModel *)managedObjectModel;
 
 @end
